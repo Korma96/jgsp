@@ -1,0 +1,22 @@
+[41A],[42A],[43A]|19.7998638594|45.2759310771|RUMENA\u010cKI PUT - GRADSKO GROBLJE\r\n|\/slike\/stajalista\/10201.jpg|I
+[14A],[41A],[42A],[43A],[51B]|19.8079135339|45.2712216153|RUMENA\u010cKI PUT - AVIJATI\u010cARSKA|\/slike\/stajalista\/10315.jpg|I
+[41A],[42A],[43A]|19.7421633381|45.3003445282|RUMENKA - KANAL||II
+[41A],[42A],[43A]|19.8293295677|45.2649620671|\u017dELEZNI\u010cKA STANICA TERMINAL|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0511464.jpg|I
+[14A],[41A],[42A],[43A],[51B]|19.7998638594|45.2759310771|RUMENA\u010cKI PUT - KRU\u017dNI TOK|\/slike\/stajalista\/10316.jpg|I
+[41A],[42A],[43A]|19.7945953|45.2784461|RUMENA\u010cKI PUT - GRADSKO GROBLJE\r\n||I
+[41A],[42A],[43A]|19.7849461714|45.2805491923|SAJLOVO - NADVO\u017dNJAK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img06033.jpg|I
+[41A],[42A],[43A]|19.7718910191|45.2830754582|SAJLOVO - BANGLADE\u0160|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img06044.jpg|I
+[41A],[42A],[43A]|19.7486571265|45.2902962929|RUMENKA - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img06055.jpg|II
+[41A],[42A],[43A]|19.7393740621|45.2963585515|RUMENKA - PARTIZANSKA 58|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img061010.jpg|II
+[42A],[43A]|19.7425533426|45.292387897|RUMENKA - CENTAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img061917.jpg|II
+[42A],[43A]|19.7427194154|45.3081735891|RUMENKA - KISA\u010cKI PUT - ASFALTNA BAZA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062118.jpg|II
+[42A],[43A]|19.7270478081|45.3398144161|KISA\u010c - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062219.jpg|IV
+[42A],[43A],[43B]|19.723498187|45.3417675086|KISA\u010c - DR. JANKA GOMBARA 165|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062320.jpg|IV
+[42A],[43A],[43B]|19.7273239371|45.348466498|KISA\u010c - RASKRSNICA ZA STEPANOVI\u0106EVO|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062421.jpg|IV
+[42A],[43A],[43B]|19.7314018958|45.355580618|KISA\u010c - OSNOVNA \u0160KOLA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062522.jpg|IV
+[42A],[43A],[43B]|19.7331543826|45.3589186851|KISA\u010c - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062623.jpg|IV
+[42A],[43A],[43B]|19.7311112386|45.3612543718|KISA\u010c - JANA KOLARA - MIHALA KARDELISA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062724.jpg|IV
+[42A],[43A],[43B]|19.7283248707|45.3647063948|KISA\u010c - MIHALA KARDELISA - OMLADINSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img062825.jpg|IV
+[42A],[42B],[43A],[43B]|19.7264007767|45.3688030497|KISA\u010c - OKRETNICA||IV
+[5A],[14A],[41A],[42A],[43A],[51B]|19.8148147237|45.2660444179|RUMENA\u010cKA - RADNI\u010cKO IGRALI\u0160TE|\/slike\/stajalista\/10314.jpg|I
+[3A],[5A],[7B],[14A],[18B],[41A],[42A],[43A],[51B]|19.8182127414|45.2633439588|RUMENA\u010cKA - BUL. JA\u0160E TOMI\u0106A|\/slike\/stajalista\/10312.jpg|I

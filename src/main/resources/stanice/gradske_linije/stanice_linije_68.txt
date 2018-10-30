@@ -1,0 +1,26 @@
+[10A],[15A],[17A],[51B],[52B],[53B],[54B],[55B],[56B]|19.8366307617|45.2528681592|BUL. OSLOBO\u0110ENJA - FUTO\u0160KA PIJACA|\/slike\/stajalista\/10343.jpg|I
+[2B],[6B],[51B],[52B],[53B],[54B],[55B],[56B]|19.8252968807|45.2491656314|FUTO\u0160KA - CARA DU\u0160ANA|\/slike\/stajalista\/10340.jpg|I
+[51B],[52B],[53B],[54B],[55B],[56B]|19.8010162498|45.24628254|FUTO\u0160KI PUT - SATELITSKA PIJACA|\/slike\/stajalista\/10337.jpg|I
+[2B],[6B],[9A],[51B],[52B],[53B],[54B],[55B],[56B]|19.8083415635|45.247517576|FUTO\u0160KI PUT - VR\u0160A\u010cKA|\/slike\/stajalista\/10338.jpg|I
+[3AA],[4A],[5NB],[11A],[11B],[16B],[17B],[21B],[22B],[23B],[24B],[41B],[42B],[43B],[52B],[53B],[54B],[55B],[56B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B]|19.830132455|45.2650202834|\u017dELEZNI\u010cKA STANICA - DOLASCI|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0506461.jpg|I
+[51B],[52B],[53B],[54B],[55B],[56B]|19.79550631|45.2445958159|FUTO\u0160KI PUT - BUL. PATRIJAHA PAVLA|\/slike\/stajalista\/10336.jpg|I
+[51B],[52B],[53B],[54B],[55B],[56B]|19.7572312271|45.2492300271|VETERNIK - PRAVOSLAVNA CRKVA|\/slike\/stajalista\/10329.jpg|II
+[53B],[55B],[56B]|19.6945874305|45.2386780841|FUTOG - CARICE MILICE - ROBNA KU\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0722112.jpg|III
+[54B],[56B]|19.710492541|45.2410451184|FUTOG - RADE KONDI\u0106A - GRME\u010cKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0739128.jpg|III
+[54B],[56B]|19.7194038535|45.2427078645|FUTOG - RADE KONDI\u0106A - INDUSTRIJSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0740129.jpg|III
+[54B],[56B]|19.7278720071|45.2444242272|FUTOG - RADE KONDI\u0106A - RUMENA\u010cKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0741130.jpg|III
+[53B],[54B],[55B],[56B]|19.7371847016|45.2463545316|VETERNIK - ZAVOD ZA DECU|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0742131.jpg|II
+[51B],[52B],[53B],[54B],[55B],[56B]|19.7680295823|45.2466526277|VETERNIK - FE\u0160TER|\/slike\/stajalista\/10331.jpg|II
+[51B],[52B],[53B],[54B],[55B],[56B]|19.792701|45.243705|FUTO\u0160KI PUT - GARA\u017dA GSP|\/slike\/stajalista\/10335.jpg|I
+[56A],[56B]|19.6220513162|45.2310593407|BEGE\u010c - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0767154.jpg|IV
+[56B]|19.6236073708|45.2350784381|BEGE\u010c - KRALJA PETRA I - DOSITEJA OBRADOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0768155.jpg|IV
+[56B]|19.622897357|45.2377119869|BEGE\u010c - \u010cESMA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0769156.jpg|IV
+[56B]|19.6221147229|45.2406816439|BEGE\u010c - KRALJA PETRA I - ZMAJ JOVINA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0770157.jpg|IV
+[56B]|19.6278103336|45.2410597438|BEGE\u010c - PARTIZANSKA - STADION|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0771158.jpg|IV
+[56B]|19.6342153146|45.2409278186|BEGE\u010c - NIKOLE TESLE - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0772159.jpg|IV
+[56B]|19.6382594445|45.2414349692|BEGE\u010c - NIKOLE TESLE - HEMIPRODUKT|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0773160.jpg|IV
+[56B]|19.6532486911|45.2418427335|BA\u010cKOPALANA\u010cKI PUT - SALA\u0160|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0774161.jpg|IV
+[56B]|19.6697390487|45.2404009547|BA\u010cKOPALANA\u010cKI PUT - \u010cARDA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0775162.jpg|IV
+[56B]|19.6794477912|45.2396198902|FUTOG - IZLAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0776163.jpg|III
+[56B]|19.6864559541|45.2391587159|FUTOG - KOZARA\u010cKA - STARA OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0777164.jpg|III
+[56B]|19.7040749573|45.2398713667|FUTOG - RADE KONDI\u0106A - NJEGO\u0160EVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0778165.jpg|III

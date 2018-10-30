@@ -1,0 +1,19 @@
+[1B],[1ZB],[3A],[8B],[19B]|19.8419960985|45.255185246|USPENSKA - POZORI\u0160NI TRG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img002920.jpg|I
+[3A],[8B],[18B]|19.8263471168|45.2595168963|BUL .KRALJA PETRA I - GROBLJE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img011298.jpg|I
+[3A]|19.8375257882|45.2588786887|VOJVODE BOJOVI\u0106 - SOCIALNO|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img011096.jpg|I
+[1B],[1ZB],[3A],[3AB],[4A],[6A],[8B],[12B],[18B],[19B]|19.844141|45.253519|BUL. MIHAJLA PUPINA - POTHODNIK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009480.jpg|I
+[3A],[9B],[19B]|19.87968712|45.2464017138|PRERADOVI\u0106EVA - MARINA DR\u017dI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img010591.jpg|I
+[3A],[3B],[9A],[9B],[19A],[19B]|19.8878906109|45.2360062995|PETROVARADIN - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0159142.jpg|I
+[3A],[9B],[19B],[60B],[61B],[62B]|19.8853872807|45.2396101516|PETROVARADIN - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0160143.jpg|I
+[3A],[9B],[19B]|19.8814113961|45.2439233024|PRERADOVI\u0106EVA - BO\u017dIDAR AD\u017dIJE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0161144.jpg|I
+[3A],[3AB],[9B],[19B],[60B],[61B],[62B],[64B]|19.8757045697|45.2496755784|PRERADOVI\u0106EVA - BENZINSKA PUMPA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0162145.jpg|I
+[3A],[3AB],[9B],[19B],[64B],[69B]|19.8732154355|45.251431704|PRERADOVI\u0106EVA - \u0160ENOINA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0163146.jpg|I
+[3A],[3AB],[9B],[19B],[69B]|19.8689433116|45.2526031657|PRERADOVI\u0106EVA - LOVA\u010cKI DOM|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0164147.jpg|I
+[3A],[3AB],[9B],[19B],[60B],[61B],[62B],[64B],[69B]|19.8623634945|45.2548163902|BEOGRADSKA - VLADIMIRA NAZORA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0165148.jpg|I
+[3A],[8B],[18B]|19.8314132035|45.2605767651|BUL .KRALJA PETRA I - BUL. OSLOBO\u0110ENJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0170153.jpg|I
+[3A],[5A],[11B],[18B]|19.8213763649|45.260450059|RUMENA\u010cKA - DOM ZDRAVLJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0171154.jpg|I
+[3A],[7B],[18B]|19.8156966528|45.2634661042|KORNELIJA STANKOVI\u0106A - FILIPA FILIPOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0173156.jpg|I
+[3A],[13B]|19.8111852139|45.2640112807|MILENKA GR\u010cI\u0106A - BANATSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0174157.jpg|I
+[3A],[3AB],[6A],[9B],[19B],[60B],[61B],[62B],[64B],[69]|19.8519122087|45.2542020579|BUL. MIHAJLA PUPINA - DUNAVSKI PARK||I
+[3A],[13B]|19.808222|45.265188|OBLA\u010cI\u0106A RADA - JANKA \u010cMELIKA|\/slike\/10137.jpg|I
+[3A],[5A],[7B],[14A],[18B],[41A],[42A],[43A],[51B]|19.8182127414|45.2633439588|RUMENA\u010cKA - BUL. JA\u0160E TOMI\u0106A|\/slike\/stajalista\/10312.jpg|I

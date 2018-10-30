@@ -1,0 +1,18 @@
+[1A],[1ZA],[4B],[8A],[9B],[12A],[60B],[61B],[62B],[64B],[69B],[18A]|19.8471827488|45.2524025428|\u017dARKA ZRENJANINA - OP\u0160TINA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0127112.jpg|I
+[3A],[9B],[19B],[60B],[61B],[62B]|19.8853872807|45.2396101516|PETROVARADIN - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0160143.jpg|I
+[3A],[3AB],[9B],[19B],[60B],[61B],[62B],[64B]|19.8757045697|45.2496755784|PRERADOVI\u0106EVA - BENZINSKA PUMPA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0162145.jpg|I
+[3A],[3AB],[9B],[19B],[60B],[61B],[62B],[64B],[69B]|19.8623634945|45.2548163902|BEOGRADSKA - VLADIMIRA NAZORA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0165148.jpg|I
+[3AB],[4A],[5A],[5NB],[7B],[14A],[18B],[60B],[61B],[62B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B],[77B],[78B],[79B],[80B],[81B],[84B]|19.8368000824|45.2525198464|BUL. OSLOBO\u0110ENJA - FUTO\u0160KA PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0227207.jpg|I
+[3AB],[4A],[5NB],[7B],[10A],[14A],[15A],[17A],[51B],[52B],[53B],[54B],[55B],[60B],[61B],[62B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B],[77B],[78B],[79B],[80B],[81B],[84B]|19.8318492939|45.2613766166|BUL. OSLOBO\u0110ENJA - KRALJA PETRA I|\/slike\/stajalista\/10350.jpg|I
+[12A],[60B],[61B],[62B],[64B],[69B]|19.8421576964|45.2488034819|MAKSIMA GORKOG - SREMSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0394361.jpg|I
+[31B],[32B],[33B],[60B],[61B],[62B],[77B],[78B],[79B],[80B],[81B],[84B]|19.8292532816|45.2646698037|MAS - DOLAZNI PERON|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0503458.jpg|I
+[62A],[62B]|19.9321771485|45.1944294024|DUDARA - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0913295.jpg|IIa
+[62B]|19.9314175687|45.1983381413|SR. KARLOVCI V - IGRALI\u0160TE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0914296.jpg|IIa
+[60B],[62B]|19.9330346419|45.2014900109|SR. KARLOVCI - KARLOVA\u010cKA GIMNAZIJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0921302.jpg|IIa
+[60B],[61B],[62B]|19.9373887604|45.2030489442|SR. KARLOVCI IV - CENTAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0922303.jpg|IIa
+[60B],[61B],[62B]|19.9323217935|45.2065802878|SR. KARLOVCI III - \u017dEL. STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0924305.jpg|IIa
+[60B],[61B],[62B]|19.9215868909|45.2103090191|SR. KARLOVCI II - PANORAMA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0925306.jpg|IIa
+[60B],[61B],[62B]|19.9118377779|45.2145349843|SR. KARLOVCI I - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0926307.jpg|IIa
+[60B],[61B],[62B]|19.9009328712|45.2225249456|TEKIJE II - VINOGRADI|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0927308.jpg|II
+[60B],[61B],[62B]|19.8914101033|45.2332483189|TEKIJE - NAVIP|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0928309.jpg|I
+[3A],[3AB],[6A],[9B],[19B],[60B],[61B],[62B],[64B],[69]|19.8519122087|45.2542020579|BUL. MIHAJLA PUPINA - DUNAVSKI PARK||I

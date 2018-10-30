@@ -1,0 +1,23 @@
+[5A],[5NB]|19.8414877223|45.2554480126|USPENSKA - \u0160AFARIKOVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img002718.jpg|I
+[3A],[5A],[11B],[18B]|19.8213763649|45.260450059|RUMENA\u010cKA - DOM ZDRAVLJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0171154.jpg|I
+[3AB],[4A],[5A],[5NB],[7B],[14A],[18B],[60B],[61B],[62B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B],[77B],[78B],[79B],[80B],[81B],[84B]|19.8368000824|45.2525198464|BUL. OSLOBO\u0110ENJA - FUTO\u0160KA PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0227207.jpg|I
+[5A],[14A]|19.8121474846|45.2681204351|RUMENA\u010cKI PUT - BENZINSKA PUMPA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0277254.jpg|I
+[5A]|19.80785211|45.2704064001|AVIJATI\u010cARSKA - RUMENA\u010cKI PUT|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0278255.jpg|I
+[5A],[5B]|19.8051343851|45.2664847055|AVIJATI\u010cARSKA - KASARNA - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0279256.jpg|I
+[5A],[5B],[5NA],[5NB]|19.8302754549|45.3023192227|TEMERINSKI PUT - NADVO\u017dNJAK - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0297273.jpg|I
+[5A],[5NB],[30B],[31B],[32B],[33B]|19.8304360891|45.2993083361|TEMERINSKI PUT - SAVSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0348319.jpg|I
+[5A],[5NB],[30B]|19.8304491318|45.2957648457|TEMERINSKI PUT - VELEBITSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0350320.jpg|I
+[5A],[5NB],[30B]|19.8304941804|45.2933241684|TEMERINSKI PUT - PAJE RADOSAVLJEVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0351321.jpg|I
+[5A],[5NB],[30B]|19.8305011638|45.2906889242|TEMERINSKI PUT - MAJKE JUGOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0352322.jpg|I
+[5A],[5NB],[30B],[31B],[32B],[33B]|19.8317289762|45.2880777199|TEMERINSKI PUT - OTOKARA KER\u0160OVANIJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0353323.jpg|I
+[5A],[5NB],[30B],[31B],[32B],[33B]|19.8346922664|45.2828756397|TEMERINSKA - NAJLON PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0354324.jpg|I
+[5A],[5NB],[30B]|19.8363835969|45.2802317297|TEMERINSKA - VIDOVDANSKO NASELJE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0355325.jpg|I
+[5A],[5NB],[30B]|19.8411205686|45.2725760616|TEMERINSKA - \u0160AJKA\u0160KA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0356326.jpg|I
+[5A],[5NB],[21B],[30B]|19.8430703993|45.2673052212|TEMERINSKA - KOSTE \u0160OKICE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0358328.jpg|I
+[5A],[5NB],[21B],[30B]|19.8435652321|45.2621466908|TEMERINSKA - PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0359329.jpg|I
+[5A]|19.8339511487|45.2551283388|NOVOSADSKOG SAJMA - BUL.OSLOBO\u0110ENJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0375342.jpg|I
+[5A]|19.8300945566|45.2547426103|NOVOSADSKOG SAJMA -O.\u0160. PETEFI \u0160ANDOR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0376343.jpg|I
+[11B],[5A]|19.8244393678|45.2545639152|HAJDUK VELJKOVA - NOVOSADSKOG SAJMA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0378345.jpg|I
+[5A],[5NB],[21B],[22B],[23B],[24B],[30B]|19.8421271396|45.2696690854|TEMERINSKA - PARTIZANSKA||I
+[5A],[14A],[41A],[42A],[43A],[51B]|19.8148147237|45.2660444179|RUMENA\u010cKA - RADNI\u010cKO IGRALI\u0160TE|\/slike\/stajalista\/10314.jpg|I
+[3A],[5A],[7B],[14A],[18B],[41A],[42A],[43A],[51B]|19.8182127414|45.2633439588|RUMENA\u010cKA - BUL. JA\u0160E TOMI\u0106A|\/slike\/stajalista\/10312.jpg|I

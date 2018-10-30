@@ -1,0 +1,18 @@
+[1B],[1ZB],[3A],[8B],[19B]|19.8419960985|45.255185246|USPENSKA - POZORI\u0160NI TRG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img002920.jpg|I
+[1B], [1ZB],[4A],[8B],[9A],[11A],[18B]|19.8492059684|45.2481301777|STRA\u017dILOVSKA - URBIS|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0155138.jpg|I
+[1B],[1ZB],[3A],[3AB],[4A],[6A],[8B],[12B],[18B],[19B]|19.844141|45.253519|BUL. MIHAJLA PUPINA - POTHODNIK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009480.jpg|I
+[1B],[1ZB],[4A],[8B],[9A],[12B],[18B],[60A],[61A],[62A],[64A],[69A]|19.8475593745|45.2528535063|\u017dARKA ZRENJANINA - IZVR\u0160NO VE\u0106E|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0186169.jpg|I
+[1B],[1ZB],[8B]|19.848256|45.239001|\u0160TRAND - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0199180.jpg|I
+[1B],[1ZB],[4A],[8B],[11A],[13B]|19.847528317|45.2429842112|FRU\u0160KOGORSKA - DR. I. \u0110URI\u010cI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0200181.jpg|I
+[1B],[1ZB],[19B],[35A],[35\u010cLA]|19.8226514651|45.2993746126|SENTANDREJSKI PUT - SAVSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0298274.jpg|I
+[1A],[1B],[1ZA],[19A],[19B]|19.8247023774|45.3025717506|SENTANDREJSKI PUT - ZMAJEVA\u010cKI PUT|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0299275.jpg|I
+[1B],[1ZB],[8B],[19B],[21B],[22B],[23B],[24B],[30B]|19.8423966225|45.2608711975|KISA\u010cKA - TEMERINSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0334308.jpg|I
+[1B],[1ZB],[19B],[21B]|19.8390209306|45.2632551971|KISA\u010cKA - DOSITEJEVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0336309.jpg|I
+[1B],[1ZB],[15A],[16A],[17A],[19B],[31A],[32A],[33A],[35A],[35\u010cLA]|19.834665763|45.2665045391|KISA\u010cKA - PODVO\u017dNJAK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0339311.jpg|I
+[1B],[1ZB],[15A],[17A],[19B]|19.8315959987|45.2699357528|SENTANDREJSKI PUT - PARTIZANSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0341312.jpg|I
+[1B],[1ZB],[15A],[17A],[19B],[35A],[35\u010cLA]|19.830315176|45.2737069812|SENTANDREJSKI PUT - TEODORA MANDI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0342313.jpg|I
+[1B],[1ZB],[19B],[35A],[35\u010cLA]|19.8263159471|45.2848260115|SENTANDREJSKI PUT - PRIMORSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0343314.jpg|I
+[1B],[1ZB],[19B]|19.825474462|45.2872651434|SENTANDREJSKI PUT - OTOKARA KER\u0160OV.|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0344315.jpg|I
+[1B],[1ZB],[19B],[35A],[35\u010cLA]|19.8245477965|45.2898775272|SENTANDREJSKI PUT - SPORTSKA HALA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0345316.jpg|I
+[1B],[1ZB],[19B]|19.8237043193|45.2922920477|SENTANDREJSKI PUT - ZELENGORSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0346317.jpg|I
+[1B],[1ZB],[19B]|19.8226166593|45.2953893559|SENTANDREJSKI PUT - VELEBITSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0347318.jpg|I
