@@ -1,0 +1,20 @@
+[14B],[41B],[42B],[43B],[51A]|19.8018176756|45.2747023047|RUMENA\u010cKI PUT - KRU\u017dNI TOK|\/slike\/stajalista\/10345.jpg|I
+[5B],[14B],[41B],[42B],[43B],[51A]|19.8130603695|45.2670846403|RUMENA\u010cKA - POLICIJSKA STANICA|\/slike\/stajalista\/10347.jpg|I
+[11B],[41B],[42B],[43B],[51A]|19.8192032513|45.2630741789|BUL. JA\u0160E TOMI\u0106A - RUMENA\u010cKA|\/slike\/stajalista\/10348.jpg|I
+[3AA],[4A],[5NB],[11A],[11B],[16B],[17B],[21B],[22B],[23B],[24B],[41B],[42B],[43B],[52B],[53B],[54B],[55B],[56B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B]|19.830132455|45.2650202834|\u017dELEZNI\u010cKA STANICA - DOLASCI|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0506461.jpg|I
+[14B],[41B],[42B],[43B]|19.7863577779|45.2801667701|RUMENA\u010cKI PUT - NADVO\u017dNJAK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0523476.jpg|I
+[5B],[14B],[41B],[42B],[43B],[51A]|19.8089150153|45.2702133075|RUMENA\u010cKI PUT - AVIJATI\u010cARSKA|\/slike\/stajalista\/10346.jpg|I
+[41B],[42B],[43B]|19.7937338396|45.2785344884|RUMENA\u010cKI PUT - GRADSKO GROBLJE||I
+[41B],[42B],[43B]|19.7416538887|45.2998666774|RUMENKA - KANAL|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img061312.jpg|II
+[41B],[42B],[43B]|19.7383925986|45.2951261357|RUMENKA - PARTIZANSKA 59|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img061413.jpg|II
+[42B],[43A],[43B]|19.7283956395|45.3644564073|KISA\u010c - MIHALJA KARDELISA - OMLADINSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img063027.jpg|IV
+[42B],[43A],[43B]|19.7307323674|45.3611210212|KISA\u010c - JANA KOLARA - MIHALA KARDELISA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img063128.jpg|IV
+[42B],[43A],[43B]|19.7330422654|45.359210214|KISA\u010c - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img063229.jpg|IV
+[42B],[43A],[43B]|19.7308155346|45.3546615353|KISA\u010c - MLIN|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img063430.jpg|IV
+[42B],[43B]|19.7262662918|45.3467969|KISA\u010c - BENZINSKA PUMPA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064137.jpg|IV
+[42B],[43B]|19.7234010713|45.3417537798|KISA\u010c - DR. JANKA GOMBARA 196|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064238.jpg|IV
+[42B],[43B]|19.7256711919|45.3402478207|KISA\u010c - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064339.jpg|IV
+[42B],[43B]|19.742680494|45.3080190296|RUMENKA - KISA\u010cKI PUT - ASFALTNA BAZA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064440.jpg|II
+[41B],[42B],[43B]|19.7447983387|45.291518222|RUMENKA - CENTAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064541.jpg|II
+[41B],[42B],[43B]|19.7732069555|45.2827262394|SAJLOVO - BANGLADE\u0160|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064742.jpg|I
+[42A],[42B],[43A],[43B]|19.7264007767|45.3688030497|KISA\u010c - OKRETNICA||IV

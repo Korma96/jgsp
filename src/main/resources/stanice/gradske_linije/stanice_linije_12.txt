@@ -1,0 +1,21 @@
+[2B],[6B]|19.8331936901|45.2498730986|FUTO\u0160KA - BRA\u0106E RIBNIKAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img005445.jpg|I
+[6A],[6B],[6AA],[6AB]|19.7847028632|45.2344242907|SMEDEREVSKA - BANJALU\u010cKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img006857.jpg|I
+[6B],[6AA]|19.787184434|45.2332075399|SIME \u0160OLAJE - \u017dIKICE JOVANOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img006958.jpg|I
+[6B]|19.7921001728|45.2336631693|BRANKA \u0106OPI\u0106A - SLAVUJEVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img007059.jpg|I
+[6B]|19.8008702781|45.2390614549|\u0106IRILA I METODIJA - GORANA KOVA\u010cI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img007261.jpg|I
+[6B]|19.8110232713|45.2416663419|VR\u0160A\u010cKA - ADI ENDREA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img007865.jpg|I
+[1A],[1ZA],[3B],[3AA],[4B],[6B],[8A],[12A],[18A],[19A]|19.844187|45.253337|BUL. MIHAJLA PUPINA - POTHODNIK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008067.jpg|I
+[3B],[3AA],[6B],[9A],[16A],[19A],[60A],[61A],[62A],[64A],[69A]|19.8530960428|45.2542765403|BUL. MIHAJLA PUPINA - SONJE MARINKOVI\u0106|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008168.jpg|I
+[6B],[11A]|19.8537375388|45.2617554805|MARKA MILJANOVA - KVANTA\u0160KA PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008572.jpg|I
+[6B],[11A]|19.8510251212|45.2615941131|MARKA MILJANOVA - KOSOVSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008773.jpg|I
+[6B],[11A]|19.8548476045|45.2576645565|BEOGRADSKI KEJ - KAPETANIJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0166149.jpg|I
+[6B]|19.7976007162|45.2359280235|BRANKA \u0106OPI\u0106A 43|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0206186.jpg|I
+[6B],[12B]|19.8079954948|45.2383549843|\u0106IRILA I METODIJA - O.\u0160. JO\u017dEF ATILA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0207187.jpg|I
+[6B]|19.8108903063|45.23855347|VR\u0160A\u010cKA - PRAVOSLAVNA CRKVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0208188.jpg|I
+[6B]|19.8094435931|45.2443433814|VR\u0160A\u010cKA - JOVANA POPOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0209189.jpg|I
+[2B],[6B],[9A],[51B],[52B],[53B],[54B],[55B]|19.8177958089|45.2488161894|FUTO\u0160KA - HIGIJENSKI ZAVOD|\/slike\/stajalista\/10339.jpg|I
+[2B],[6B],[51B],[52B],[53B],[54B],[55B],[56B]|19.8252968807|45.2491656314|FUTO\u0160KA - CARA DU\u0160ANA|\/slike\/stajalista\/10340.jpg|I
+[2B],[6B],[9A],[51B],[52B],[53B],[54B],[55B],[56B]|19.8083415635|45.247517576|FUTO\u0160KI PUT - VR\u0160A\u010cKA|\/slike\/stajalista\/10338.jpg|I
+[2B],[3AA],[4B],[5B],[5NA],[6B],[10B],[14B],[15B],[18A]|19.8377609655|45.2522080286|JEVREJSKA - BUL. OSLOBO\u0110ENJA||I
+[2B],[6B],[51B],[52B],[53B],[54B],[55B]|19.8300215701|45.2490835157|FUTO\u0160KA - ANTONA \u010cEHOVA|\/slike\/stajalista\/10342.jpg|I
+[6B]|19.850372|45.264010|PODBARA\r\n-\r\nOKRETNICA|\/slike\/stajalista\/10266.jpg|I

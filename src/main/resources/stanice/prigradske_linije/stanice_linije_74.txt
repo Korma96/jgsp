@@ -1,0 +1,19 @@
+[3B],[3AA],[6B],[9A],[16A],[19A],[60A],[61A],[62A],[64A],[69A]|19.8530960428|45.2542765403|BUL. MIHAJLA PUPINA - SONJE MARINKOVI\u0106|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008168.jpg|I
+[3B],[3AA],[9A],[19A],[60A],[61A],[62A],[64A],[69A]|19.8620128358|45.2547734365|BEOGRADSKA - LISINSKOG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009581.jpg|I
+[3B],[9A],[19A],[60A],[61A],[62A]|19.8857439999|45.2389365212|PETROVARADIN - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img010187.jpg|I
+[3B],[9A],[19A],[60A],[61A],[62A],[64A]|19.876524398|45.2488033781|PRERADOVI\u0106EVA - RELJKOVI\u0106EVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0157140.jpg|I
+[1B],[1ZB],[4A],[8B],[9A],[12B],[18B],[60A],[61A],[62A],[64A],[69A]|19.8475593745|45.2528535063|\u017dARKA ZRENJANINA - IZVR\u0160NO VE\u0106E|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0186169.jpg|I
+[7A],[60A],[61A],[62A],[64A],[68A],[69A],[71A],[72A],[73A],[74A],[76A],[77A],[78A],[79A],[80A],[81A],[84A]|19.8370753816|45.2514514442|BUL. OSLOBO\u0110ENJA - FUTO\u0160KA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0238218.jpg|I
+[12B],[60A],[61A],[62A],[64A],[69A]|19.8431913572|45.2488624702|MAKSIMA GORKOG - SPENS|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0393360.jpg|I
+[31A],[32A],[33A],[60A],[61A],[62A]|19.8285213548|45.2641307634|MAS - POLAZNI PERON BR. 13|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0500455.jpg|I
+[3AA],[4B],[5NA],[7A],[10B],[14B],[15B],[18A],[51A],[52A],[53A],[54A],[55A],[60A],[61A],[62A],[64A],[68A],[69A],[71A],[72A],[73A],[74A],[76A],[77A],[78A],[79A],[80A],[81A],[84A]|19.8322222835|45.2601777537|BUL. OSLOBO\u0110ENJA - KRALJA PETRA I|\/slike\/stajalista\/10305.jpg|I
+[60A],[61A],[62A]|19.8936378798|45.2312570434|TEKIJE - BENZINSKA PUMPA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0902284.jpg|I
+[60A],[61A],[62A]|19.9008106109|45.2225589456|TEKIJE II - VINOGRADI|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0903285.jpg|II
+[60A],[61A],[62A]|19.9115365236|45.2147383234|SR.KARLOVCI I - ULAZ|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0904286.jpg|IIa
+[60A],[61A],[62A]|19.9219017516|45.2101464748|SR.KARLOVCI II - PANORAMA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0905287.jpg|IIa
+[60A],[61A],[62A]|19.9321083976|45.2065920518|SR.KARLOVCI III - \u017dEL. STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0906288.jpg|IIa
+[60A],[61A],[62A]|19.9378333803|45.2034783249|SR.KARLOVCI IV - CENTAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0907289.jpg|IIa
+[61A]|19.9381009482|45.2002565769|SR.KARLOVCI V - MITR. STRATIMIROVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0908290.jpg|IIa
+[61A],[61B]|19.9424436102|45.1985106856|VINOGRADARSKA - MITR. STRATIMIROVI\u0106A OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0909291.jpg|IIa
+[61A],[61B]|19.9349213862|45.2041760491|SR.KARLOVCI - CENTAR OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0923304.jpg|IIa
+[3AA],[4B],[5NA],[7A],[10B],[14B],[15B],[18A],[51A],[52A],[53A],[54A],[55A],[60A],[61A],[62A],[64A],[68A],[69A],[71A],[72A],[73A],[74A],[76A],[77A],[78A],[79A],[80A],[81A],[84A]|19.8322222835|45.2601777537|BUL. OSLOBO\u0110ENJA - KRALJA PETRA I|\/slike\/stajalista\/10362.jpg|I

@@ -1,0 +1,20 @@
+[1B],[1ZB],[3A],[8B],[19B]|19.8419960985|45.255185246|USPENSKA - POZORI\u0160NI TRG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img002920.jpg|I
+[2A],[7B],[8B],[9B],[18B]|19.8031021067|45.2529483166|BUL. J. DU\u010cI\u0106A - BUL. S. JOVANOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004132.jpg|I
+[2A],[7B],[8B],[9B],[18B]|19.7983752275|45.2513539058|BUL. J. DU\u010cI\u0106A - BRA\u0106E DRONJAK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004233.jpg|I
+[2A],[8B],[9B],[18A],[18B]|19.7915144259|45.2489713023|NOVO NASELJE - BISTRICA - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004435.jpg|I
+[1B], [1ZB],[4A],[8B],[9A],[11A],[18B]|19.8492059684|45.2481301777|STRA\u017dILOVSKA - URBIS|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0155138.jpg|I
+[3A],[8B],[18B]|19.8263471168|45.2595168963|BUL .KRALJA PETRA I - GROBLJE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img011298.jpg|I
+[1B],[1ZB],[3A],[3AB],[4A],[6A],[8B],[12B],[18B],[19B]|19.844141|45.253519|BUL. MIHAJLA PUPINA - POTHODNIK|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009480.jpg|I
+[3A],[8B],[18B]|19.8314132035|45.2605767651|BUL .KRALJA PETRA I - BUL. OSLOBO\u0110ENJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0170153.jpg|I
+[1B],[1ZB],[4A],[8B],[9A],[12B],[18B],[60A],[61A],[62A],[64A],[69A]|19.8475593745|45.2528535063|\u017dARKA ZRENJANINA - IZVR\u0160NO VE\u0106E|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0186169.jpg|I
+[1B],[1ZB],[8B]|19.848256|45.239001|\u0160TRAND - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0199180.jpg|I
+[1B],[1ZB],[4A],[8B],[11A],[13B]|19.847528317|45.2429842112|FRU\u0160KOGORSKA - DR. I. \u0110URI\u010cI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0200181.jpg|I
+[8B]|19.7950461743|45.2543785923|BATE BRKI\u0106A - GERONTOLO\u0160KI CENTAR|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0214194.jpg|I
+[8B]|19.7902083832|45.2518458292|BUL. KNEZA MILO\u0160A - MILEVE MARI\u0106|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0215195.jpg|I
+[1B],[1ZB],[8B],[19B],[21B],[22B],[23B],[24B],[30B]|19.8423966225|45.2608711975|KISA\u010cKA - TEMERINSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0334308.jpg|I
+[8B]|19.821789798|45.2590354052|BRA\u0106E POPOVI\u0106 - RUMENA\u010cKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0360330.jpg|I
+[8B]|19.81692892|45.2576529346|HAD\u017dI RUVIMOVA - ILIJE BIR\u010cANINA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0361331.jpg|I
+[8B]|19.8135561249|45.2565030038|HAD\u017dI RUVIMOVA - JANKA \u010cMELIKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0362332.jpg|I
+[8B]|19.8064282878|45.2540476132|RA\u0160E RADUJKOVA - STOJANA NOVAKOVI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0363333.jpg|I
+[8B]|19.8390400612|45.2626605142|BUL. KRALJA PETRA I - KISA\u010cKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0380347.jpg|I
+[8B]|19.8351798744|45.2616127597|BUL. KRALJA PETRA I - KRALJEVI\u0106A MARKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0381348.jpg|I

@@ -1,0 +1,26 @@
+[2B],[8A],[9A],[18A],[18B]|19.791754249|45.2489224745|NOVO NASELJE - BISTRICA - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004536.jpg|I
+[2B],[7A],[9A],[18A]|19.7936823203|45.2495765937|BUL. J.DU\u010cI\u0106A - IGRALI\u0160TE|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004637.jpg|I
+[2B],[7A],[8A],[9A],[18A]|19.7983862612|45.2511237051|BUL. J. DU\u010cI\u0106A - BATE BRKI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004738.jpg|I
+[2B],[7A],[8A],[9A],[18A]|19.8018919417|45.2523770585|BUL. J. DU\u010cI\u0106A - ROBNA KU\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004839.jpg|I
+[2B],[9A]|19.8056491406|45.2510355315|BUL. S.JOVANOVI\u0106A - DOM ZDRAVLJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img004940.jpg|I
+[1B], [1ZB],[4A],[8B],[9A],[11A],[18B]|19.8492059684|45.2481301777|STRA\u017dILOVSKA - URBIS|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0155138.jpg|I
+[9A],[12B],[18B]|19.8317379566|45.241465683|BUL. CARA LAZARA - DOM ZDRAVLJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0137122.jpg|I
+[3B],[3AA],[6B],[9A],[16A],[19A],[60A],[61A],[62A],[64A],[69A]|19.8530960428|45.2542765403|BUL. MIHAJLA PUPINA - SONJE MARINKOVI\u0106|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img008168.jpg|I
+[3B],[3AA],[9A],[19A],[60A],[61A],[62A],[64A],[69A]|19.8620128358|45.2547734365|BEOGRADSKA - LISINSKOG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009581.jpg|I
+[3B],[3AA],[9A],[19A],[69A]|19.8678103709|45.2525866389|PRERADOVI\u0106EVA - LOVA\u010cKI DOM|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009682.jpg|I
+[3B],[3AA],[9A],[19A],[64A],[69A]|19.8727083512|45.2516407374|PRERADOVI\u0106EVA - O.\u0160. JOVAN DU\u010cI\u0106|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009783.jpg|I
+[3B],[9A],[19A]|19.8801002749|45.2455157784|PRERADOVI\u0106EVA - MARINA DR\u017dI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img009985.jpg|I
+[3B],[9A],[19A],[60A],[61A],[62A]|19.8857439999|45.2389365212|PETROVARADIN - \u017dELEZNI\u010cKA STANICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img010187.jpg|I
+[3B],[9A],[19A],[60A],[61A],[62A],[64A]|19.876524398|45.2488033781|PRERADOVI\u0106EVA - RELJKOVI\u0106EVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0157140.jpg|I
+[3B],[9A],[19A]|19.8830977084|45.241791669|PRERADOVI\u0106EVA - RA\u010cKOG|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0158141.jpg|I
+[3A],[3B],[9A],[9B],[19A],[19B]|19.8878906109|45.2360062995|PETROVARADIN - OKRETNICA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0159142.jpg|I
+[9A],[11A]|19.8247020319|45.2487841683|CARA DU\u0160ANA - FUTO\u0160KA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0181164.jpg|I
+[9A],[11A]|19.8250937953|45.2436192236|CARA DU\u0160ANA - MEDICINSKA \u0160KOLA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0182165.jpg|I
+[9A],[12B],[18B]|19.8258641034|45.2399480828|BUL. CARA LAZARA - IVE ANDRI\u0106A|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0183166.jpg|I
+[9A],[12B],[18B]|19.8371533191|45.2426706144|BUL. CARA LAZARA - \u0160EKSPIROVA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0184167.jpg|I
+[9A],[13A],[18B]|19.8424535024|45.2440216217|BUL. CARA LAZARA - BUL. OSLOBO\u0110ENJA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0185168.jpg|I
+[1B],[1ZB],[4A],[8B],[9A],[12B],[18B],[60A],[61A],[62A],[64A],[69A]|19.8475593745|45.2528535063|\u017dARKA ZRENJANINA - IZVR\u0160NO VE\u0106E|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0186169.jpg|I
+[2B],[6B],[9A],[51B],[52B],[53B],[54B],[55B]|19.8177958089|45.2488161894|FUTO\u0160KA - HIGIJENSKI ZAVOD|\/slike\/stajalista\/10339.jpg|I
+[2B],[6B],[9A],[51B],[52B],[53B],[54B],[55B],[56B]|19.8083415635|45.247517576|FUTO\u0160KI PUT - VR\u0160A\u010cKA|\/slike\/stajalista\/10338.jpg|I
+[9A],[64A]|19.8831881997|45.2403483789|PETROVARADIN - RA\u010cKOG - PETROVARADINSKA PIJACA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img064944.jpg|I
+[9A]|19.8822505968|45.2294522586|PETROVARADIN - PUT NOVI SAD RUMA 124|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img067467.jpg|I
