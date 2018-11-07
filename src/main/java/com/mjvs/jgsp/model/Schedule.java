@@ -18,10 +18,10 @@ public class Schedule {
     @Column(name="date_from", unique=false, nullable=false)
     private LocalDate dateFrom;
 
-    @Column(name="departure_list", unique=false, nullable=false)
-    private LocalTime[] departureList;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MyLocalTime> departureList;
 
-    public Schedule(DayType dayType, LocalDate dateFrom, LocalTime[] departureList) {
+    public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList) {
         this.dayType = dayType;
         this.dateFrom = dateFrom;
         this.departureList = departureList;
@@ -51,11 +51,11 @@ public class Schedule {
         this.dateFrom = dateFrom;
     }
 
-    public LocalTime[] getDepartureList() {
+    public List<MyLocalTime> getDepartureList() {
         return departureList;
     }
 
-    public void setDepartureList(LocalTime[] departureList) {
+    public void setDepartureList(List<MyLocalTime> departureList) {
         this.departureList = departureList;
     }
 }

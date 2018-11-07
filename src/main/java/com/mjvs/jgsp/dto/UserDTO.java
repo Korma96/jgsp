@@ -1,21 +1,21 @@
 package com.mjvs.jgsp.dto;
 
-import com.mjvs.jgsp.model.Administrator;
+import com.mjvs.jgsp.model.User;
 
-public class AdministratorDTO {
+public class UserDTO {
 
     private String username;
     private String password;
 
-    public AdministratorDTO() {
+    public UserDTO() {
 
     }
 
-    public AdministratorDTO(Administrator administrator) {
-        this(administrator.getUsername(), administrator.getPassword());
+    public UserDTO(User user) {
+        this(user.getUsername(), user.getPassword());
     }
 
-    public AdministratorDTO(String username, String password) {
+    public UserDTO(String username, String password) {
         this.username = username;
         this.password = password;
     }

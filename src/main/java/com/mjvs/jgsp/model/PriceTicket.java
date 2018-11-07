@@ -14,9 +14,11 @@ public class PriceTicket {
     private LocalDate dateFrom;
 
     @Column(name="passenger_type", unique=false, nullable=false)
+    @Enumerated(EnumType.ORDINAL)
     private PassengerType passengerType;
 
     @Column(name="ticket_type", unique=false, nullable=false)
+    @Enumerated(EnumType.ORDINAL)
     private TicketType ticketType;
 
     @Column(name="price", unique=false, nullable=false)

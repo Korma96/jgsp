@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -28,7 +28,7 @@ public abstract class User {
 
     }
 
-    protected User(String username, String password, UserType userType, UserStatus userStatus) {
+    public User(String username, String password, UserType userType, UserStatus userStatus) {
         this.username = username;
         this.password = password;
         this.userType = userType;
