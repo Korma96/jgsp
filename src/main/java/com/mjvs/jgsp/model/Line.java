@@ -13,6 +13,9 @@ public class Line {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "active", unique = true, nullable = false)
+    private boolean active;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Stop> stops;
 
@@ -44,6 +47,10 @@ public class Line {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
 
     public List<Stop> getStops() {
         return stops;

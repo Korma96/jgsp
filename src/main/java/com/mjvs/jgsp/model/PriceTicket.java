@@ -21,17 +21,21 @@ public class PriceTicket {
     @Enumerated(EnumType.ORDINAL)
     private TicketType ticketType;
 
-    @Column(name="price", unique=false, nullable=false)
-    private double price;
+    @Column(name="priceLine", unique=false, nullable=false)
+    private double priceLine;
+
+    @Column(name="priceZone", unique=false, nullable=false)
+    private double priceZone;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Zone zone;
 
-    public PriceTicket(LocalDate dateFrom, PassengerType passengerType, TicketType ticketType, double price, Zone zone) {
+    public PriceTicket(LocalDate dateFrom, PassengerType passengerType, TicketType ticketType, double priceLine, double priceZone, Zone zone) {
         this.dateFrom = dateFrom;
         this.passengerType = passengerType;
         this.ticketType = ticketType;
-        this.price = price;
+        this.priceLine = priceLine;
+        this.priceZone = priceZone;
         this.zone = zone;
     }
 
@@ -67,13 +71,9 @@ public class PriceTicket {
         this.ticketType = ticketType;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    public double getPriceZone() { return priceZone; }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public void setPriceZone(double priceZone) {this.priceZone = priceZone; }
 
     public Zone getZone() {
         return zone;
@@ -82,4 +82,9 @@ public class PriceTicket {
     public void setZone(Zone zone) {
         this.zone = zone;
     }
+
+
+    public double getPriceLine() { return priceLine; }
+
+    public void setPriceLine(double priceLine) { this.priceLine = priceLine; }
 }
