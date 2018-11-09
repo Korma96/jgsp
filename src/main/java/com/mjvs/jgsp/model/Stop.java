@@ -19,9 +19,9 @@ public class Stop {
     private String name;
 
 
-    public Stop(double xCoordinate, double yCoordinate, String name) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+    public Stop(double latitude, double longitude, String name) {
+        this.latitude = latitude;
+        this.longitude = longitude;
 		this.name = name;
     }
 
