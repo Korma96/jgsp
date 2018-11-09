@@ -28,6 +28,7 @@ public class UserController {
     @Autowired
     private ScheduleService scheduleService;
 
+
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity add(@RequestBody UserDTO userDTO) {
         try{
@@ -47,4 +48,6 @@ public class UserController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
 }

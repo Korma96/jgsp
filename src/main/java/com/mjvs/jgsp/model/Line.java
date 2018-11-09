@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,13 @@ public class Line {
         this.stops = stops;
         this.transports = transports;
         this.schedules = schedules;
+    }
+
+    public Line(String name) {
+        this.name = name;
+        this.stops = new ArrayList<>();
+        this.transports = new ArrayList<>();
+        this.schedules = new ArrayList<>();
     }
 
     public Long getId() {

@@ -10,10 +10,10 @@ public class Stop {
     private Long id;
 
     @Column(name = "x_coordinate", unique = false, nullable = false)
-    private double xCoordinate;
+    private double latitude;
 
     @Column(name = "y_coordinate", unique = false, nullable = false)
-    private double yCoordinate;
+    private double longitude;
 
 	@Column(name = "name", unique = false, nullable = false)
     private String name;
@@ -33,20 +33,20 @@ public class Stop {
         this.id = id;
     }
 
-    public double getxCoordinate() {
-        return xCoordinate;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setxCoordinate(double xCoordinate) {
-        this.xCoordinate = xCoordinate;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public double getyCoordinate() {
-        return yCoordinate;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setyCoordinate(double yCoordinate) {
-        this.yCoordinate = yCoordinate;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 	
 	public String getName() {

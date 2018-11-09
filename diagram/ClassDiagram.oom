@@ -2689,8 +2689,8 @@ LABL 0 Arial,8,N</a:FontList>
 </o:Attribute>
 <o:Attribute Id="o105">
 <a:ObjectID>03F35289-8CEE-4BF8-9B22-AD78E75330D6</a:ObjectID>
-<a:Name>xCoordinate</a:Name>
-<a:Code>xCoordinate</a:Code>
+<a:Name>latitude</a:Name>
+<a:Code>latitude</a:Code>
 <a:CreationDate>1525430408</a:CreationDate>
 <a:Creator>Vuk</a:Creator>
 <a:ModificationDate>1541106943</a:ModificationDate>
@@ -2700,8 +2700,8 @@ LABL 0 Arial,8,N</a:FontList>
 </o:Attribute>
 <o:Attribute Id="o106">
 <a:ObjectID>615E2C89-6C7D-4CEC-BF66-5D8548ACCD21</a:ObjectID>
-<a:Name>yCoordinate</a:Name>
-<a:Code>yCoordinate</a:Code>
+<a:Name>longitude</a:Name>
+<a:Code>longitude</a:Code>
 <a:CreationDate>1541106886</a:CreationDate>
 <a:Creator>JOVO</a:Creator>
 <a:ModificationDate>1541106943</a:ModificationDate>
