@@ -1,6 +1,5 @@
 package com.mjvs.jgsp.controller;
 
-
 import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Stop;
@@ -16,34 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/home_page")
-public class HomeController
+@RequestMapping(value = "/line")
+public class LineController
 {
     @Autowired
     LineService lineService;
 
-    @RequestMapping(value = "/coordinates", method = RequestMethod.POST)
-    public ResponseEntity receiveCoordinates(@RequestBody String data)
-    {
-        System.out.println(data);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/lines", method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseEntity<List<Line>> getAllLines()
     {
         List<Line> allLines = lineService.getAll();
         return new ResponseEntity<>(allLines, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/line_stops", method = RequestMethod.POST)
+    @RequestMapping(value = "/stops", method = RequestMethod.POST)
     public ResponseEntity<List<Stop>> getLineStops(@RequestBody LineDTO line)
     {
         List<Stop> lineStops = lineService.getLineStops(line.getName());
         return new ResponseEntity<>(lineStops, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public ResponseEntity addLine(@RequestBody LineDTO line)
+    {
+        boolean result = lineService.add(new Line(line));
 
-
-
+        if(result){
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

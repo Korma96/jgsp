@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,8 @@ public class LineServiceImpl implements LineService {
     private LineRepository lineRepository;
 
     @Override
-    public boolean add(Line newLine) {
+    public boolean add(Line newLine)
+    {
         Optional<Line> line = lineRepository.findAll().stream()
                 .filter(l -> l.getName().equals(newLine.getName())).findFirst();
         if(line.isPresent())
@@ -32,27 +34,32 @@ public class LineServiceImpl implements LineService {
         try
         {
             lineRepository.save(newLine);
-            return true;
+            logger.info(String.format("Line %s successfully added!", newLine.getName()));
         }
         catch (Exception ex)
         {
-            logger.error(String.format("Error adding new line with name %s! Message: %s"
-                    , newLine.getName(), ex.getMessage()));
+            logger.error(String.format("Error adding new line %s message %s",
+                    newLine.getName(), ex.getMessage()));
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     @Override
-    public List<Line> getAll() {
+    public List<Line> getAll()
+    {
         return lineRepository.findAll();
     }
 
     @Override
-    public List<Stop> getLineStops(String lineName) {
+    public List<Stop> getLineStops(String lineName)
+    {
         Line line = lineRepository.findByName(lineName);
-        if(line == null) {
-            return null;
+        if(line == null)
+        {
+            logger.warn(String.format("Line %s does not exists.", line.getName()));
+            return new ArrayList<>();
         }
 
         return line.getStops();
@@ -64,21 +71,28 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public boolean delete(String lineName) {
+    public boolean delete(String lineName)
+    {
         Optional<Line> line = lineRepository.findAll().stream()
                 .filter(l -> l.getName().equals(lineName)).findFirst();
         if(!line.isPresent()){
-            // TO DO: Need to be logged...
+            logger.warn(String.format("Line %s does not exists.", lineName));
             return false;
         }
 
-        try {
+        try
+        {
             lineRepository.delete(line.get());
-            return true;
-        }catch (Exception ex) {
-            // TO DO: Need to be logged...
+            logger.info("Stop %s successfully deleted!", line.get().getName());
+        }
+        catch (Exception ex)
+        {
+            logger.error(String.format("Error deleting line %s message %s",
+                    line.get().getName(), ex.getMessage()));
             return false;
         }
+
+        return true;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.model;
 
+import com.mjvs.jgsp.dto.StopDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,11 @@ public class Stop {
         this.latitude = latitude;
         this.longitude = longitude;
 		this.name = name;
+    }
+
+    public Stop(StopDTO stopDTO)
+    {
+        this.name = stopDTO.getName();
     }
 
     public Long getId() {

@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.model;
 
+import com.mjvs.jgsp.dto.LineDTO;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,14 @@ public class Line {
 
     public Line(String name) {
         this.name = name;
+        this.stops = new ArrayList<>();
+        this.transports = new ArrayList<>();
+        this.schedules = new ArrayList<>();
+    }
+
+    public Line(LineDTO lineDTO)
+    {
+        this.name = lineDTO.getName();
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
