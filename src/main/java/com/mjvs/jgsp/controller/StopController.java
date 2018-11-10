@@ -26,7 +26,7 @@ public class StopController
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity addStop(@RequestBody Stop stop)
     {
         boolean result = stopService.add(stop);
@@ -37,7 +37,7 @@ public class StopController
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
     public ResponseEntity<List<Stop>> getAllStops()
     {
         List<Stop> allStops = stopService.getAll();

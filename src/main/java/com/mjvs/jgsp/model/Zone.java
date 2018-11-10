@@ -21,6 +21,11 @@ public class Zone {
         this.lines = lines;
     }
 
+    public Zone(String name)
+    {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

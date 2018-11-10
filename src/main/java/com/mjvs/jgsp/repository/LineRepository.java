@@ -5,8 +5,8 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface LineRepository extends Repository<Line, Long> {
-
+public interface LineRepository extends Repository<Line, Long>
+{
     Line findByName(String name);
 
     List<Line> findAll();
