@@ -1,17 +1,16 @@
 package com.mjvs.jgsp.dto;
 
-import com.mjvs.jgsp.model.Line;
+public class StopDTO {
 
-public class LineDTO
-{
     private String name;
 
-    public LineDTO() {
+    public StopDTO()
+    {
+
     }
 
-    public LineDTO(Line line)
-    {
-        this.name = line.getName();
+    public StopDTO(String name) {
+        this.name = name;
     }
 
     public String getName() {

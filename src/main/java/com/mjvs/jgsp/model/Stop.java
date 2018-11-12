@@ -9,20 +9,20 @@ public class Stop {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "x_coordinate", unique = false, nullable = false)
-    private double xCoordinate;
+    @Column(name = "latitude", unique = false, nullable = false)
+    private double latitude;
 
-    @Column(name = "y_coordinate", unique = false, nullable = false)
-    private double yCoordinate;
+    @Column(name = "longitude", unique = false, nullable = false)
+    private double longitude;
 
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
 
-    public Stop(double xCoordinate, double yCoordinate, String name) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
-        this.name = name;
+    public Stop(double latitude, double longitude, String name) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+		this.name = name;
     }
 
     public Long getId() {
@@ -33,20 +33,20 @@ public class Stop {
         this.id = id;
     }
 
-    public double getxCoordinate() {
-        return xCoordinate;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setxCoordinate(double xCoordinate) {
-        this.xCoordinate = xCoordinate;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public double getyCoordinate() {
-        return yCoordinate;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setyCoordinate(double yCoordinate) {
-        this.yCoordinate = yCoordinate;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -59,6 +59,6 @@ public class Stop {
 
     @Override
     public String toString() {
-        return xCoordinate + "|" + yCoordinate + "|" + name;
+        return latitude + "|" + longitude + "|" + name;
     }
 }

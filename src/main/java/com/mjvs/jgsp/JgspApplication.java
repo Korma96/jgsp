@@ -2,6 +2,8 @@ package com.mjvs.jgsp;
 
 import com.mjvs.jgsp.model.Stop;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,10 +21,16 @@ import java.util.HashMap;
 
 @SpringBootApplication
 public class JgspApplication {
+	private static final Logger logger = LogManager.getLogger(JgspApplication.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(JgspApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(JgspApplication.class, args);
+		logger.debug("Debugging log");
+		logger.info("Info log");
+		logger.warn("Hey, This is a warning!");
+		logger.error("Oops! We have an Error. OK");
+		logger.fatal("Damn! Fatal error. Please fix me.");
+	}
 
     //@EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {

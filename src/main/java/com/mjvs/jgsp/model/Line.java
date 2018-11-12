@@ -1,6 +1,9 @@
 package com.mjvs.jgsp.model;
 
+import com.mjvs.jgsp.dto.LineDTO;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,6 +15,9 @@ public class Line {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    @Column(name = "active", unique = true, nullable = false)
+    private boolean active;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Stop> stops;
@@ -29,6 +35,21 @@ public class Line {
         this.schedules = schedules;
     }
 
+    public Line(String name) {
+        this.name = name;
+        this.stops = new ArrayList<>();
+        this.transports = new ArrayList<>();
+        this.schedules = new ArrayList<>();
+    }
+
+    public Line(LineDTO lineDTO)
+    {
+        this.name = lineDTO.getName();
+        this.stops = new ArrayList<>();
+        this.transports = new ArrayList<>();
+        this.schedules = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,6 +65,10 @@ public class Line {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
 
     public List<Stop> getStops() {
         return stops;

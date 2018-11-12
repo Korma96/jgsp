@@ -2,35 +2,68 @@ package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.Schedule;
+import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.LineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/lines")
-public class LineController {
-
+@RequestMapping(value = "/line")
+public class LineController
+{
     @Autowired
-    private LineService lineService;
+    LineService lineService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LineDTO>> getLines() {
-        List<Line> lines = lineService.getLines();
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity addLine(@RequestBody LineDTO line)
+    {
+        boolean result = lineService.add(line.getName());
 
-        List<LineDTO> lineDTOS = lines.stream()
-                .map(LineDTO::new)
-                .collect(Collectors.toList());
+        if(result){
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 
-        return new ResponseEntity<>(lineDTOS, HttpStatus.OK)
-;    }
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
+    public ResponseEntity<List<Line>> getAllLines()
+    {
+        List<Line> allLines = lineService.getAll();
+        return new ResponseEntity<>(allLines, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/schedules", method = RequestMethod.POST)
+    public ResponseEntity<List<Schedule>> getLineSchedules(@RequestBody LineDTO line)
+    {
+        List<Schedule> schedules = lineService.getSchedules(line.getName());
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/stops", method = RequestMethod.POST)
+    public ResponseEntity<List<Stop>> getLineStops(@RequestBody LineDTO line)
+    {
+        List<Stop> lineStops = lineService.getLineStops(line.getName());
+        return new ResponseEntity<>(lineStops, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/delete")
+    public ResponseEntity deleteLine(@RequestBody LineDTO line)
+    {
+        boolean result = lineService.delete(line.getName());
+
+        if(result){
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
 }
