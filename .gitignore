@@ -24,4 +24,4 @@
 /nbdist/
 /.nb-gradle/
 
-src/main/resources/stanice/
+/src/main/resources/stanice/

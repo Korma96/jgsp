@@ -15,14 +15,14 @@ public class Stop {
     @Column(name = "y_coordinate", unique = false, nullable = false)
     private double yCoordinate;
 
-	@Column(name = "name", unique = false, nullable = false)
+    @Column(name = "name", unique = false, nullable = false)
     private String name;
 
 
     public Stop(double xCoordinate, double yCoordinate, String name) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-		this.name = name;
+        this.name = name;
     }
 
     public Long getId() {
@@ -48,12 +48,17 @@ public class Stop {
     public void setyCoordinate(double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
-	
-	public String getName() {
+
+    public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return xCoordinate + "|" + yCoordinate + "|" + name;
     }
 }
