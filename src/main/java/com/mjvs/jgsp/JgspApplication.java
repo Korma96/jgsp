@@ -250,7 +250,7 @@ public class JgspApplication {
         String apiKey = "AIzaSyCncyqJ42IAu6XewfdwvXyVmCOUyr30gWI";
 
         try {
-            URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+currentStop.getxCoordinate()+","+currentStop.getyCoordinate()+"&destinations="+nextStop.getxCoordinate()+","+nextStop.getyCoordinate()+"&key="+ apiKey);
+            URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+currentStop.getLatitude()+","+currentStop.getLongitude()+"&destinations="+nextStop.getLatitude()+","+nextStop.getLongitude()+"&key="+ apiKey);
             URLConnection connection = url.openConnection();
             connection.setDoOutput(true);
             //connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");

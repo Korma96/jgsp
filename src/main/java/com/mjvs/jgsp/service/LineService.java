@@ -16,7 +16,7 @@ public interface LineService {
 
     Line getByName(String lineName);
 
-    List<Line> getLinesByNames(List<String> lineNames);
+    //List<Line> getLinesByNames(List<String> lineNames);
 
     List<Stop> getLineStops(String lineName);
 
