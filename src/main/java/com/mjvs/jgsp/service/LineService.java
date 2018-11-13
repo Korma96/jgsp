@@ -4,6 +4,7 @@ import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface LineService {
@@ -16,13 +17,11 @@ public interface LineService {
 
     Line getByName(String lineName);
 
-    //List<Line> getLinesByNames(List<String> lineNames);
-
     List<Stop> getLineStops(String lineName);
 
     List<Schedule> getSchedules(String lineName);
 
-    boolean update(String oldLineName, String newLineName);
-
     boolean delete(String lineName);
+
+    boolean rename(HashMap<String, String> data);
 }

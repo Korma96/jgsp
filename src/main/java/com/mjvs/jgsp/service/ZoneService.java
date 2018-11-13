@@ -2,6 +2,7 @@ package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.model.Zone;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ZoneService
@@ -14,5 +15,9 @@ public interface ZoneService
 
     boolean delete(String zoneName);
 
-    boolean addLinesToZone(String zoneName, List<String> lineNames);
+    boolean addLineToZone(String zoneName, String lineName);
+
+    boolean removeLineFromZone(String zoneName, String lineName);
+
+    boolean rename(HashMap<String, String> data);
 }

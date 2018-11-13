@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public class ResponseHelpers
 {
-    public static ResponseEntity getResponseBasedOnResult(boolean result)
+    public static ResponseEntity getResponseBasedOnBoolean(boolean result)
     {
         if(result)
         {

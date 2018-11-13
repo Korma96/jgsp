@@ -1,12 +1,10 @@
 package com.mjvs.jgsp.dto;
 
-import java.util.List;
-
 public class ZoneDTO
 {
     private String name;
 
-    private List<String> lineNames;
+    private String lineName;
 
     public ZoneDTO() {
     }
@@ -15,12 +13,12 @@ public class ZoneDTO
         this.name = name;
     }
 
-    public List<String> getLineNames() {
-        return lineNames;
+    public String getLineName() {
+        return lineName;
     }
 
-    public void setLineNames(List<String> lineNames) {
-        this.lineNames = lineNames;
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
     }
 
     public String getName() {

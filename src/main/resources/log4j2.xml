@@ -18,10 +18,6 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="com.example.log4j2demo" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-        </Logger>
-
         <Root level="info">
             <AppenderRef ref="FileAppender"/>
         </Root>

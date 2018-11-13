@@ -1,12 +1,15 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.repository.LineRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,6 +19,9 @@ public class ZoneServiceImpl implements ZoneService
 
     @Autowired
     ZoneRepository zoneRepository;
+
+    @Autowired
+    LineRepository lineRepository;
 
     @Override
     public boolean add(String zoneName) {
@@ -41,9 +47,37 @@ public class ZoneServiceImpl implements ZoneService
     }
 
     @Override
-    public boolean addLinesToZone(String zoneName, List<String> lines)
+    public boolean addLineToZone(String zoneName, String lineName)
     {
-        return false;
+        Zone zone = zoneRepository.findByName(zoneName);
+        if(zone == null)
+        {
+            logger.warn(String.format("Zone %s does not exist.", lineName));
+            return false;
+        }
+        Line line = lineRepository.findByName(lineName);
+        if(line == null)
+        {
+            logger.warn(String.format("Line %s does not exist.", lineName));
+            return false;
+        }
+
+        zone.getLines().add(line);
+
+        try
+        {
+            zoneRepository.save(zone);
+            logger.info(String.format("Line %s successfully added to zone %s",
+                    lineName, zoneName));
+        }
+        catch (Exception ex)
+        {
+            logger.info(String.format("Error adding line %s to zone %s",
+                    lineName, zoneName));
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -70,6 +104,82 @@ public class ZoneServiceImpl implements ZoneService
         {
             logger.error(String.format("Error deleting zone %s message %s",
                     zoneName, ex.getMessage()));
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean removeLineFromZone(String zoneName, String lineName)
+    {
+        Zone zone = zoneRepository.findByName(zoneName);
+        if(zone == null)
+        {
+            logger.warn(String.format("Zone %s does not exist.", lineName));
+            return false;
+        }
+        Line line = lineRepository.findByName(lineName);
+        if(line == null)
+        {
+            logger.warn(String.format("Line %s does not exist.", lineName));
+            return false;
+        }
+
+        zone.getLines().remove(line);
+
+        try
+        {
+            zoneRepository.save(zone);
+            logger.info(String.format("Line %s successfully removed from zone %s",
+                    lineName, zoneName));
+        }
+        catch (Exception ex)
+        {
+            logger.info(String.format("Error removing line %s from zone %s",
+                    lineName, zoneName));
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean rename(HashMap<String, String> data)
+    {
+        String oldName;
+        String newName;
+
+        try
+        {
+            oldName = data.get("oldName");
+            newName = data.get("newName");
+        }
+        catch (Exception ex)
+        {
+            logger.error(String.format("Wrong data format! %s", ex.getMessage()));
+            return false;
+        }
+
+        Zone zone = zoneRepository.findByName(oldName);
+        if(zone == null)
+        {
+            logger.warn(String.format("Zone %s does not exist.", oldName));
+            return false;
+        }
+
+        zone.setName(newName);
+
+        try
+        {
+            zoneRepository.save(zone);
+            logger.info(String.format("Zone %s successfully renamed to %s",
+                    oldName, newName));
+        }
+        catch (Exception ex)
+        {
+            logger.info(String.format("Error renaming zone %s to %s",
+                    oldName, newName));
             return false;
         }
 

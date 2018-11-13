@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -64,16 +65,11 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public boolean update(String oldLineName, String newLineName) {
-        return false;
-    }
-
-    @Override
     public boolean delete(String lineName)
     {
         Line line = lineRepository.findByName(lineName);
         if(line == null){
-            logger.warn(String.format("Line %s does not exists.", lineName));
+            logger.warn(String.format("Line %s does not exist.", lineName));
             return false;
         }
 
@@ -109,6 +105,48 @@ public class LineServiceImpl implements LineService {
         }
 
         return line.getSchedules();
+    }
+
+    @Override
+    public boolean rename(HashMap<String, String> data)
+    {
+        String oldName;
+        String newName;
+
+        try
+        {
+            oldName = data.get("oldName");
+            newName = data.get("newName");
+        }
+        catch (Exception ex)
+        {
+            logger.error(String.format("Wrong data format! %s ", ex.getMessage()));
+            return false;
+        }
+
+        Line line = lineRepository.findByName(oldName);
+        if(line == null)
+        {
+            logger.warn(String.format("Line %s does not exist.", oldName));
+            return false;
+        }
+
+        line.setName(newName);
+
+        try
+        {
+            lineRepository.save(line);
+            logger.info(String.format("Line %s successfully renamed to %s",
+                    oldName, newName));
+        }
+        catch (Exception ex)
+        {
+            logger.info(String.format("Error renaming line %s to %s",
+                    oldName, newName));
+            return false;
+        }
+
+        return true;
     }
 
     @Override
