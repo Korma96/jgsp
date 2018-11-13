@@ -32,7 +32,7 @@ public class JgspApplication {
 		logger.fatal("Damn! Fatal error. Please fix me.");
 	}
 
-    //@EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
         int[] gradskeLinijeBrojevi = {1,2,232,233,3,4,5,6,241,242,7,8,9,10,69,70,11,12,234,235,13,14,15,16,17,18,19,20,21,22,
                 23,24,239,240,25,26,27,28,29,30,31,33,34,81,82,83,84,85,86,243,244};
@@ -99,8 +99,8 @@ public class JgspApplication {
         napraviDirektorijumAkoNePostoji(staniceDirektorijumRelativnaPutanja);
         napraviDirektorijumAkoNePostoji(sortiraneStaniceDirektorijumRelativnaPutanja);
 
-        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
-        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
+        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
+        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
         dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "medjumesne_linije", medjumesneLinije);
 
         System.out.println("***** Podaci o stanicama svih linija su dobavljeni i smesteni u fajlove. *****");
@@ -134,7 +134,7 @@ public class JgspApplication {
         String direktorijumVrstaLinijaPutanjaSortiraneStanice = sortiraneStaniceDirektorijumRelativnaPutanja + File.separator + vrstaLinija;
         napraviDirektorijumAkoNePostoji(direktorijumVrstaLinijaPutanjaSortiraneStanice);
 
-        int indexOfFirstStop = 6;
+        int indexOfFirstStop = -1;
         String[] aOrB = {"A", "B"};
 
         ArrayList<Stop> stops;
@@ -167,6 +167,8 @@ public class JgspApplication {
 
                     procitanaLinija = procitanaLinija.replace("[\"", "");
                     procitanaLinija = procitanaLinija.replace("\"]", "");
+                    procitanaLinija = procitanaLinija.replace("\\r", "");
+                    procitanaLinija = procitanaLinija.replace("\\n", "");
                     procitanaLinija = procitanaLinija.replace("\",\"", "\n");
                     procitanaLinija = StringEscapeUtils.unescapeJava(procitanaLinija);
 

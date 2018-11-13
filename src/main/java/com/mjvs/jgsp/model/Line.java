@@ -16,15 +16,17 @@ public class Line {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "active", unique = true, nullable = false)
+    @Column(name = "active", unique = false, nullable = false)
     private boolean active;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Stop> stops;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Transport> transports;
 
+    // orphanRemoval znaci da kad izbrisemo neki Schedule iz ove liste, on ce postati siroce, i bice automatski obrisan
+    // i iz tabele schedule
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
 

@@ -20,7 +20,7 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     protected UserType userType;
 
-    @Column(name = "user_status", unique = false, nullable = false)
+    @Column(name = "user_status", unique = false, nullable = true)
     @Enumerated(EnumType.ORDINAL)
     protected UserStatus userStatus;
 

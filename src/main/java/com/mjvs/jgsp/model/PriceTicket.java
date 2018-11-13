@@ -27,6 +27,7 @@ public class PriceTicket {
     @Column(name="priceZone", unique=false, nullable=false)
     private double priceZone;
 
+    // nullable se koristi kao ogranicenje nad semom, optinal se koristi u runtime-u, pri proveri, pre kontakta sa bazom
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Zone zone;
 

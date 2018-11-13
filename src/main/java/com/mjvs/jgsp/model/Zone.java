@@ -13,7 +13,7 @@ public class Zone {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Line> lines;
 
     public Zone(String name, List<Line> lines) {
