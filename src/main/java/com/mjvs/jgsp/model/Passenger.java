@@ -13,7 +13,7 @@ public class Passenger extends User {
     @Column(name = "last_name", unique = false, nullable = false)
     protected String lastName;
 
-    @Column(name = "email", unique = false, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     protected String email;
 
     @Column(name = "address", unique = false, nullable = false)
@@ -23,16 +23,16 @@ public class Passenger extends User {
     @Enumerated(EnumType.ORDINAL)
     protected PassengerType passengerType;
 
-    @Column(name = "confirmation", unique = false, nullable = false)
+    @Column(name = "confirmation", unique = false, nullable = true)
     private String confirmation;
 
-    @Column(name = "expiration_date", unique = false, nullable = false)
+    @Column(name = "expiration_date", unique = false, nullable = true)
     private LocalDate expirationDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     protected User verifiedBy;
 
     public Passenger() {
@@ -51,6 +51,18 @@ public class Passenger extends User {
         this.expirationDate = expirationDate;
         this.tickets = new ArrayList<Ticket>();
         this.verifiedBy = verifiedBy;
+    }
+
+
+    public Passenger(String username, String password, UserType userType, UserStatus userStatus, String firstName, String lastName, String email, String address, PassengerType passengerType) {
+        super(username, password, userType, userStatus);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.passengerType = passengerType;
+
+        this.tickets = new ArrayList<Ticket>();
     }
 
     public String getFirstName() {
