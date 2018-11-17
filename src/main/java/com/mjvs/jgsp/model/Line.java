@@ -1,23 +1,24 @@
 package com.mjvs.jgsp.model;
 
-import com.mjvs.jgsp.dto.LineDTO;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Line {
-    @Id
+public class Line extends LineZone {
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Long id;
+    private Long id;*/
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "active", unique = false, nullable = false)
     private boolean active;
+
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    private Zone zone;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Stop> stops;
@@ -30,34 +31,24 @@ public class Line {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
 
-    public Line(String name, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
+    public Line() {
+
+    }
+
+    public Line(String name, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
         this.name = name;
+        this.zone = zone;
         this.stops = stops;
         this.transports = transports;
         this.schedules = schedules;
     }
 
-    public Line(String name) {
+    public Line(String name, Zone zone) {
         this.name = name;
+        this.zone = zone;
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
-    }
-
-    public Line(LineDTO lineDTO)
-    {
-        this.name = lineDTO.getName();
-        this.stops = new ArrayList<>();
-        this.transports = new ArrayList<>();
-        this.schedules = new ArrayList<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -71,6 +62,10 @@ public class Line {
     public boolean isActive() { return active; }
 
     public void setActive(boolean active) { this.active = active; }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
 
     public List<Stop> getStops() {
         return stops;
@@ -94,5 +89,10 @@ public class Line {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    @Override
+    protected Zone getZone() {
+        return zone;
     }
 }

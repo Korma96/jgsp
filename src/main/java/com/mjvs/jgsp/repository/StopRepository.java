@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface StopRepository extends Repository<Stop, Long>
 {
+    Stop findByLatitudeAndLongitude(double latitude, double longitude);
+
     List<Stop> findAll();
 
     Stop save(Stop stop);

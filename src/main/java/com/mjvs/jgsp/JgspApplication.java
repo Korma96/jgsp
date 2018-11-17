@@ -32,7 +32,7 @@ public class JgspApplication {
 		logger.fatal("Damn! Fatal error. Please fix me.");
 	}
 
-    @EventListener(ApplicationReadyEvent.class)
+    //@EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
         int[] gradskeLinijeBrojevi = {1,2,232,233,3,4,5,6,241,242,7,8,9,10,69,70,11,12,234,235,13,14,15,16,17,18,19,20,21,22,
                 23,24,239,240,25,26,27,28,29,30,31,33,34,81,82,83,84,85,86,243,244};

@@ -16,6 +16,10 @@ public class Transport {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Stop stop;
 
+    public  Transport() {
+
+    }
+
     public Transport(TransportType transportType, Stop stop) {
         this.transportType = transportType;
         this.stop = stop;

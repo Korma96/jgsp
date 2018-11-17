@@ -31,6 +31,10 @@ public class PriceTicket {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Zone zone;
 
+    public PriceTicket() {
+
+    }
+
     public PriceTicket(LocalDate dateFrom, PassengerType passengerType, TicketType ticketType, double priceLine, double priceZone, Zone zone) {
         this.dateFrom = dateFrom;
         this.passengerType = passengerType;

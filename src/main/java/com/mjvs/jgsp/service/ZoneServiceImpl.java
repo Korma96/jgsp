@@ -1,5 +1,6 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import org.apache.logging.log4j.LogManager;
@@ -40,10 +41,19 @@ public class ZoneServiceImpl implements ZoneService
         return true;
     }
 
+    public void save(Zone zone) {
+        zoneRepository.save(zone);
+    }
+
     @Override
     public boolean addLinesToZone(String zoneName, List<String> lines)
     {
         return false;
+    }
+
+    @Override
+    public Zone getZone(Long zoneId) {
+        return zoneRepository.findById(zoneId);
     }
 
     @Override

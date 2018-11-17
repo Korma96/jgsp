@@ -8,6 +8,8 @@ public interface ZoneService
 {
     boolean add(String zoneName);
 
+    void save(Zone zone);
+
     boolean exists(String zoneName);
 
     List<Zone> getAll();
@@ -15,4 +17,6 @@ public interface ZoneService
     boolean delete(String zoneName);
 
     boolean addLinesToZone(String zoneName, List<String> lineNames);
+
+    Zone getZone(Long zoneId);
 }

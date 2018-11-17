@@ -1,28 +1,34 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.exceptions.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
+import com.mjvs.jgsp.model.Zone;
 
 import java.util.List;
 
 public interface LineService {
 
-    boolean add(String lineName);
+    boolean add(String lineName, Long zoneId);
+
+    void save(Line line, Zone zone);
 
     boolean exists(String lineName);
 
-    List<Line> getAll();
+    List<Line> getLines();
 
-    Line getByName(String lineName);
+    List<Line> getActiveLines();
+
+    Line getLine(Long lineId);
 
     //List<Line> getLinesByNames(List<String> lineNames);
 
-    List<Stop> getLineStops(String lineName);
+    List<Stop> getLineStops(Long lineId)  throws LineNotFoundException;
 
-    List<Schedule> getSchedules(String lineName);
+    List<Schedule> getSchedules(Long lineId) throws LineNotFoundException;
 
     boolean update(String oldLineName, String newLineName);
 
-    boolean delete(String lineName);
+    void delete(Long lineId) throws Exception;
 }

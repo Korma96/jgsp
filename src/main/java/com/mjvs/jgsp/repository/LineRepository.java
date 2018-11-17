@@ -9,7 +9,11 @@ public interface LineRepository extends Repository<Line, Long>
 {
     Line findByName(String name);
 
+    Line findById(Long id);
+
     List<Line> findAll();
+
+    List<Line> findByActive(boolean active);
 
     Line save(Line line);
 
