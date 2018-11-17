@@ -28,6 +28,20 @@ public class PassengerController {
     @RequestMapping(value ="/registrate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registrate(@RequestBody PassengerDTO passengerDTO) {
 
+        if(passengerDTO.getUsername().equals("") || passengerDTO.getPassword1().equals("") || passengerDTO.getPassword2().equals("")){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        if(passengerDTO.getFirstName().equals("") || passengerDTO.getLastName().equals("") || passengerDTO.getEmail().equals("") || passengerDTO.getAdress().equals("")){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        if(!passengerDTO.getPassengerType().equalsIgnoreCase("student") || !passengerDTO.getPassengerType().equalsIgnoreCase("pensioner") || !passengerDTO.getPassengerType().equalsIgnoreCase("other")){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+
+
         if(!passengerDTO.getPassword1().equals(passengerDTO.getPassword2())){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

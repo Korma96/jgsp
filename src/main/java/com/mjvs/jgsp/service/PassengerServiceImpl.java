@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,23 @@ public class PassengerServiceImpl implements PassengerService {
     public boolean registrate(Passenger p){
         List<Passenger> list = passengerRepository.findAll();
 
-        for(int i = 0;i<list.size();i++){
-            if(list.get(i).getUsername().equals(p.getUsername()) || list.get(i).getEmail().equals(p.getEmail())){
-                return false;
-            }
-        }
 
+        boolean e = exists(p.getUsername(),p.getPassword());
+
+        if(e){
+            return false;
+        }
         passengerRepository.save(p);
         return true;
     }
+
+
+    public boolean exists(String username,String password){
+        Passenger p = passengerRepository.findByUsernameAndPassword(username,password);
+        return  p != null;
+    }
+
+
+
+
 }
