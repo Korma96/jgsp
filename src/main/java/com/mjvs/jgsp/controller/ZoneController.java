@@ -1,10 +1,7 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.controller.method_helpers.ResponseHelpers;
-import com.mjvs.jgsp.dto.ZoneDTO;
-import com.mjvs.jgsp.model.Zone;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.ZoneService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.mjvs.jgsp.controller.method_helpers.ResponseHelpers;
+import com.mjvs.jgsp.dto.ZoneDTO;
+import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.service.LineService;
+import com.mjvs.jgsp.service.ZoneService;
 
 @RestController
-@RequestMapping(value = "/zone")
+@RequestMapping(value = "/zones")
 public class ZoneController
 {
     @Autowired
@@ -25,16 +26,16 @@ public class ZoneController
     private LineService lineService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity addZone(@RequestBody ZoneDTO zone)
+    public ResponseEntity addZone(@RequestBody String zoneName)
     {
-        boolean result = zoneService.add(zone.getName());
+        boolean result = zoneService.add(zoneName);
         return ResponseHelpers.getResponseBasedOnResult(result);
     }
 
-    @RequestMapping(value = "/add_lines", method = RequestMethod.POST)
-    public ResponseEntity addZoneLines(@RequestBody ZoneDTO zone)
+    @RequestMapping(value = "/add-with-lines", method = RequestMethod.POST)
+    public ResponseEntity addZoneWithLines(@RequestBody ZoneDTO zone)
     {
-        boolean result = zoneService.addLinesToZone(zone.getName(), zone.getLineNames());
+        boolean result = zoneService.addZoneWithLines(zone.getName(), zone.getLineNames());
         return ResponseHelpers.getResponseBasedOnResult(result);
     }
 

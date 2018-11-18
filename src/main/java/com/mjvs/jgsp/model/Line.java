@@ -6,11 +6,6 @@ import java.util.List;
 
 @Entity
 public class Line extends LineZone {
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;*/
-
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 

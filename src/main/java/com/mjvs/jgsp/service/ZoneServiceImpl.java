@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ZoneServiceImpl implements ZoneService
@@ -18,23 +19,42 @@ public class ZoneServiceImpl implements ZoneService
     @Autowired
     ZoneRepository zoneRepository;
 
+    
     @Override
     public boolean add(String zoneName) {
+    	return addZoneWithLines(zoneName, null);
+    }
+    
+    @Override
+    public boolean addZoneWithLines(String zoneName, List<String> lineNames) {
         if(exists(zoneName))
         {
             logger.debug(String.format("Zone %s already exists.", zoneName));
             return false;
         }
+        
+        StringBuilder sbMessage = new StringBuilder("");
 
         try
         {
-            zoneRepository.save(new Zone(zoneName));
-            logger.info(String.format("Zone %s successfully added!", zoneName));
+        	Zone zone = new Zone(zoneName);
+        	if(lineNames != null) {
+	        	List<Line> lines = lineNames.stream()
+	        			.map(lineName -> new Line(lineName, zone))
+	        			.collect(Collectors.toList());
+	        	zone.setLines(lines);
+	        	
+	        	lineNames.stream()
+    					.forEach(lineName -> {sbMessage.append(","); sbMessage.append(lineName);} );
+        	}
+        	else sbMessage.append("null");
+        	
+            zoneRepository.save(zone);
+            logger.info(String.format("Zone %s with lines (%s) successfully added!", zoneName, sbMessage.substring(1)));
         }
         catch (Exception ex)
-        {
-            logger.error(String.format("Error adding new zone %s message %s",
-                    zoneName, ex.getMessage()));
+        {	
+            logger.error(String.format("Error adding new zone %s with lines (%s) message %s",zoneName, sbMessage.substring(1), ex.getMessage()));
             return false;
         }
 
@@ -43,12 +63,6 @@ public class ZoneServiceImpl implements ZoneService
 
     public void save(Zone zone) {
         zoneRepository.save(zone);
-    }
-
-    @Override
-    public boolean addLinesToZone(String zoneName, List<String> lines)
-    {
-        return false;
     }
 
     @Override

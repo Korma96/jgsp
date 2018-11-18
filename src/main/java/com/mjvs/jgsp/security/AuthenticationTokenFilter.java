@@ -25,8 +25,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	private UserDetailsService userDetailsService;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader("X-Auth-Token");
 		String username = tokenUtils.getUsernameFromToken(authToken);

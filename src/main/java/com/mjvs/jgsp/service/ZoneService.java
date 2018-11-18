@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ZoneService
 {
-    boolean add(String zoneName);
+	boolean add(String zoneName);
+	
+    boolean addZoneWithLines(String zoneName, List<String> lineNames);
 
     void save(Zone zone);
 
@@ -15,8 +17,6 @@ public interface ZoneService
     List<Zone> getAll();
 
     boolean delete(String zoneName);
-
-    boolean addLinesToZone(String zoneName, List<String> lineNames);
 
     Zone getZone(Long zoneId);
 }

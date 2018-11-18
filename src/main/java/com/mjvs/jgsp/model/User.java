@@ -14,7 +14,7 @@ public class User {
     protected String username;
 
     @Column(name = "password", unique = false, nullable = false)
-    protected String password;
+    protected String password; // cuvamo enkriptoavan password
 
     @Column(name = "user_type", unique = false, nullable = false)
     @Enumerated(EnumType.ORDINAL)
