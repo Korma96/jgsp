@@ -21,6 +21,10 @@ public class Schedule {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MyLocalTime> departureList;
 
+    public Schedule() {
+
+    }
+
     public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList) {
         this.dayType = dayType;
         this.dateFrom = dateFrom;

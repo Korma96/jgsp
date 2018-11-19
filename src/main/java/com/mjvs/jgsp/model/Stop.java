@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Stop {
@@ -18,6 +19,9 @@ public class Stop {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
+    public Stop() {
+
+    }
 
     public Stop(double latitude, double longitude, String name) {
         this.latitude = latitude;
@@ -65,5 +69,18 @@ public class Stop {
     @Override
     public String toString() {
         return latitude + "|" + longitude + "|" + name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Stop stop = (Stop) o;
+        return Objects.equals(id, stop.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

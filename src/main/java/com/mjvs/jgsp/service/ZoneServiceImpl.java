@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ZoneServiceImpl implements ZoneService
@@ -32,6 +33,7 @@ public class ZoneServiceImpl implements ZoneService
         this.lineRepository = lineRepository;
     }
 
+    
     @Override
     public Result<Zone> findById(Long id)
     {
@@ -143,6 +145,10 @@ public class ZoneServiceImpl implements ZoneService
         }
 
         return new Result<>(true, message);
+    }
+
+    public void save(Zone zone) {
+        zoneRepository.save(zone);
     }
 
     @Override

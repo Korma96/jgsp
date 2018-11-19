@@ -29,7 +29,7 @@ public class Passenger extends User {
     @Column(name = "expiration_date", unique = false, nullable = true)
     private LocalDate expirationDate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)

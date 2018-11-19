@@ -1,6 +1,6 @@
 package com.mjvs.jgsp.dto;
 
-import com.mjvs.jgsp.model.Passenger;
+import com.mjvs.jgsp.model.PassengerType;
 
 public class PassengerDTO {
     private String username;
@@ -9,15 +9,15 @@ public class PassengerDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String adress;
-    private String passengerType;
+    private String address;
+    private PassengerType passengerType;
 
 
     public PassengerDTO(){
 
     }
 
-    public PassengerDTO(Passenger p){
+    /*public PassengerDTO(Passenger p){
         this.username = p.getUsername();
         this.password1 = p.getPassword();
         this.password2 = p.getPassword();
@@ -25,18 +25,18 @@ public class PassengerDTO {
         this.lastName = p.getLastName();
         this.email = p.getEmail();
         this.adress = p.getAddress();
-        this.passengerType = p.getPassengerType().toString();
+        this.passengerType = p.getPassengerType();
 
-    }
+    }*/
 
-    public PassengerDTO(String username, String password1, String password2, String firstName, String lastName, String email, String adress, String passengerType) {
+    public PassengerDTO(String username, String password1, String password2, String firstName, String lastName, String email, String address, PassengerType passengerType) {
         this.username = username;
         this.password1 = password1;
         this.password2 = password2;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.adress = adress;
+        this.address = address;
         this.passengerType = passengerType;
     }
 
@@ -89,19 +89,19 @@ public class PassengerDTO {
         this.email = email;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getPassengerType() {
+    public PassengerType getPassengerType() {
         return passengerType;
     }
 
-    public void setPassengerType(String passengerType) {
+    public void setPassengerType(PassengerType passengerType) {
         this.passengerType = passengerType;
     }
 }

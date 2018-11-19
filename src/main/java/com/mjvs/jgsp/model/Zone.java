@@ -6,12 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Zone {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;
-
+public class Zone extends LineZone {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
@@ -23,8 +18,7 @@ public class Zone {
         this.lines = lines;
     }
 
-    public Zone(String name)
-    {
+    public Zone(String name) {
         this.name = name;
         this.lines = new ArrayList<>();
     }
@@ -36,10 +30,6 @@ public class Zone {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -56,5 +46,10 @@ public class Zone {
 
     public void setLines(List<Line> lines) {
         this.lines = lines;
+    }
+
+    @Override
+    protected Zone getZone() {
+        return this;
     }
 }

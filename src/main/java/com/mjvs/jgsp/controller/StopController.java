@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/stop")
+@RequestMapping(value = "/stops")
 public class StopController
 {
     @Autowired

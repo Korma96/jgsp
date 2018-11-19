@@ -1,12 +1,10 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mjvs.jgsp.model.Passenger;
+import com.mjvs.jgsp.repository.PassengerRepository;
 
 
 @Service
@@ -15,18 +13,25 @@ public class PassengerServiceImpl implements PassengerService {
     @Autowired
     private PassengerRepository passengerRepository;
 
-
+    @Autowired
+    private UserService userService;
+    
     @Override
-    public boolean registrate(Passenger p){
-        List<Passenger> list = passengerRepository.findAll();
+    public boolean save(Passenger p){
+        boolean e = userService.exists(p.getUsername());
 
-        for(int i = 0;i<list.size();i++){
-            if(list.get(i).getUsername().equals(p.getUsername()) || list.get(i).getEmail().equals(p.getEmail())){
-                return false;
-            }
+        if(e){
+            return false;
         }
-
+        
         passengerRepository.save(p);
         return true;
     }
+
+
+    /*public boolean exists(String username,String password){
+        Passenger p = passengerRepository.findByUsernameAndPassword(username,password);
+        return  p != null;
+    }*/
+
 }

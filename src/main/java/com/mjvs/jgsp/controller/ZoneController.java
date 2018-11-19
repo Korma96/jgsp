@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/zone")
+@RequestMapping(value = "/zones")
 public class ZoneController
 {
     private ZoneService zoneService;

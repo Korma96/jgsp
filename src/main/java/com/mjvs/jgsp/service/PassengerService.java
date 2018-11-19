@@ -5,10 +5,8 @@ import com.mjvs.jgsp.model.Passenger;
 
 public interface PassengerService {
 
+    boolean save(Passenger p);
 
-
-
-    boolean registrate(Passenger p);
-
+    //boolean exists(String username,String password);
 
 }

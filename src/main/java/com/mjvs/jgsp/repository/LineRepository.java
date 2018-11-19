@@ -13,6 +13,8 @@ public interface LineRepository extends Repository<Line, Long>
 
     List<Line> findAll();
 
+    List<Line> findByActive(boolean active);
+
     Line save(Line line);
 
     void delete(Line line);

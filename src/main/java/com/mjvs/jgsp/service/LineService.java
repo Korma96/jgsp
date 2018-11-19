@@ -4,13 +4,14 @@ import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
+import com.mjvs.jgsp.model.Zone;
 
 import java.util.HashMap;
 import java.util.List;
 
 public interface LineService {
 
-    boolean add(String lineName);
+    boolean add(String lineName, Long zoneId);
 
     Result<Boolean> exists(String name);
 
@@ -18,11 +19,11 @@ public interface LineService {
 
     List<Line> getAll();
 
-    Line getByName(String lineName);
+    List<Line> getActiveLines();
 
     List<Stop> getLineStops(String lineName);
 
-    List<Schedule> getSchedules(String lineName);
+    List<Schedule> getSchedules(Long lineId) throws LineNotFoundException;
 
     boolean delete(String lineName);
 

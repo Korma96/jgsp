@@ -99,8 +99,8 @@ public class JgspApplication {
         napraviDirektorijumAkoNePostoji(staniceDirektorijumRelativnaPutanja);
         napraviDirektorijumAkoNePostoji(sortiraneStaniceDirektorijumRelativnaPutanja);
 
-        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
-        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
+        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
+        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
         dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "medjumesne_linije", medjumesneLinije);
 
         System.out.println("***** Podaci o stanicama svih linija su dobavljeni i smesteni u fajlove. *****");
@@ -134,7 +134,7 @@ public class JgspApplication {
         String direktorijumVrstaLinijaPutanjaSortiraneStanice = sortiraneStaniceDirektorijumRelativnaPutanja + File.separator + vrstaLinija;
         napraviDirektorijumAkoNePostoji(direktorijumVrstaLinijaPutanjaSortiraneStanice);
 
-        int indexOfFirstStop = 6;
+        int indexOfFirstStop = -1;
         String[] aOrB = {"A", "B"};
 
         ArrayList<Stop> stops;
@@ -167,6 +167,8 @@ public class JgspApplication {
 
                     procitanaLinija = procitanaLinija.replace("[\"", "");
                     procitanaLinija = procitanaLinija.replace("\"]", "");
+                    procitanaLinija = procitanaLinija.replace("\\r", "");
+                    procitanaLinija = procitanaLinija.replace("\\n", "");
                     procitanaLinija = procitanaLinija.replace("\",\"", "\n");
                     procitanaLinija = StringEscapeUtils.unescapeJava(procitanaLinija);
 
