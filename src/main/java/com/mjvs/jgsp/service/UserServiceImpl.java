@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.mjvs.jgsp.exceptions.UserNotFoundException;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.repository.UserRepository;
 
@@ -16,12 +17,12 @@ public class UserServiceImpl implements UserService {
 
     
     
-    public User getLoggedUser() {
+    public User getLoggedUser() throws UserNotFoundException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
             return userRepository.findByUsername((String) auth.getPrincipal());
         } catch (Exception e) {
-            return null;
+            throw new UserNotFoundException();
         }
         
     }

@@ -1,9 +1,5 @@
 package com.mjvs.jgsp.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +17,7 @@ public class PassengerServiceImpl implements PassengerService {
     private UserService userService;
     
     @Override
-    public boolean registrate(Passenger p){
+    public boolean save(Passenger p){
         boolean e = userService.exists(p.getUsername());
 
         if(e){

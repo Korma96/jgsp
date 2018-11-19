@@ -1,22 +1,19 @@
 package com.mjvs.jgsp.service;
 
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.mjvs.jgsp.exceptions.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.repository.LineRepository;
-import com.mjvs.jgsp.repository.ZoneRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.LazyInitializationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LineServiceImpl implements LineService {

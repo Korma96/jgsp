@@ -1,5 +1,6 @@
 package com.mjvs.jgsp.exceptions;
 
+@SuppressWarnings("serial")
 public class LineNotFoundException extends Exception {
 
     public LineNotFoundException() {
