@@ -13,7 +13,5 @@ public interface StopRepository extends Repository<Stop, Long>
 
     Stop save(Stop stop);
 
-    Stop findByLatitudeAndLongitude(double latitude, double longitude);
-
     void delete(Stop stop);
 }

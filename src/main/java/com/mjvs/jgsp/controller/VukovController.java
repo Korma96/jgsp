@@ -68,7 +68,8 @@ public class VukovController {
 						if(!stops.contains(stop)) stops.add(stop);
 					}
 					line.setStops(stops);
-					lineService.save(line, zone);
+					lineService.save(line);
+
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

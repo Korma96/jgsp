@@ -1,10 +1,10 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.helpers.Result;
+import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.model.Zone;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +21,15 @@ public interface LineService {
 
     List<Line> getActiveLines();
 
-    List<Stop> getLineStops(String lineName);
+    List<Stop> getLineStops(Long lineId) throws LineNotFoundException;
 
     List<Schedule> getSchedules(Long lineId) throws LineNotFoundException;
 
-    boolean delete(String lineName);
+    boolean delete(Long id) throws Exception;
 
     boolean rename(HashMap<String, String> data);
 
     Result<Line> findById(Long id);
+
+    void save(Line line);
 }

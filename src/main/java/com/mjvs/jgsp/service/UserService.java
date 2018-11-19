@@ -1,6 +1,6 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.exceptions.UserNotFoundException;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.User;
 
 public interface UserService {

@@ -1,7 +1,7 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.controller.exception.BadRequestException;
-import com.mjvs.jgsp.controller.exception.DatabaseException;
+import com.mjvs.jgsp.helpers.exception.BadRequestException;
+import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.dto.LineLiteDTO;
 import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneLiteDTO;

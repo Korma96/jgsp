@@ -46,11 +46,6 @@ public class Line extends LineZone {
         this.schedules = new ArrayList<>();
     }
 
-    public Line()
-    {
-
-    }
-
     public Long getId() {
         return id;
     }

@@ -3,17 +3,17 @@ package com.mjvs.jgsp.service;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
+import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.repository.LineRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class LineServiceImpl implements LineService {
     @Override
     public boolean add(String lineName, Long zoneId)
     {
+        /*
         if(exists(lineName))
         {
             logger.debug(String.format("Line %s already exists.", lineName));
@@ -39,7 +40,7 @@ public class LineServiceImpl implements LineService {
 
         try
         {
-            Zone zone = zoneService.getZone(zoneId);
+            Zone zone = zoneService.findById(zoneId);
             if(zone == null) {
                 logger.info(String.format("When adding a new line (%s), the zone with id %d was not found!", lineName, zoneId));
                 return false;
@@ -54,7 +55,7 @@ public class LineServiceImpl implements LineService {
                     lineName, ex.getMessage()));
             return false;
         }
-
+        */
         return true;
     }
 
@@ -104,12 +105,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public boolean update(String oldLineName, String newLineName) {
-        return false;
-    }
-
-    @Override
-    public void delete(Long lineId) throws Exception
+    public boolean delete(Long lineId) throws Exception
     {
         Line line = lineRepository.findById(lineId);
         if(line == null){
@@ -119,12 +115,7 @@ public class LineServiceImpl implements LineService {
         }
 
         lineRepository.delete(line);
-    }
-
-    @Override
-    public Line getLine(Long lineId)
-    {
-        return  lineRepository.findById(lineId);
+        return true;
     }
 
     @Override
@@ -208,6 +199,13 @@ public class LineServiceImpl implements LineService {
         }
         return new Result<>(true);
     }
+
+    @Override
+    public void save(Line line)
+    {
+        lineRepository.save(line);
+    }
+
 
 
 }

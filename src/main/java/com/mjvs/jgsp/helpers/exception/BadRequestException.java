@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.controller.exception;
+package com.mjvs.jgsp.helpers.exception;
 
 public class BadRequestException extends Exception
 {

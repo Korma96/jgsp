@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ZoneServiceImpl implements ZoneService
@@ -101,6 +100,33 @@ public class ZoneServiceImpl implements ZoneService
             return new Result<>(false, false, message);
         }
     }
+
+    @Override
+    public Result<Boolean> exists(String name)
+    {
+        Zone zone = zoneRepository.findByName(name);
+        if(zone != null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Zone, name);
+            logger.warn(message);
+            return new Result<>(true, true, message);
+        }
+        return new Result<>(false);
+    }
+
+    @Override
+    public Result<Boolean> exists(Long id)
+    {
+        Zone zone = zoneRepository.findById(id);
+        if(zone != null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Zone, id);
+            logger.warn(message);
+            return new Result<>(true, message);
+        }
+        return new Result<>(false);
+    }
+
     //----------------------------------------------------------------------------------------
     @Override
     public Result<Boolean> removeLineFromZone(String zoneName, String lineName)
@@ -145,10 +171,6 @@ public class ZoneServiceImpl implements ZoneService
         }
 
         return new Result<>(true, message);
-    }
-
-    public void save(Zone zone) {
-        zoneRepository.save(zone);
     }
 
     @Override
@@ -196,31 +218,5 @@ public class ZoneServiceImpl implements ZoneService
         }
 
         return new Result<>(true, true, message);
-    }
-
-    @Override
-    public Result<Boolean> exists(String name)
-    {
-        Zone zone = zoneRepository.findByName(name);
-        if(zone != null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Zone, name);
-            logger.warn(message);
-            return new Result<>(true, true, message);
-        }
-        return new Result<>(false);
-    }
-
-    @Override
-    public Result<Boolean> exists(Long id)
-    {
-        Zone zone = zoneRepository.findById(id);
-        if(zone != null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Zone, id);
-            logger.warn(message);
-            return new Result<>(true, message);
-        }
-        return new Result<>(false);
     }
 }

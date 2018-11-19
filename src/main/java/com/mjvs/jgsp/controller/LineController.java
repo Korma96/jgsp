@@ -2,7 +2,7 @@ package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.LineDtoIdAndName;
 import com.mjvs.jgsp.dto.LineDtoFromFrontend;
-import com.mjvs.jgsp.exceptions.LineNotFoundException;
+import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,22 +27,10 @@ public class LineController
 
  */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity addLine(@RequestBody LineDtoFromFrontend line)
-    {
+    public ResponseEntity addLine(@RequestBody LineDtoFromFrontend line) {
         boolean result = lineService.add(line.getLineName(), line.getZoneId());
-
-    @RequestMapping(value = "/add_stop", method = RequestMethod.POST)
-    public ResponseEntity addStop(@RequestBody LineDTO line)
-    {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity(HttpStatus.OK);
     }
-
-    /*@RequestMapping(value = "/get_all", method = RequestMethod.GET)
-    public ResponseEntity<List<Line>> getAllLines()
-    {
-        List<Line> allLines = lineService.getAll();
-        return new ResponseEntity<>(allLines, HttpStatus.OK);
-    }*/
 
     @RequestMapping(/*value = "/get_all_names",*/ method = RequestMethod.GET)
     public ResponseEntity<List<LineDtoIdAndName>> getAllLines() {
@@ -53,7 +40,7 @@ public class LineController
                 .map(LineDtoIdAndName::new)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<List<LineDtoIdAndName>>(activeLinesDto, HttpStatus.OK);
+        return new ResponseEntity<>(activeLinesDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/schedules", method = RequestMethod.POST)
@@ -62,19 +49,12 @@ public class LineController
         List<Schedule> schedules = null;
         try {
             schedules = lineService.getSchedules(id);
-        } catch (LineNotFoundException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
-
-    /*@RequestMapping(value = "/stops", method = RequestMethod.POST)
-    public ResponseEntity<List<Stop>> getLineStops(@RequestBody LineDtoFromFrontend line)
-    {
-        List<Stop> lineStops = lineService.getLineStops(line.getName());
-        return new ResponseEntity<>(lineStops, HttpStatus.OK);
-    }*/
 
     @RequestMapping(value = "/{id}/stops", method = RequestMethod.POST)
     public ResponseEntity<List<Stop>> getLineStops(@PathVariable("id") Long id)

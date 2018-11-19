@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.controller.exception;
+package com.mjvs.jgsp.helpers.exception;
 
 import com.mjvs.jgsp.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;

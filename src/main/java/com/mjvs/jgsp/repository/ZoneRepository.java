@@ -11,8 +11,6 @@ public interface ZoneRepository extends Repository<Zone, Long>
 
     Zone findByName(String zoneName);
 
-    Zone findById(Long id);
-
     List<Zone> findAll();
 
     Zone save(Zone zone);
