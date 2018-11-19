@@ -9,6 +9,8 @@ public interface LineRepository extends Repository<Line, Long>
 {
     Line findByName(String name);
 
+    Line findById(Long id);
+
     List<Line> findAll();
 
     Line save(Line line);

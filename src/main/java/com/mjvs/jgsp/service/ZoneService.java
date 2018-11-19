@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.ZoneLiteDTO;
+import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Zone;
 
 import java.util.HashMap;
@@ -7,17 +9,19 @@ import java.util.List;
 
 public interface ZoneService
 {
-    boolean add(String zoneName);
+    Result<Boolean> exists(String name);
 
-    boolean exists(String zoneName);
+    Result<Boolean> exists(Long id);
 
-    List<Zone> getAll();
+    Result<Zone> findById(Long id);
 
-    boolean delete(String zoneName);
+    Result<List<ZoneLiteDTO>> getAll();
 
-    boolean addLineToZone(String zoneName, String lineName);
+    Result<Boolean> delete(Zone zone);
 
-    boolean removeLineFromZone(String zoneName, String lineName);
+    Result<Boolean> removeLineFromZone(String zoneName, String lineName);
 
-    boolean rename(HashMap<String, String> data);
+    Result<Boolean> rename(HashMap<String, String> data);
+
+    Result<Boolean> save(Zone zone) throws Exception;
 }

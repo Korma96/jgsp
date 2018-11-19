@@ -1,6 +1,6 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.controller.method_helpers.ResponseHelpers;
+import com.mjvs.jgsp.helpers.ResponseHelpers;
 import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.StopService;
@@ -34,7 +34,7 @@ public class StopController
     {
         Stop newStop = new Stop(stop.getLatitude(), stop.getLongitude(), stop.getName());
         boolean result = stopService.add(newStop);
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 
     @RequestMapping(value = "/get_all", method = RequestMethod.GET)
@@ -48,20 +48,20 @@ public class StopController
     public ResponseEntity rename(@RequestBody HashMap<String, String> data)
     {
         boolean result = stopService.rename(data);
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 
     @RequestMapping(value = "/change_coordinates")
     public ResponseEntity changeCoordinates(@RequestBody HashMap<String, Double> data)
     {
         boolean result = stopService.changeCoordinates(data);
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@RequestBody StopDTO stop)
     {
         boolean result = stopService.delete(stop.getLatitude(), stop.getLongitude());
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 }

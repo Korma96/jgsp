@@ -25,6 +25,11 @@ public class Stop {
 		this.name = name;
     }
 
+    public Stop()
+    {
+
+    }
+
     public Long getId() {
         return id;
     }

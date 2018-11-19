@@ -1,6 +1,8 @@
 package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,10 +15,10 @@ public class Zone {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Line> lines;
 
-    public Zone(String name, List<Line> lines) {
+    public Zone(String name, @NotNull List<Line> lines) {
         this.name = name;
         this.lines = lines;
     }
@@ -24,6 +26,12 @@ public class Zone {
     public Zone(String name)
     {
         this.name = name;
+        this.lines = new ArrayList<>();
+    }
+
+    public Zone()
+    {
+        this.lines = new ArrayList<>();
     }
 
     public Long getId() {

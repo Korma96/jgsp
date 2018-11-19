@@ -14,7 +14,7 @@ public class Line {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "active", unique = true, nullable = false)
+    @Column(name = "active", nullable = false)
     private boolean active;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -38,6 +38,11 @@ public class Line {
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
+    }
+
+    public Line()
+    {
+
     }
 
     public Long getId() {

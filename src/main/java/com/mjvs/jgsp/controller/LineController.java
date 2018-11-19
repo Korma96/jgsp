@@ -1,12 +1,13 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.controller.method_helpers.ResponseHelpers;
+import com.mjvs.jgsp.helpers.ResponseHelpers;
 import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.LineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,19 @@ public class LineController
     public ResponseEntity add(@RequestBody LineDTO line)
     {
         boolean result = lineService.add(line.getName());
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
+    }
+
+    @RequestMapping(value = "/add_stop", method = RequestMethod.POST)
+    public ResponseEntity addStop(@RequestBody LineDTO line)
+    {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @RequestMapping(value = "/add_line", method = RequestMethod.POST)
+    public ResponseEntity addSchedule(@RequestBody LineDTO line)
+    {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @RequestMapping(value = "/get_all", method = RequestMethod.GET)
@@ -59,14 +72,14 @@ public class LineController
     public ResponseEntity delete(@RequestBody LineDTO line)
     {
         boolean result = lineService.delete(line.getName());
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 
     @RequestMapping(value = "/rename")
     public ResponseEntity rename(@RequestBody HashMap<String, String> data)
     {
         boolean result = lineService.rename(data);
-        return ResponseHelpers.getResponseBasedOnBoolean(result);
+        return ResponseHelpers.getResponseData(result);
     }
 
 }

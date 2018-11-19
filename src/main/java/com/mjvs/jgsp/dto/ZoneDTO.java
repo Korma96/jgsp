@@ -2,30 +2,31 @@ package com.mjvs.jgsp.dto;
 
 public class ZoneDTO
 {
-    private String name;
+    private Long zoneId;
 
-    private String lineName;
+    private Long lineId;
 
     public ZoneDTO() {
     }
 
-    public ZoneDTO(String name) {
-        this.name = name;
+    public ZoneDTO(Long zoneId, Long lineId) {
+        this.zoneId = zoneId;
+        this.lineId = lineId;
     }
 
-    public String getLineName() {
-        return lineName;
+    public Long getZoneId() {
+        return zoneId;
     }
 
-    public void setLineName(String lineName) {
-        this.lineName = lineName;
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
     }
 
-    public String getName() {
-        return name;
+    public Long getLineId() {
+        return lineId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLineId(Long lineId) {
+        this.lineId = lineId;
     }
 }

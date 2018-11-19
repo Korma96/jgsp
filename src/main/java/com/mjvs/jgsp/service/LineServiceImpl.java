@@ -1,8 +1,12 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.helpers.Result;
+import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
+import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.repository.LineRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +47,19 @@ public class LineServiceImpl implements LineService {
         }
 
         return true;
+    }
+
+    @Override
+    public Result<Line> findById(Long id)
+    {
+        Line line = lineRepository.findById(id);
+        if(line == null)
+        {
+            String message = Messages.DoesNotExists(StringConstants.Line, id);
+            logger.warn(message);
+            return new Result<>(null, message);
+        }
+        return new Result<>(line);
     }
 
     @Override
@@ -150,9 +167,30 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public boolean exists(String lineName)
+    public Result<Boolean> exists(String name)
     {
-        Line line = lineRepository.findByName(lineName);
-        return line != null;
+        Line line = lineRepository.findByName(name);
+        if(line == null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Line, name);
+            logger.warn(message);
+            return new Result<>(false, false, message);
+        }
+        return new Result<>(true);
     }
+
+    @Override
+    public Result<Boolean> exists(Long id)
+    {
+        Line line = lineRepository.findById(id);
+        if(line == null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Zone, id);
+            logger.warn(message);
+            return new Result<>(false, false, message);
+        }
+        return new Result<>(true);
+    }
+
+
 }
