@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.service.converter;
+package com.mjvs.jgsp.helpers.converter;
 
 import com.mjvs.jgsp.dto.ZoneLiteDTO;
 import com.mjvs.jgsp.model.Zone;

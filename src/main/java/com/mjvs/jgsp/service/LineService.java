@@ -1,7 +1,7 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.helpers.Result;
-import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
@@ -9,27 +9,25 @@ import com.mjvs.jgsp.model.Stop;
 import java.util.HashMap;
 import java.util.List;
 
-public interface LineService {
-
-    boolean add(String lineName, Long zoneId);
+public interface LineService
+{
+    Result<Boolean> delete(Line line);
 
     Result<Boolean> exists(String name);
 
     Result<Boolean> exists(Long id);
 
-    List<Line> getAll();
+    Result<Line> findById(Long id);
 
-    List<Line> getActiveLines();
+    Result<List<LineDTO>> getAll();
 
-    List<Stop> getLineStops(Long lineId) throws LineNotFoundException;
+    Result<List<LineDTO>> getActiveLines();
 
-    List<Schedule> getSchedules(Long lineId) throws LineNotFoundException;
+    List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
-    boolean delete(Long id) throws Exception;
+    List<Stop> getSortedStopsById(List<Stop> stops);
 
     boolean rename(HashMap<String, String> data);
 
-    Result<Line> findById(Long id);
-
-    void save(Line line);
+    Result<Boolean> save(Line line) throws Exception;
 }

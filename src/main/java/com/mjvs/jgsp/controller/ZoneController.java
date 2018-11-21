@@ -1,21 +1,21 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.helpers.exception.BadRequestException;
-import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.dto.LineLiteDTO;
 import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneLiteDTO;
+import com.mjvs.jgsp.dto.ZoneWithLineDTO;
 import com.mjvs.jgsp.helpers.*;
+import com.mjvs.jgsp.helpers.exception.BadRequestException;
+import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.ZoneService;
-import com.mjvs.jgsp.service.converter.LineConverter;
+import com.mjvs.jgsp.helpers.converter.LineConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -53,14 +53,14 @@ public class ZoneController
     }
 
     @RequestMapping(value = "/line/add", method = RequestMethod.POST)
-    public ResponseEntity addLineToZone(@RequestBody ZoneDTO zoneDTO) throws Exception
+    public ResponseEntity addLineToZone(@RequestBody ZoneWithLineDTO zoneWithLineDTO) throws Exception
     {
-        Result<Zone> zoneResult = zoneService.findById(zoneDTO.getZoneId());
+        Result<Zone> zoneResult = zoneService.findById(zoneWithLineDTO.getZoneId());
         if(!zoneResult.hasData()) {
             throw new BadRequestException(zoneResult.getMessage());
         }
 
-        Result<Line> lineResult = lineService.findById(zoneDTO.getLineId());
+        Result<Line> lineResult = lineService.findById(zoneWithLineDTO.getLineId());
         if(!lineResult.hasData()) {
             throw new BadRequestException(lineResult.getMessage());
         }
@@ -122,17 +122,60 @@ public class ZoneController
         return ResponseHelpers.getResponseData(deleteResult);
     }
 
-    @RequestMapping(value = "/line/remove", method = RequestMethod.POST)
-    public ResponseEntity removeLineFromZone(@RequestBody ZoneDTO zone)
+    @RequestMapping(value = "/line/remove", method = RequestMethod.DELETE)
+    public ResponseEntity removeLineFromZone(@RequestBody ZoneWithLineDTO zoneWithLineDTO) throws Exception
     {
-        //boolean result = zoneService.removeLineFromZone(zone.getName(), zone.getLineName());
-        return ResponseHelpers.getResponseData(true);
+        Result<Zone> zoneResult = zoneService.findById(zoneWithLineDTO.getZoneId());
+        if(!zoneResult.hasData()) {
+            throw new BadRequestException(zoneResult.getMessage());
+        }
+
+        Result<Line> lineResult = lineService.findById(zoneWithLineDTO.getLineId());
+        if(!lineResult.hasData()) {
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Zone zone = zoneResult.getData();
+        Line line = lineResult.getData();
+        if(!zone.getLines().contains(line)) {
+            throw new BadRequestException(Messages.DoesNotContains(
+                    StringConstants.Zone, zone.getId(), StringConstants.Line, line.getId()));
+        }
+
+        zone.getLines().remove(line);
+        Result<Boolean> saveResult = zoneService.save(zone);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult.getData());
     }
 
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
-    public ResponseEntity rename(@RequestBody HashMap<String, String> data)
+    public ResponseEntity rename(@RequestBody ZoneDTO zoneDTO) throws Exception
     {
-        //boolean result = zoneService.rename(data);
-        return ResponseHelpers.getResponseData(true);
+        if(StringExtensions.isEmptyOrWhitespace(zoneDTO.getName())) {
+            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Zone));
+        }
+
+        Result<Boolean> existsResult = zoneService.exists(zoneDTO.getName());
+        if(existsResult.getData()) {
+            throw new BadRequestException(existsResult.getMessage());
+        }
+
+        Result<Zone> zoneResult = zoneService.findById(zoneDTO.getId());
+        if(!zoneResult.hasData()) {
+            throw new BadRequestException(zoneResult.getMessage());
+        }
+
+        Zone zone = zoneResult.getData();
+        zone.setName(zoneDTO.getName());
+
+        Result<Boolean> saveResult = zoneService.save(zone);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult.getData());
     }
 }

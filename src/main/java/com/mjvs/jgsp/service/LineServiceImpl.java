@@ -1,9 +1,11 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
-import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
+import com.mjvs.jgsp.helpers.StringExtensions;
+import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
@@ -13,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -22,41 +26,56 @@ public class LineServiceImpl implements LineService {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
-    @Autowired
     private LineRepository lineRepository;
 
     @Autowired
-    private ZoneService zoneService;
+    public LineServiceImpl(LineRepository lineRepository)
+    {
+        this.lineRepository = lineRepository;
+    }
 
     @Override
-    public boolean add(String lineName, Long zoneId)
+    public Result<Boolean> delete(Line line)
     {
-        /*
-        if(exists(lineName))
-        {
-            logger.debug(String.format("Line %s already exists.", lineName));
-            return false;
-        }
+        try {
+            lineRepository.delete(line);
 
-        try
-        {
-            Zone zone = zoneService.findById(zoneId);
-            if(zone == null) {
-                logger.info(String.format("When adding a new line (%s), the zone with id %d was not found!", lineName, zoneId));
-                return false;
-            }
-
-           Line line = new Line(lineName, zone);
-            save(line, zone);
+            String message = Messages.SuccessfullyDeleted(StringConstants.Line, line.getName());
+            logger.info(message);
+            return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            logger.error(String.format("Error adding new line %s message %s",
-                    lineName, ex.getMessage()));
-            return false;
+            String message = Messages.ErrorDeleting(StringConstants.Line, line.getName(), ex.getMessage());
+            logger.error(message);
+            return new Result<>(false, false, message);
         }
-        */
-        return true;
+    }
+
+    @Override
+    public Result<Boolean> exists(String name)
+    {
+        Line line = lineRepository.findByName(name);
+        if(line == null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Line, name);
+            logger.warn(message);
+            return new Result<>(false, false, message);
+        }
+        return new Result<>(true);
+    }
+
+    @Override
+    public Result<Boolean> exists(Long id)
+    {
+        Line line = lineRepository.findById(id);
+        if(line == null)
+        {
+            String message = Messages.AlreadyExists(StringConstants.Zone, id);
+            logger.warn(message);
+            return new Result<>(false, false, message);
+        }
+        return new Result<>(true);
     }
 
     @Override
@@ -73,28 +92,36 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public List<Line> getAll()
+    public Result<List<LineDTO>> getAll()
     {
-        return lineRepository.findAll();
+        try {
+            List<LineDTO> data = LineConverter
+                    .ConvertLinesToLineDTOs(lineRepository.findAll());
+            return new Result<>(data);
+        }
+        catch (Exception ex) {
+            return new Result<>(null, false, ex.getMessage());
+        }
     }
 
     @Override
-    public List<Line> getActiveLines() { return lineRepository.findByActive(true); }
+    public Result<List<LineDTO>> getActiveLines()
+    {
+        try {
+            List<LineDTO> data = LineConverter
+                    .ConvertLinesToLineDTOs(lineRepository.findByActive(true));
+            return new Result<>(data);
+        }
+        catch (Exception ex) {
+            return new Result<>(null, false, ex.getMessage());
+        }
+    }
 
     @Override
-    public List<Stop> getLineStops(Long lineId) throws LineNotFoundException
+    public List<Stop> getSortedStopsById(List<Stop> stops)
     {
-        Line line = lineRepository.findById(lineId);
-        if(line == null)
-        {
-            String message = String.format("Line with id %d does not exist.", lineId);
-            logger.error(message);
-            throw new LineNotFoundException(message);
-        }
-
-        List<Stop> stops = line.getStops();
-        stops.sort(new Comparator<Stop>() { // sortiramo jer u dokumentaciji nije grantovano
-                                            // da cemo dobiti sortirane objekte po id
+        stops.sort(new Comparator<Stop>() { // sortiramo jer u dokumentaciji nije garantovano
+            // da cemo dobiti sortirane objekte po id
             @Override
             public int compare(Stop o1, Stop o2) {
                 return o1.getId().compareTo(o2.getId());
@@ -105,31 +132,34 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public boolean delete(Long lineId) throws Exception
+    public List<Schedule> getLatestSchedules(List<Schedule> schedules)
     {
-        Line line = lineRepository.findById(lineId);
-        if(line == null){
-            String message = String.format("Line with id %d does not exist.", lineId);
-            logger.error(message);
-            throw new LineNotFoundException(message);
+        if(schedules.size() == 0) {
+            return new ArrayList<>();
         }
 
-        lineRepository.delete(line);
-        return true;
-    }
+        List<Schedule> latestSchedules = new ArrayList<>();
+        LocalDate latestDate = schedules.stream().findFirst().get().getDateFrom();
 
-    @Override
-    public List<Schedule> getSchedules(Long lineId) throws LineNotFoundException
-    {
-        Line line = lineRepository.findById(lineId);
-        if(line == null)
+        for(Schedule schedule : schedules)
         {
-            String message = String.format("Line with id %d does not exist.", lineId);
-            logger.error(message);
-            throw new LineNotFoundException(message);
+            if(schedule.getDateFrom().isBefore(latestDate))
+            {
+                continue;
+            }
+            else if(schedule.getDateFrom().isAfter(latestDate))
+            {
+                latestDate = schedule.getDateFrom();
+                latestSchedules = new ArrayList<>();
+                latestSchedules.add(schedule);
+            }
+            else
+            {
+                latestSchedules.add(schedule);
+            }
         }
 
-        return line.getSchedules();
+        return latestSchedules;
     }
 
     @Override
@@ -175,37 +205,29 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public Result<Boolean> exists(String name)
+    public Result<Boolean> save(Line line) throws Exception
     {
-        Line line = lineRepository.findByName(name);
-        if(line == null)
+        if(line == null) {
+            throw new Exception(Messages.CantBeNull(StringConstants.Line));
+        }
+
+        if(StringExtensions.isEmptyOrWhitespace(line.getName())) {
+            throw new Exception(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
+        }
+
+        try {
+            lineRepository.save(line);
+
+            String message = Messages.SuccessfullyAdded(StringConstants.Line, line.getName());
+            logger.info(message);
+            return new Result<>(true, message);
+        }
+        catch (Exception ex)
         {
-            String message = Messages.AlreadyExists(StringConstants.Line, name);
-            logger.warn(message);
+            String message = Messages.ErrorAdding(StringConstants.Line, line.getName(), ex.getMessage());
+            logger.error(message);
             return new Result<>(false, false, message);
         }
-        return new Result<>(true);
     }
-
-    @Override
-    public Result<Boolean> exists(Long id)
-    {
-        Line line = lineRepository.findById(id);
-        if(line == null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Zone, id);
-            logger.warn(message);
-            return new Result<>(false, false, message);
-        }
-        return new Result<>(true);
-    }
-
-    @Override
-    public void save(Line line)
-    {
-        lineRepository.save(line);
-    }
-
-
 
 }

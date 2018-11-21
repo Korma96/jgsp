@@ -32,6 +32,10 @@ public class Messages
         return String.format("%s with id %d%n does not exist.", object, id);
     }
 
+    public static String DoesNotContains(String object1, Long id1, String object2, Long id2)
+    {
+        return String.format("%s with id %d%n doesn`t contains %s with id %d%n", object1, id1, object2, id2);
+    }
     public static String ErrorAdding(String object, String name, String message)
     {
         return String.format("Error adding %s with name %s message %s", object, name, message);
