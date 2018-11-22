@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,7 @@ public class ZoneController
     @Autowired
     private LineService lineService;
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity addZone(@RequestBody String zoneName)
     {
@@ -32,6 +34,7 @@ public class ZoneController
         return ResponseHelpers.getResponseBasedOnResult(result);
     }
 
+    @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value = "/add-with-lines", method = RequestMethod.POST)
     public ResponseEntity addZoneWithLines(@RequestBody ZoneDTO zone)
     {

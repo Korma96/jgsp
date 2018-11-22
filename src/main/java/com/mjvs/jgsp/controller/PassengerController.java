@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.dto.TicketDTO;
+import com.mjvs.jgsp.exceptions.UserNotFoundException;
 import com.mjvs.jgsp.model.LineZone;
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.PassengerType;
@@ -95,6 +96,7 @@ public class PassengerController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value ="/buy-ticket", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity buyTicket(@RequestBody TicketDTO ticketDTO) {
         LocalDateTime startDateAndTime, endDateAndTime;
@@ -112,7 +114,7 @@ public class PassengerController {
 			User loggedUser = userService.getLoggedUser();
 			loggedPassenger = (Passenger) loggedUser;
 		} 
-		catch(UsernameNotFoundException e) {
+		catch(UserNotFoundException e) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
 		catch(ClassCastException e) {
