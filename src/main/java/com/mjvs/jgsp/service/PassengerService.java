@@ -8,5 +8,7 @@ public interface PassengerService {
     boolean save(Passenger p);
 
     //boolean exists(String username,String password);
+    
+    Passenger getPassenger(String username);
 
 }

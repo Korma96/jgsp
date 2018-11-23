@@ -27,6 +27,12 @@ public class PassengerServiceImpl implements PassengerService {
         passengerRepository.save(p);
         return true;
     }
+    
+    @Override
+	public Passenger getPassenger(String username)
+	{
+		return passengerRepository.findByUsername(username);
+	}
 
 
     /*public boolean exists(String username,String password){
