@@ -1,23 +1,13 @@
 package com.mjvs.jgsp.dto;
 
-public class ZoneDTO
+public class ZoneLiteDTO
 {
     private String name;
 
-    private Long id;
-
-    public ZoneDTO() {
+    public ZoneLiteDTO() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ZoneDTO(String name) {
+    public ZoneLiteDTO(String name) {
         this.name = name;
     }
 

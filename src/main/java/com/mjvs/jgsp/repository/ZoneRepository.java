@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ZoneRepository extends Repository<Zone, Long>
 {
-    Zone findByName(String name);
-
     Zone findById(Long id);
+
+    Zone findByName(String zoneName);
 
     List<Zone> findAll();
 

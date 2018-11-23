@@ -30,6 +30,11 @@ public class Line extends LineZone {
 
     }
 
+    public Line(String name)
+    {
+        this.name = name;
+    }
+
     public Line(String name, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
         this.name = name;
         this.zone = zone;
@@ -44,6 +49,14 @@ public class Line extends LineZone {
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

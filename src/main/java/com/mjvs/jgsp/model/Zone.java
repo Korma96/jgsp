@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +13,23 @@ public class Zone extends LineZone {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Line> lines;
 
-    public Zone() {
-
-    }
-
-    public Zone(String name, List<Line> lines) {
+    public Zone(String name, @NotNull List<Line> lines) {
         this.name = name;
         this.lines = lines;
     }
 
     public Zone(String name) {
         this.name = name;
-        this.lines = new ArrayList<Line>();
+        this.lines = new ArrayList<>();
+    }
 
+    public Zone()
+    {
+        this.lines = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

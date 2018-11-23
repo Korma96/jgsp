@@ -1,11 +1,13 @@
 package com.mjvs.jgsp.controller;
 
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
-
+import com.mjvs.jgsp.dto.PassengerDTO;
+import com.mjvs.jgsp.dto.TicketDTO;
+import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.service.LineService;
+import com.mjvs.jgsp.service.PassengerService;
+import com.mjvs.jgsp.service.UserService;
+import com.mjvs.jgsp.service.ZoneService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.TicketDTO;
-import com.mjvs.jgsp.model.LineZone;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
-import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.TicketType;
-import com.mjvs.jgsp.model.User;
-import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.UserType;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.PassengerService;
-import com.mjvs.jgsp.service.UserService;
-import com.mjvs.jgsp.service.ZoneService;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
 
 
 @RestController
@@ -173,8 +165,8 @@ public class PassengerController {
          boolean activated = ticketDTO.getTicketType() != TicketType.ONETIME; // only a ONETIME ticket
                                                                             // will not be activated immediately
         LineZone lineZone;
-        if (ticketDTO.hasZoneNotLine()) lineZone = lineService.getLine(ticketDTO.getId());
-        else lineZone = zoneService.getZone(ticketDTO.getId());
+        if (ticketDTO.hasZoneNotLine()) lineZone = lineService.findById(ticketDTO.getId()).getData();
+        else lineZone = zoneService.findById(ticketDTO.getId()).getData();
          if(lineZone == null) {
             logger.error(String.format("Line or zone with id %d does not exist!",ticketDTO.getId()));
             return new ResponseEntity(HttpStatus.BAD_REQUEST);

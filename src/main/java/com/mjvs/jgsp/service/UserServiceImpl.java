@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
 
-import com.mjvs.jgsp.exceptions.UserNotFoundException;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.repository.UserRepository;
 

@@ -1,22 +1,22 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.ZoneLiteDTO;
+import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Zone;
 
 import java.util.List;
 
 public interface ZoneService
 {
-	boolean add(String zoneName);
-	
-    boolean addZoneWithLines(String zoneName, List<String> lineNames);
+    Result<Boolean> delete(Zone zone);
 
-    void save(Zone zone);
+    Result<Boolean> exists(String name);
 
-    boolean exists(String zoneName);
+    Result<Boolean> exists(Long id);
 
-    List<Zone> getAll();
+    Result<Zone> findById(Long id);
 
-    boolean delete(String zoneName);
+    Result<List<ZoneLiteDTO>> getAll();
 
-    Zone getZone(Long zoneId);
+    Result<Boolean> save(Zone zone) throws Exception;
 }
