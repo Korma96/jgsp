@@ -1,34 +1,33 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.exceptions.LineNotFoundException;
+import com.mjvs.jgsp.dto.LineDTO;
+import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.model.Zone;
 
+import java.util.HashMap;
 import java.util.List;
 
-public interface LineService {
+public interface LineService
+{
+    Result<Boolean> delete(Line line);
 
-    boolean add(String lineName, Long zoneId);
+    Result<Boolean> exists(String name);
 
-    void save(Line line, Zone zone);
+    Result<Boolean> exists(Long id);
 
-    boolean exists(String lineName);
+    Result<Line> findById(Long id);
 
-    List<Line> getLines();
+    Result<List<LineDTO>> getAll();
 
-    List<Line> getActiveLines();
+    Result<List<LineDTO>> getActiveLines();
 
-    Line getLine(Long lineId);
+    List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
-    //List<Line> getLinesByNames(List<String> lineNames);
+    List<Stop> getSortedStopsById(List<Stop> stops);
 
-    List<Stop> getLineStops(Long lineId)  throws LineNotFoundException;
+    boolean rename(HashMap<String, String> data);
 
-    List<Schedule> getSchedules(Long lineId) throws LineNotFoundException;
-
-    boolean update(String oldLineName, String newLineName);
-
-    void delete(Long lineId) throws Exception;
+    Result<Boolean> save(Line line) throws Exception;
 }

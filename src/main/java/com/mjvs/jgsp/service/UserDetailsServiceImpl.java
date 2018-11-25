@@ -15,7 +15,6 @@ import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.repository.UserRepository;
 
 
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

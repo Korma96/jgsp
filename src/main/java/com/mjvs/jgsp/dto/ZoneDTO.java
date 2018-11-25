@@ -1,26 +1,24 @@
 package com.mjvs.jgsp.dto;
 
-import java.util.List;
-
 public class ZoneDTO
 {
     private String name;
 
-    private List<String> lineNames;
+    private Long id;
 
     public ZoneDTO() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public ZoneDTO(String name) {
         this.name = name;
-    }
-
-    public List<String> getLineNames() {
-        return lineNames;
-    }
-
-    public void setLineNames(List<String> lineNames) {
-        this.lineNames = lineNames;
     }
 
     public String getName() {
@@ -31,3 +29,4 @@ public class ZoneDTO
         this.name = name;
     }
 }
+

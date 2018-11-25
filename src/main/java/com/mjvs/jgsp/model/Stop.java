@@ -19,14 +19,15 @@ public class Stop {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
-    public Stop() {
-
-    }
-
     public Stop(double latitude, double longitude, String name) {
         this.latitude = latitude;
         this.longitude = longitude;
 		this.name = name;
+    }
+
+    public Stop()
+    {
+
     }
 
     public Long getId() {

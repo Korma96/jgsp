@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.dto.TicketDTO;
-import com.mjvs.jgsp.exceptions.UserNotFoundException;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.LineZone;
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.PassengerType;
+import com.mjvs.jgsp.model.PriceTicket;
 import com.mjvs.jgsp.model.Ticket;
 import com.mjvs.jgsp.model.TicketType;
 import com.mjvs.jgsp.model.User;
@@ -32,6 +33,7 @@ import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.PassengerService;
+import com.mjvs.jgsp.service.PriceTicketService;
 import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.service.ZoneService;
 
@@ -56,6 +58,10 @@ public class PassengerController {
     
     @Autowired
     private ZoneService zoneService;
+    
+    @Autowired
+    private PriceTicketService priceTicketService;
+    
 
     @RequestMapping(value ="/registrate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registrate(@RequestBody PassengerDTO passengerDTO) {
@@ -175,16 +181,27 @@ public class PassengerController {
          boolean activated = ticketDTO.getTicketType() != TicketType.ONETIME; // only a ONETIME ticket
                                                                             // will not be activated immediately
         LineZone lineZone;
-        if (ticketDTO.hasZoneNotLine()) lineZone = lineService.getLine(ticketDTO.getId());
-        else lineZone = zoneService.getZone(ticketDTO.getId());
-         if(lineZone == null) {
+        if (ticketDTO.hasZoneNotLine()) lineZone = zoneService.findById(ticketDTO.getId()).getData();
+        else lineZone = lineService.findById(ticketDTO.getId()).getData(); 
+        
+        if(lineZone == null) {
             logger.error(String.format("Line or zone with id %d does not exist!",ticketDTO.getId()));
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        
         Ticket ticket = new Ticket(startDateAndTime, endDateAndTime, ticketDTO.getTicketType() ,activated, lineZone);
+        //priprema podataka 
+        //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.STUDENT, TicketType.MONTHLY, 3000, 6000, lineZone.getZone()));
+        PriceTicket priceTicket = priceTicketService.getPriceTicket(loggedPassenger.getPassengerType(), ticketDTO.getTicketType(),
+        															lineZone.getZone());
+        ticket.lookAtPriceTicketAndSetPrice(priceTicket);
         
         loggedPassenger.getTickets().add(ticket);
-        passengerService.save(loggedPassenger);
+        try {
+			userService.save(loggedPassenger);
+		} catch (Exception e) {
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
         
         return new ResponseEntity(HttpStatus.CREATED);
     }

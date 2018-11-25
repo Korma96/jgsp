@@ -1,6 +1,0 @@
-[1A],[1ZA],[15B],[16B],[17A],[19A],[31B],[32B],[33B]|19.8317437287|45.2687779267|SENTANDREJSKI PUT - PARTIZANSKA|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0330304.jpg|I
-[16A],[16B]|19.8589099487|45.2658468595|BAJ\u010cI \u017dILINSKOG - DANUBIUS|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0412377.jpg|I
-[16B]|19.8564206921|45.2667245338|BAJ\u010cI \u017dILINSKOG - LUKA NOVI SAD|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0413378.jpg|I
-[16B]|19.853083049|45.2678999388|BAJ\u010cI \u017dILINSKOG - BALKAN|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0416381.jpg|I
-[3AA],[4A],[5NB],[11A],[11B],[16B],[17B],[21B],[22B],[23B],[24B],[41B],[42B],[43B],[52B],[53B],[54B],[55B],[56B],[64B],[68B],[69B],[71B],[72B],[73B],[74B],[76B]|19.830132455|45.2650202834|\u017dELEZNI\u010cKA STANICA - DOLASCI|http:\/\/www.mapanovisad.rs\/stajalista_gsp\/img0506461.jpg|I
-[16B],[31B],[32B],[33B]|19.841061|45.270261|PARTIZANSKA - TEMERINSKA|\/slike\/10148.jpg|I

@@ -16,14 +16,22 @@
             </Policies>
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
+        <Appenders>
+            <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+            </Console>
+        </Appenders>
     </Appenders>
     <Loggers>
-        <Logger name="com.example.log4j2demo" level="debug" additivity="false">
+        <AsyncLogger name="com.example.log4j2demo" level="debug"
+                     additivity="false">
             <AppenderRef ref="ConsoleAppender" />
-        </Logger>
+            <AppenderRef ref="FileAppender" />
+        </AsyncLogger>
 
         <Root level="info">
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="FileAppender" />
         </Root>
     </Loggers>
 </Configuration>

@@ -1,22 +1,19 @@
 package com.mjvs.jgsp.controller;
 
-import java.io.*;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-
+import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.repository.StopRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.ZoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mjvs.jgsp.model.Line;
-import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.repository.LineRepository;
-import com.mjvs.jgsp.repository.StopRepository;
+import java.io.*;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping(value = "/vuk_popunjava_bazu")
@@ -32,7 +29,7 @@ public class VukovController {
 	private ZoneRepository zoneRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public void databaseFill()
+	public void databaseFill() throws Exception
     {	
     	String myDirectoryPath = "/stops";
 		File dir = null;
@@ -68,7 +65,8 @@ public class VukovController {
 						if(!stops.contains(stop)) stops.add(stop);
 					}
 					line.setStops(stops);
-					lineService.save(line, zone);
+					lineService.save(line);
+
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
