@@ -4,6 +4,7 @@ package com.mjvs.jgsp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.repository.UserRepository;
 
-
+@Primary
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

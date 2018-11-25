@@ -23,8 +23,8 @@ public class Passenger extends User {
     @Enumerated(EnumType.ORDINAL)
     protected PassengerType passengerType;
 
-    @Column(name = "confirmation", unique = false, nullable = true)
-    private String confirmation;
+    @Column(name = "id_confirmation", unique = false, nullable = true)
+    private Long idConfirmation;
 
     @Column(name = "expiration_date", unique = false, nullable = true)
     private LocalDate expirationDate;
@@ -39,7 +39,7 @@ public class Passenger extends User {
 
     }
 
-    public Passenger(String username, String password, String firstName, String lastName, String email, String address, PassengerType passengerType, String confirmation, LocalDate expirationDate, User verifiedBy) {
+    public Passenger(String username, String password, String firstName, String lastName, String email, String address, PassengerType passengerType, Long idConfirmation, LocalDate expirationDate, User verifiedBy) {
         super(username, password, UserType.PASSENGER, UserStatus.ACTIVATED);
 
         this.firstName = firstName;
@@ -47,7 +47,7 @@ public class Passenger extends User {
         this.email = email;
         this.address = address;
         this.passengerType = passengerType;
-        this.confirmation = confirmation;
+        this.idConfirmation = idConfirmation;
         this.expirationDate = expirationDate;
         this.tickets = new ArrayList<Ticket>();
         this.verifiedBy = verifiedBy;
@@ -105,9 +105,9 @@ public class Passenger extends User {
         this.passengerType = passengerType;
     }
 
-    public String getConfirmation() { return confirmation; }
+    public Long getConfirmation() { return idConfirmation; }
 
-    public void setConfirmation(String confirmation) { this.confirmation = confirmation; }
+    public void setConfirmation(Long idConfirmation) { this.idConfirmation = idConfirmation; }
 
     public LocalDate getExpirationDate() { return expirationDate; }
 
