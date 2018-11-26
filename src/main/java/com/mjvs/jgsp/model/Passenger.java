@@ -19,6 +19,9 @@ public class Passenger extends User {
     @Column(name = "address", unique = false, nullable = false)
     protected String address;
 
+    @Column(name = "num_of_delicts", unique = false, nullable = true)
+    protected int num_of_delicts;
+
     @Column(name = "passenger_type", unique = false, nullable = false)
     @Enumerated(EnumType.ORDINAL)
     protected PassengerType passengerType;
@@ -51,6 +54,7 @@ public class Passenger extends User {
         this.expirationDate = expirationDate;
         this.tickets = new ArrayList<Ticket>();
         this.verifiedBy = verifiedBy;
+        this.num_of_delicts = 0;
     }
 
 
@@ -61,6 +65,7 @@ public class Passenger extends User {
         this.email = email;
         this.address = address;
         this.passengerType = passengerType;
+        this.num_of_delicts = 0;
 
         this.tickets = new ArrayList<Ticket>();
     }
@@ -124,4 +129,8 @@ public class Passenger extends User {
     public void setVerifiedBy(User verifiedBy) {
         this.verifiedBy = verifiedBy;
     }
+
+    public int getNum_of_delicts() { return num_of_delicts; }
+
+    public void setNum_of_delicts(int num_of_delicts) { this.num_of_delicts = num_of_delicts;}
 }
