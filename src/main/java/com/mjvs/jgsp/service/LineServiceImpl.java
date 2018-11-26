@@ -230,4 +230,10 @@ public class LineServiceImpl implements LineService {
         }
     }
 
+	@Override
+	public Line findByName(String name) {
+		// TODO Auto-generated method stub
+		return lineRepository.findByName(name);
+	}
+
 }

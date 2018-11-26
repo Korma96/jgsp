@@ -18,6 +18,8 @@ public interface LineService
     Result<Boolean> exists(Long id);
 
     Result<Line> findById(Long id);
+    
+    Line findByName(String name);
 
     Result<List<LineDTO>> getAll();
 

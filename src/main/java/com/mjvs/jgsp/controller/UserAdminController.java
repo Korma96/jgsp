@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mjvs.jgsp.dto.LineDtoIdAndName;
 import com.mjvs.jgsp.dto.UserDTO;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Passenger;
@@ -110,6 +109,8 @@ public class UserAdminController {
 
 	        return new ResponseEntity(HttpStatus.OK);
 	    }
+	    
+	    
 	    
 
 }
