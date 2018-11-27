@@ -5,13 +5,14 @@ import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneLiteDTO;
 import com.mjvs.jgsp.dto.ZoneWithLineDTO;
 import com.mjvs.jgsp.helpers.*;
+import com.mjvs.jgsp.helpers.converter.LineConverter;
+import com.mjvs.jgsp.helpers.converter.ZoneConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.ZoneService;
-import com.mjvs.jgsp.helpers.converter.LineConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +20,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/zones")
+@RequestMapping(value = "/zone")
 public class ZoneController
 {
     private ZoneService zoneService;
     private LineService lineService;
 
     @Autowired
-    public ZoneController(ZoneService zoneService, LineService lineService)
+    public ZoneController(LineService lineService, ZoneService zoneService)
     {
-        this.zoneService = zoneService;
         this.lineService = lineService;
+        this.zoneService = zoneService;
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -84,12 +85,13 @@ public class ZoneController
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseEntity getAll()
     {
-        Result<List<ZoneLiteDTO>> result = zoneService.getAll();
+        Result<List<Zone>> result = zoneService.getAll();
         if(result.isFailure()) {
             throw new DatabaseException(result.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(result.getData());
+        List<ZoneDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData());
+        return ResponseHelpers.getResponseData(zoneLiteDTOs);
     }
 
     @RequestMapping(value = "/line/{id}", method = RequestMethod.GET)

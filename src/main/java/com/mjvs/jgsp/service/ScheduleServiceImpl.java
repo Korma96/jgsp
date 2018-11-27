@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService {
-
+public class ScheduleServiceImpl extends BaseServiceImpl<Schedule> implements ScheduleService
+{
     @Autowired
-    private ScheduleRepository scheduleRepository;
-
-    public void save(Schedule schedule) throws Exception {
-        scheduleRepository.save(schedule);
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository)
+    {
+        super(scheduleRepository);
     }
 }

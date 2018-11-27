@@ -1,5 +1,8 @@
 package com.mjvs.jgsp.controller;
 
+import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.security.TokenUtils;
+import com.mjvs.jgsp.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,27 +12,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.security.TokenUtils;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+    AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
-	TokenUtils tokenUtils;
+    TokenUtils tokenUtils;
     
 
     @RequestMapping(value="/login", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -37,7 +36,7 @@ public class UserController {
     	try {
         	// Perform the authentication
         	UsernamePasswordAuthenticationToken userInfo = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
-            Authentication authentication = authenticationManager.authenticate(userInfo);            
+            Authentication authentication = authenticationManager.authenticate(userInfo);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Reload user details so we can generate token
@@ -51,6 +50,5 @@ public class UserController {
         }
     	
     }
-
 
 }

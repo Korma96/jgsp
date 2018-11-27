@@ -1,13 +1,12 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
+import com.mjvs.jgsp.model.User;
+import com.mjvs.jgsp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.User;
-import com.mjvs.jgsp.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     
-    
+
     public User getLoggedUser() throws UserNotFoundException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
         }
         
     }
-    
+
     public void save(User user) throws Exception {
         userRepository.save(user);
     }
