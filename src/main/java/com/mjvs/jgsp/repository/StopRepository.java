@@ -1,7 +1,6 @@
 package com.mjvs.jgsp.repository;
 
-import java.util.List;
-
+import com.mjvs.jgsp.model.Stop;
 import org.springframework.data.repository.Repository;
 
 public interface StopRepository extends BaseRepository<Stop>, Repository<Stop, Long>
