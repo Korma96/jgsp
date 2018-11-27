@@ -6,6 +6,7 @@ import com.mjvs.jgsp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +20,8 @@ public class UserServiceImpl implements UserService {
     public User getLoggedUser() throws UserNotFoundException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
-            return userRepository.findByUsername((String) auth.getPrincipal());
+        	org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+            return userRepository.findByUsername(user.getUsername());
         } catch (Exception e) {
             throw new UserNotFoundException();
         }

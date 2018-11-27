@@ -100,7 +100,12 @@ public class Line extends LineZone {
     }
 
     @Override
-    protected Zone getZone() {
+    public Zone getZone() {
         return zone;
     }
+
+	@Override
+	protected double getPrice(PriceTicket priceTicket) {
+		return priceTicket.getPriceLine();
+	}
 }

@@ -14,5 +14,4 @@ public interface UserService {
     User getUser(String username, String password);
 
     boolean exists(String username);
-    
 }

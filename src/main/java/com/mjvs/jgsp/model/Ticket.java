@@ -50,8 +50,8 @@ public class Ticket {
         //this.zone = zone;
     }
 
-    private void computePrice(PriceTicket priceTicket) {
-        this.price = 0;
+    public void lookAtPriceTicketAndSetPrice(PriceTicket priceTicket) {
+        this.price = lineZone.getPrice(priceTicket);
     }
 
     public Long getId() {

@@ -24,5 +24,7 @@ public abstract class LineZone {
         this.id = id;
     }
 
-    protected abstract Zone getZone();
+    public abstract Zone getZone();
+
+	protected abstract double getPrice(PriceTicket priceTicket);
 }

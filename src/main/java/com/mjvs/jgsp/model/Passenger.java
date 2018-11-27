@@ -19,12 +19,15 @@ public class Passenger extends User {
     @Column(name = "address", unique = false, nullable = false)
     protected String address;
 
+    @Column(name = "num_of_delicts", unique = false, nullable = true)
+    protected int num_of_delicts;
+
     @Column(name = "passenger_type", unique = false, nullable = false)
     @Enumerated(EnumType.ORDINAL)
     protected PassengerType passengerType;
 
-    @Column(name = "confirmation", unique = false, nullable = true)
-    private String confirmation;
+    @Column(name = "id_confirmation", unique = false, nullable = true)
+    private Long idConfirmation;
 
     @Column(name = "expiration_date", unique = false, nullable = true)
     private LocalDate expirationDate;
@@ -39,7 +42,7 @@ public class Passenger extends User {
 
     }
 
-    public Passenger(String username, String password, String firstName, String lastName, String email, String address, PassengerType passengerType, String confirmation, LocalDate expirationDate, User verifiedBy) {
+    public Passenger(String username, String password, String firstName, String lastName, String email, String address, PassengerType passengerType, Long idConfirmation, LocalDate expirationDate, User verifiedBy) {
         super(username, password, UserType.PASSENGER, UserStatus.ACTIVATED);
 
         this.firstName = firstName;
@@ -47,10 +50,11 @@ public class Passenger extends User {
         this.email = email;
         this.address = address;
         this.passengerType = passengerType;
-        this.confirmation = confirmation;
+        this.idConfirmation = idConfirmation;
         this.expirationDate = expirationDate;
         this.tickets = new ArrayList<Ticket>();
         this.verifiedBy = verifiedBy;
+        this.num_of_delicts = 0;
     }
 
 
@@ -61,6 +65,7 @@ public class Passenger extends User {
         this.email = email;
         this.address = address;
         this.passengerType = passengerType;
+        this.num_of_delicts = 0;
 
         this.tickets = new ArrayList<Ticket>();
     }
@@ -105,9 +110,9 @@ public class Passenger extends User {
         this.passengerType = passengerType;
     }
 
-    public String getConfirmation() { return confirmation; }
+    public Long getConfirmation() { return idConfirmation; }
 
-    public void setConfirmation(String confirmation) { this.confirmation = confirmation; }
+    public void setConfirmation(Long idConfirmation) { this.idConfirmation = idConfirmation; }
 
     public LocalDate getExpirationDate() { return expirationDate; }
 
@@ -124,4 +129,8 @@ public class Passenger extends User {
     public void setVerifiedBy(User verifiedBy) {
         this.verifiedBy = verifiedBy;
     }
+
+    public int getNum_of_delicts() { return num_of_delicts; }
+
+    public void setNum_of_delicts(int num_of_delicts) { this.num_of_delicts = num_of_delicts;}
 }

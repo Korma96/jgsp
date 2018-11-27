@@ -1,11 +1,11 @@
 package com.mjvs.jgsp.repository;
 
 
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.User;
+import java.util.List;
+
 import org.springframework.data.repository.Repository;
 
-import java.util.List;
+import com.mjvs.jgsp.model.Passenger;
 
 public interface PassengerRepository extends Repository<Passenger,Long> {
 

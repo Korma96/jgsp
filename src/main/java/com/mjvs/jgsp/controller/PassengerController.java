@@ -1,52 +1,41 @@
 package com.mjvs.jgsp.controller;
 
 
-import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.TicketDTO;
-import com.mjvs.jgsp.model.*;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.PassengerService;
-import com.mjvs.jgsp.service.UserService;
-import com.mjvs.jgsp.service.ZoneService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+
+import com.mjvs.jgsp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import com.mjvs.jgsp.dto.PassengerDTO;
+import com.mjvs.jgsp.dto.TicketDTO;
+import com.mjvs.jgsp.model.Passenger;
+import com.mjvs.jgsp.model.UserStatus;
+import com.mjvs.jgsp.model.UserType;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
 @RequestMapping(value = "/passengers")
 public class PassengerController {
-
-	private final Logger logger = LogManager.getLogger(this.getClass());
 	
 	@Autowired
     private UserService userService;
-	
+
     @Autowired
     private PassengerService passengerService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
-    private LineService lineService;
-    
-    @Autowired
-    private ZoneService zoneService;
+    private ImageModelService imageModelService;
+
 
     @RequestMapping(value ="/registrate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registrate(@RequestBody PassengerDTO passengerDTO) {
@@ -78,104 +67,42 @@ public class PassengerController {
         					passengerDTO.getEmail(),passengerDTO.getAddress(),passengerDTO.getPassengerType());
 
 
-
-        boolean registrated = passengerService.save(p);
-        if(registrated){
+        try {
+            userService.save(p);
             return new ResponseEntity(HttpStatus.CREATED);
-        }
 
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
-
-    @RequestMapping(value ="/buy-ticket", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity buyTicket(@RequestBody TicketDTO ticketDTO) {
-        LocalDateTime startDateAndTime, endDateAndTime;
-        LocalDateTime dateAndTime = LocalDateTime.now();
-        LocalDate date;
-        
-        LocalTime timeThreeZero = LocalTime.of(0, 0, 0);
-        LocalTime timeEndOfDay = LocalTime.of(23, 59, 59);
-        LocalTime time;
-        
-        int dayInMonthOrMonthInYear = ticketDTO.getDayInMonthOrMonthInYear();
-        
-        Passenger loggedPassenger;
-		try {
-			User loggedUser = userService.getLoggedUser();
-			loggedPassenger = (Passenger) loggedUser;
-		} 
-		catch(UsernameNotFoundException e) {
-			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-		}
-		catch(ClassCastException e) {
-			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-		}
-		catch (Exception e) {
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
-		}
-        
-        	
-        
-         switch (ticketDTO.getTicketType()) {
-            case DAILY:
-                int lastDayInMonth = YearMonth.of(dateAndTime.getYear(), dateAndTime.getMonthValue()).lengthOfMonth();
-                if(dayInMonthOrMonthInYear < dateAndTime.getDayOfMonth() || dayInMonthOrMonthInYear > lastDayInMonth) {
-                    logger.error(String.format("Day in month (%d) is less than current day or greater than count days of current month (%d)",dayInMonthOrMonthInYear, lastDayInMonth));
-                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
-                }
-                else if(dayInMonthOrMonthInYear > dateAndTime.getDayOfMonth()) time = timeThreeZero;
-                else time = dateAndTime.toLocalTime();
-                
-                date = LocalDate.of(dateAndTime.getYear(), dateAndTime.getMonthValue(), dayInMonthOrMonthInYear);
-                startDateAndTime = LocalDateTime.of(date, time);
-                endDateAndTime = LocalDateTime.of(date, timeEndOfDay);
-                break;
-            case MONTHLY:
-                int day;
-                final int numberOfMonths = 12;
-                if(dayInMonthOrMonthInYear < dateAndTime.getMonthValue() || dayInMonthOrMonthInYear > numberOfMonths) {
-                    logger.error(String.format("Month in year (%d) is less than current month or greater than count months(12)",dayInMonthOrMonthInYear ));
-                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
-                }
-                else if(dayInMonthOrMonthInYear > dateAndTime.getMonthValue()) {
-                    day = 1;
-                    time = timeThreeZero;
-                }
-                else {
-                    day = dateAndTime.getDayOfMonth();
-                    time = dateAndTime.toLocalTime();
-                }
-                startDateAndTime = LocalDateTime.of(LocalDate.of(dateAndTime.getYear(), dayInMonthOrMonthInYear, day), time);
-                day = YearMonth.of(dateAndTime.getYear(), dayInMonthOrMonthInYear).lengthOfMonth();
-                endDateAndTime = LocalDateTime.of(LocalDate.of(dateAndTime.getYear(), dayInMonthOrMonthInYear, day), timeEndOfDay);
-                break;
-            case YEARLY:
-                startDateAndTime = dateAndTime;
-                int month;
-                if(loggedPassenger.getPassengerType() == PassengerType.STUDENT) month = 10;
-                else month = 12;
-                 endDateAndTime = LocalDateTime.of(LocalDate.of(dateAndTime.getYear(), month, 31), timeEndOfDay);
-                break;
-            case ONETIME:
-                default:
-                    startDateAndTime = null;
-                    endDateAndTime = null;
-                    break;
         }
-         boolean activated = ticketDTO.getTicketType() != TicketType.ONETIME; // only a ONETIME ticket
-                                                                            // will not be activated immediately
-        LineZone lineZone;
-        if (ticketDTO.hasZoneNotLine()) lineZone = lineService.findById(ticketDTO.getId()).getData();
-        else lineZone = zoneService.findById(ticketDTO.getId()).getData();
-         if(lineZone == null) {
-            logger.error(String.format("Line or zone with id %d does not exist!",ticketDTO.getId()));
+        catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        Ticket ticket = new Ticket(startDateAndTime, endDateAndTime, ticketDTO.getTicketType() ,activated, lineZone);
-        
-        loggedPassenger.getTickets().add(ticket);
-        passengerService.save(loggedPassenger);
-        
+
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value = "/upload-confirmation", method = RequestMethod.POST)
+    public ResponseEntity uploadConfirmation(@RequestParam("image") MultipartFile image) {
+        try {
+            imageModelService.save(image);
+
+        } catch (Exception e) {
+            System.out.println("Error upload image!");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value ="/buy-ticket", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity buyTicket(@RequestBody TicketDTO ticketDTO) {
+        try {
+            passengerService.buyTicket(ticketDTO.hasZoneNotLine(), ticketDTO.getId(), ticketDTO.getDayInMonthOrMonthInYear(),
+                    ticketDTO.getTicketType());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
