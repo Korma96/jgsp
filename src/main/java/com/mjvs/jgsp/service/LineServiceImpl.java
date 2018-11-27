@@ -36,13 +36,13 @@ public class LineServiceImpl extends BaseServiceImpl<Line> implements LineServic
     public Result<Boolean> exists(String name)
     {
         Line line = lineRepository.findByName(name);
-        if(line == null)
+        if(line != null)
         {
             String message = Messages.AlreadyExists(StringConstants.Line, name);
             logger.warn(message);
-            return new Result<>(false, false, message);
+            return new Result<>(true, false, message);
         }
-        return new Result<>(true);
+        return new Result<>(false);
     }
 
     @Override

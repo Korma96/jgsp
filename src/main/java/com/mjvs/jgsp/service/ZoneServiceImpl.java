@@ -28,12 +28,12 @@ public class ZoneServiceImpl extends BaseServiceImpl<Zone> implements ZoneServic
     public Result<Boolean> exists(String name)
     {
         Zone zone = zoneRepository.findByName(name);
-        if(zone == null)
+        if(zone != null)
         {
             String message = Messages.AlreadyExists(StringConstants.Stop, name);
             logger.warn(message);
-            return new Result<>(false, false, message);
+            return new Result<>(true, false, message);
         }
-        return new Result<>(true);
+        return new Result<>(false);
     }
 }

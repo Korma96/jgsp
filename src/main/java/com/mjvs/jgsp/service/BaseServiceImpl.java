@@ -3,7 +3,6 @@ package com.mjvs.jgsp.service;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.ReflectionHelpers;
 import com.mjvs.jgsp.helpers.Result;
-import com.mjvs.jgsp.helpers.StringExtensions;
 import com.mjvs.jgsp.repository.BaseRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,19 +24,30 @@ public class BaseServiceImpl<T> implements BaseService<T>
     }
 
     @Override
-    public Result<Boolean> delete(T obj) {
+    public Result<Boolean> delete(T obj)
+    {
+        Long id = ReflectionHelpers.InvokeGetIdMethod(obj);
+        String message;
         try {
             repository.delete(obj);
 
-            String message = Messages.SuccessfullyDeleted(typeString,
-                    ReflectionHelpers.InvokeGetNameMethod(obj));
+            if(id != null) {
+                message = Messages.SuccessfullyDeleted(typeString, id);
+            }
+            else {
+                message = Messages.SuccessfullyDeleted(typeString);
+            }
             logger.info(message);
             return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            String message = Messages.ErrorDeleting(typeString,
-                    ReflectionHelpers.InvokeGetNameMethod(obj), ex.getMessage());
+            if(id != null) {
+                message = Messages.ErrorDeleting(typeString, id, ex.getMessage());
+            }
+            else {
+                message = Messages.ErrorDeleting(typeString, ex.getMessage());
+            }
             logger.error(message);
             return new Result<>(false, false, message);
         }
@@ -46,27 +56,31 @@ public class BaseServiceImpl<T> implements BaseService<T>
     @Override
     public Result<Boolean> exists(Long id)
     {
+        // findById returns Optional :/
         T obj = repository.findById(id);
-        if(obj == null)
+        boolean isPresent = ReflectionHelpers.InvokeOptionalIsPresentMethod(obj);
+        if(isPresent)
         {
             String message = Messages.AlreadyExists(typeString, id);
             logger.warn(message);
-            return new Result<>(false, false, message);
+            return new Result<>(true, false, message);
         }
-        return new Result<>(true);
+        return new Result<>(false);
     }
 
     @Override
     public Result<T> findById(Long id)
     {
         T obj = repository.findById(id);
-        if(obj == null)
+        boolean isPresent = ReflectionHelpers.InvokeOptionalIsPresentMethod(obj);
+        if(!isPresent)
         {
             String message = Messages.DoesNotExists(typeString, id);
             logger.warn(message);
             return new Result<>(null, message);
         }
-        return new Result<>(obj);
+        T result = (T)ReflectionHelpers.InvokeOptionalGetMethod(obj);
+        return new Result<>(result);
     }
 
     @Override
@@ -88,22 +102,16 @@ public class BaseServiceImpl<T> implements BaseService<T>
             throw new Exception(Messages.CantBeNull(typeString));
         }
 
-        if(StringExtensions.isEmptyOrWhitespace(ReflectionHelpers.InvokeGetNameMethod(obj))) {
-            throw new Exception(Messages.CantBeEmptyOrWhitespace(typeString));
-        }
-
         try {
             repository.save(obj);
 
-            String message = Messages.SuccessfullyAdded(typeString,
-                    ReflectionHelpers.InvokeGetNameMethod(obj));
+            String message = Messages.SuccessfullySaved(typeString);
             logger.info(message);
             return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            String message = Messages.ErrorAdding(typeString,
-                    ReflectionHelpers.InvokeGetNameMethod(obj), ex.getMessage());
+            String message = Messages.ErrorSaving(typeString, ex.getMessage());
             logger.error(message);
             return new Result<>(false, false, message);
         }

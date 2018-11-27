@@ -27,13 +27,13 @@ public class StopServiceImpl extends BaseServiceImpl<Stop> implements StopServic
     public Result<Boolean> exists(String name)
     {
         Stop stop = stopRepository.findByName(name);
-        if(stop == null)
+        if(stop != null)
         {
             String message = Messages.AlreadyExists(StringConstants.Stop, name);
             logger.warn(message);
-            return new Result<>(false, false, message);
+            return new Result<>(true, false, message);
         }
-        return new Result<>(true);
+        return new Result<>(false);
     }
 
     @Override

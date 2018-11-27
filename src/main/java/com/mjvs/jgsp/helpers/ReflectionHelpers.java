@@ -4,12 +4,38 @@ import java.lang.reflect.Method;
 
 public class ReflectionHelpers
 {
-    public static String InvokeGetNameMethod(Object obj)
+    public static Long InvokeGetIdMethod(Object obj)
     {
         try
         {
-            Method method = obj.getClass().getMethod("getName");
-            return method.invoke(obj).toString();
+            Method method = obj.getClass().getMethod("getId");
+            return (Long) method.invoke(obj);
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+    public static boolean InvokeOptionalIsPresentMethod(Object obj)
+    {
+        try
+        {
+            Method method = obj.getClass().getMethod("isPresent");
+            return (boolean)method.invoke(obj);
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public static Object InvokeOptionalGetMethod(Object obj)
+    {
+        try
+        {
+            Method method = obj.getClass().getMethod("get");
+            return method.invoke(obj);
         }
         catch (Exception ex)
         {

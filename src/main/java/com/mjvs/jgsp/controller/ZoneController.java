@@ -1,15 +1,5 @@
 package com.mjvs.jgsp.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.mjvs.jgsp.dto.LineLiteDTO;
 import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneLiteDTO;
@@ -26,6 +16,8 @@ import com.mjvs.jgsp.service.ZoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/zone")
@@ -58,7 +50,7 @@ public class ZoneController
             throw new DatabaseException(addResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(addResult.getData());
+        return ResponseHelpers.getResponseData(addResult);
     }
 
     @RequestMapping(value = "/line/add", method = RequestMethod.POST)
@@ -87,7 +79,7 @@ public class ZoneController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -158,7 +150,7 @@ public class ZoneController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
@@ -186,6 +178,6 @@ public class ZoneController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 }

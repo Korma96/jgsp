@@ -36,23 +36,34 @@ public class Messages
     {
         return String.format("%s with id %d%n doesn`t contains %s with id %d%n", object1, id1, object2, id2);
     }
-    public static String ErrorAdding(String object, String name, String message)
+
+    public static String ErrorSaving(String object, String message)
     {
-        return String.format("Error adding %s with name %s message %s", object, name, message);
+        return String.format("Error saving %s message %s", object, message);
     }
 
-    public static String ErrorDeleting(String object, String name, String message)
+    public static String ErrorDeleting(String object, Long id, String message)
     {
-        return String.format("Error deleting %s with name %s message %s", object, name, message);
+        return String.format("Error deleting %s with id %d%n message %s", object, id, message);
     }
 
-    public static String SuccessfullyAdded(String object, String name)
+    public static String ErrorDeleting(String object, String message)
     {
-        return String.format("%s %s successfully added!", object, name);
+        return String.format("Error deleting %s message %s", object, message);
     }
 
-    public static String SuccessfullyDeleted(String object, String name)
+    public static String SuccessfullySaved(String object)
     {
-        return String.format("%s %s successfully deleted!", object, name);
+        return String.format("%s successfully saved!", object);
+    }
+
+    public static String SuccessfullyDeleted(String object, Long id)
+    {
+        return String.format("%s %d%n successfully deleted!", object, id);
+    }
+
+    public static String SuccessfullyDeleted(String object)
+    {
+        return String.format("%s successfully deleted!", object);
     }
 }

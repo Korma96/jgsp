@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/lines")
+@RequestMapping(value = "/line")
 public class LineController
 {
     private LineService lineService;
@@ -53,7 +53,7 @@ public class LineController
             throw new DatabaseException(addResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(addResult.getData());
+        return ResponseHelpers.getResponseData(addResult);
     }
 
     @RequestMapping(value = "/stop/add", method = RequestMethod.POST)
@@ -82,7 +82,7 @@ public class LineController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "schedule/add", method = RequestMethod.POST)
@@ -112,7 +112,7 @@ public class LineController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -128,14 +128,14 @@ public class LineController
     }
 
     @RequestMapping(value = "/active", method = RequestMethod.GET)
-    public ResponseEntity<List<LineDTO>> getActiveLines()
+    public ResponseEntity getActiveLines()
     {
         Result<List<LineDTO>> getResult = lineService.getActiveLines();
         if(getResult.isFailure()) {
             throw new DatabaseException(getResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(getResult.getData());
+        return ResponseHelpers.getResponseData(getResult);
     }
 
     @RequestMapping(value = "/{id}/schedule", method = RequestMethod.GET)
@@ -153,7 +153,7 @@ public class LineController
         return ResponseHelpers.getResponseData(latestSchedules);
     }
 
-    @RequestMapping(value = "/{id}/stop", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/stop", method = RequestMethod.GET)
     public ResponseEntity<List<Stop>> getLineStops(@PathVariable("id") Long id) throws Exception
     {
         Result<Line> lineResult = lineService.findById(id);
@@ -209,6 +209,6 @@ public class LineController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 }

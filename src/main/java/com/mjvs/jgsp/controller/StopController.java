@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/stops")
+@RequestMapping(value = "/stop")
 public class StopController
 {
     private StopService stopService;
@@ -47,7 +47,7 @@ public class StopController
             throw new DatabaseException(addResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(addResult.getData());
+        return ResponseHelpers.getResponseData(addResult);
     }
 
     @RequestMapping(value = "/coordinates", method = RequestMethod.POST)
@@ -73,18 +73,18 @@ public class StopController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Stop>> getAll()
+    public ResponseEntity getAll()
     {
         Result<List<Stop>> getResult = stopService.getAll();
         if(getResult.isFailure()) {
             throw new DatabaseException(getResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(getResult.getData());
+        return ResponseHelpers.getResponseData(getResult);
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.POST)
@@ -114,7 +114,7 @@ public class StopController
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult.getData());
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
