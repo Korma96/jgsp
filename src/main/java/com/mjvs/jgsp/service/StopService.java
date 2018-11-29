@@ -1,19 +1,11 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Stop;
 
-import java.util.HashMap;
-import java.util.List;
-
-public interface StopService
+public interface StopService extends BaseService<Stop>
 {
-    boolean add(Stop stop);
+    Result<Boolean> exists(String name);
 
-    boolean delete(double latitude, double longitude);
-
-    List<Stop> getAll();
-
-    boolean rename(HashMap<String, String> data);
-
-    boolean changeCoordinates(HashMap<String, Double> data);
+    Result<Stop> findByLatitudeAndLongitude(double latitude, double longitude);
 }

@@ -28,7 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/vuk_popunjava_bazu")
-public class VukovController {
+public class DatabaseController {
 
 	@Autowired
 	private StopRepository stopRepository;
@@ -197,6 +197,7 @@ public class VukovController {
     	}
     	System.out.println("Zavrsio");
     }
+
 }
 	
     

@@ -4,7 +4,6 @@ import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
-import com.mjvs.jgsp.helpers.StringExtensions;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
@@ -18,90 +17,32 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class LineServiceImpl implements LineService {
-
+public class LineServiceImpl extends BaseServiceImpl<Line> implements LineService
+{
     private final Logger logger = LogManager.getLogger(this.getClass());
-
     private LineRepository lineRepository;
 
     @Autowired
     public LineServiceImpl(LineRepository lineRepository)
     {
+        super(lineRepository);
         this.lineRepository = lineRepository;
-    }
-
-    @Override
-    public Result<Boolean> delete(Line line)
-    {
-        try {
-            lineRepository.delete(line);
-
-            String message = Messages.SuccessfullyDeleted(StringConstants.Line, line.getName());
-            logger.info(message);
-            return new Result<>(true, message);
-        }
-        catch (Exception ex)
-        {
-            String message = Messages.ErrorDeleting(StringConstants.Line, line.getName(), ex.getMessage());
-            logger.error(message);
-            return new Result<>(false, false, message);
-        }
     }
 
     @Override
     public Result<Boolean> exists(String name)
     {
         Line line = lineRepository.findByName(name);
-        if(line == null)
+        if(line != null)
         {
             String message = Messages.AlreadyExists(StringConstants.Line, name);
             logger.warn(message);
-            return new Result<>(false, false, message);
+            return new Result<>(true, false, message);
         }
-        return new Result<>(true);
-    }
-
-    @Override
-    public Result<Boolean> exists(Long id)
-    {
-        Line line = lineRepository.findById(id);
-        if(line == null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Zone, id);
-            logger.warn(message);
-            return new Result<>(false, false, message);
-        }
-        return new Result<>(true);
-    }
-
-    @Override
-    public Result<Line> findById(Long id)
-    {
-        Line line = lineRepository.findById(id);
-        if(line == null)
-        {
-            String message = Messages.DoesNotExists(StringConstants.Line, id);
-            logger.warn(message);
-            return new Result<>(null, message);
-        }
-        return new Result<>(line);
-    }
-
-    @Override
-    public Result<List<LineDTO>> getAll()
-    {
-        try {
-            List<LineDTO> data = LineConverter
-                    .ConvertLinesToLineDTOs(lineRepository.findAll());
-            return new Result<>(data);
-        }
-        catch (Exception ex) {
-            return new Result<>(null, false, ex.getMessage());
-        }
+        return new Result<>(false);
     }
 
     @Override
@@ -162,77 +103,8 @@ public class LineServiceImpl implements LineService {
         return latestSchedules;
     }
 
-    @Override
-    public boolean rename(HashMap<String, String> data)
-    {
-        String oldName;
-        String newName;
-
-        try
-        {
-            oldName = data.get("oldName");
-            newName = data.get("newName");
-        }
-        catch (Exception ex)
-        {
-            logger.error(String.format("Wrong data format! %s ", ex.getMessage()));
-            return false;
-        }
-
-        Line line = lineRepository.findByName(oldName);
-        if(line == null)
-        {
-            logger.warn(String.format("Line %s does not exist.", oldName));
-            return false;
-        }
-
-        line.setName(newName);
-
-        try
-        {
-            lineRepository.save(line);
-            logger.info(String.format("Line %s successfully renamed to %s",
-                    oldName, newName));
-        }
-        catch (Exception ex)
-        {
-            logger.info(String.format("Error renaming line %s to %s",
-                    oldName, newName));
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public Result<Boolean> save(Line line) throws Exception
-    {
-        if(line == null) {
-            throw new Exception(Messages.CantBeNull(StringConstants.Line));
-        }
-
-        if(StringExtensions.isEmptyOrWhitespace(line.getName())) {
-            throw new Exception(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
-        }
-
-        try {
-            lineRepository.save(line);
-
-            String message = Messages.SuccessfullyAdded(StringConstants.Line, line.getName());
-            logger.info(message);
-            return new Result<>(true, message);
-        }
-        catch (Exception ex)
-        {
-            String message = Messages.ErrorAdding(StringConstants.Line, line.getName(), ex.getMessage());
-            logger.error(message);
-            return new Result<>(false, false, message);
-        }
-    }
-
 	@Override
 	public Line findByName(String name) {
-		// TODO Auto-generated method stub
 		return lineRepository.findByName(name);
 	}
 

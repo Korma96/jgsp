@@ -1,20 +1,10 @@
 package com.mjvs.jgsp.repository;
 
-import java.util.List;
-
+import com.mjvs.jgsp.model.Zone;
 import org.springframework.data.repository.Repository;
 
-import com.mjvs.jgsp.model.Zone;
-
-public interface ZoneRepository extends Repository<Zone, Long>
+// BaseRepository<T> must be extended, it can`t be used directly
+public interface ZoneRepository extends BaseRepository<Zone>, Repository<Zone, Long>
 {
-    Zone findById(Long id);
-
-    Zone findByName(String zoneName);
-
-    List<Zone> findAll();
-
-    Zone save(Zone zone);
-
-    void delete(Zone zone);
+    Zone findByName(String name);
 }
