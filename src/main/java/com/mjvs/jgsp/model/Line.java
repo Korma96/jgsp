@@ -1,6 +1,8 @@
 package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,14 @@ public class Line extends LineZone {
     // i iz tabele schedule
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
+   
+    /*@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Schedule scheduleWorkDay;
+    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Schedule scheduleSaturday;
+    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Schedule scheduleSunday;
+*/
 
     public Line() {
 
@@ -35,15 +45,23 @@ public class Line extends LineZone {
         this.name = name;
     }
 
-    public Line(String name, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
-        this.name = name;
-        this.zone = zone;
-        this.stops = stops;
-        this.transports = transports;
-        this.schedules = schedules;
-    }
+    
 
-    public Line(String name, Zone zone) {
+    public Line(String name, boolean active, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules
+			/*Schedule scheduleWorkDay, Schedule scheduleSaturday, Schedule scheduleSunday*/) {
+
+		this.name = name;
+		this.active = active;
+		this.zone = zone;
+		this.stops = stops;
+		this.transports = transports;
+		this.schedules = schedules;
+//		this.scheduleWorkDay = scheduleWorkDay;
+//		this.scheduleSaturday = scheduleSaturday;
+//		this.scheduleSunday = scheduleSunday;
+	}
+
+	public Line(String name, Zone zone) {
         this.name = name;
         this.zone = zone;
         this.stops = new ArrayList<>();
@@ -90,17 +108,64 @@ public class Line extends LineZone {
     public void setTransports(List<Transport> transports) {
         this.transports = transports;
     }
+    
+    
 
-    public List<Schedule> getSchedules() {
+   public List<Schedule> getSchedules() {
         return schedules;
     }
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
+   
+    
+    /*public Schedule getScheduleWorkDay() {
+		return scheduleWorkDay;
+	}
 
-    @Override
-    protected Zone getZone() {
+	public void setScheduleWorkDay(Schedule scheduleWorkDay) {
+		this.scheduleWorkDay = scheduleWorkDay;
+	}
+
+	public Schedule getScheduleSaturday() {
+		return scheduleSaturday;
+	}
+
+	public void setScheduleSaturday(Schedule scheduleSaturday) {
+		this.scheduleSaturday = scheduleSaturday;
+	}
+
+	public Schedule getScheduleSunday() {
+		return scheduleSunday;
+	}
+
+	public void setScheduleSunday(Schedule scheduleSunday) {
+		this.scheduleSunday = scheduleSunday;
+	}
+	
+	
+	public Schedule getSchedule() {
+		int day = LocalDate.now().getDayOfWeek().getValue();
+		return getSchedule(day);
+	}
+	
+	public Schedule getSchedule(int day) {
+		if (day<6) return this.scheduleWorkDay;
+		else if (day == 6) return this.scheduleSaturday;
+		else return this.scheduleSunday;
+	}
+	*/
+    
+    
+
+	@Override
+    public Zone getZone() {
         return zone;
     }
+
+	@Override
+	protected double getPrice(PriceTicket priceTicket) {
+		return priceTicket.getPriceLine();
+	}
 }

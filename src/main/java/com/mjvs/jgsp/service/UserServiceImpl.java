@@ -3,7 +3,7 @@ package com.mjvs.jgsp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;

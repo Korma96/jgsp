@@ -1,12 +1,15 @@
 package com.mjvs.jgsp.repository;
+import com.mjvs.jgsp.model.MyLocalTime;
+
+import java.util.List;
+
+import org.springframework.data.repository.Repository;
 
 import com.mjvs.jgsp.model.Schedule;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+public interface ScheduleRepository extends Repository<Schedule, Long> {
 
     Schedule save(Schedule schedule);
     
-    
-    
+    Schedule findByDepartureList(List<MyLocalTime> departureList);
 }

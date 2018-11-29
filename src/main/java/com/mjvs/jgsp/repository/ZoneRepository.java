@@ -1,9 +1,10 @@
 package com.mjvs.jgsp.repository;
 
-import com.mjvs.jgsp.model.Zone;
+import java.util.List;
+
 import org.springframework.data.repository.Repository;
 
-import java.util.List;
+import com.mjvs.jgsp.model.Zone;
 
 public interface ZoneRepository extends Repository<Zone, Long>
 {
