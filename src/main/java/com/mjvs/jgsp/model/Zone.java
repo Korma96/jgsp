@@ -57,4 +57,9 @@ public class Zone extends LineZone {
 	protected double getPrice(PriceTicket priceTicket) {
 		return priceTicket.getPriceZone();
 	}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

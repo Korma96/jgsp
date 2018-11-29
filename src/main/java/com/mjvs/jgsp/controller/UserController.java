@@ -99,9 +99,9 @@ public class UserController {
 
 
         if(!valid){
-            int num_d = passenger.getNum_of_delicts();
+            int num_d = passenger.getNumOfDelicts();
             num_d++;
-            passenger.setNum_of_delicts(num_d);
+            passenger.setNumOfDelicts(num_d);
 
             if(num_d == 3){
                 passenger.setUserStatus(UserStatus.DEACTIVATED);

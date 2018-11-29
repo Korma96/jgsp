@@ -12,6 +12,9 @@ public class Line extends LineZone {
     @Column(name = "active", unique = false, nullable = false)
     private boolean active;
 
+    @Column(name = "minutes-required-for-whole-route")
+    private int minutesRequiredForWholeRoute;
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private Zone zone;
 
@@ -35,9 +38,11 @@ public class Line extends LineZone {
         this.name = name;
     }
 
-    public Line(String name, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
+    public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
         this.name = name;
+        this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
         this.zone = zone;
+        this.active = true;
         this.stops = stops;
         this.transports = transports;
         this.schedules = schedules;
@@ -45,7 +50,9 @@ public class Line extends LineZone {
 
     public Line(String name, Zone zone) {
         this.name = name;
+        this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
         this.zone = zone;
+        this.active = false;
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
@@ -65,6 +72,14 @@ public class Line extends LineZone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getMinutesRequiredForWholeRoute() {
+        return minutesRequiredForWholeRoute;
+    }
+
+    public void setMinutesRequiredForWholeRoute(int minutesRequiredForWholeRoute) {
+        this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
     }
 
     public boolean isActive() { return active; }
@@ -108,4 +123,9 @@ public class Line extends LineZone {
 	protected double getPrice(PriceTicket priceTicket) {
 		return priceTicket.getPriceLine();
 	}
+
+    @Override
+    public String toString() {
+        return name + " ("+ zone.getName() + ")";
+    }
 }
