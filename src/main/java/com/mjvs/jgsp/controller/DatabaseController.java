@@ -167,8 +167,8 @@ public class DatabaseController {
 							for (String token: tokens)
 							{
 								time = LocalTime.parse(token);
-							    mlt = MyLocalTImeRepository.findByTime(time);
-								if (mlt == null) mlt = MyLocalTImeRepository.save(new MyLocalTime(time));
+							    mlt = myLocalTImeRepository.findByTime(time);
+								if (mlt == null) mlt = myLocalTImeRepository.save(new MyLocalTime(time));
 								departureList.add(mlt);
 							}
 						}
