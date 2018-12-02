@@ -13,8 +13,6 @@ public interface PassengerRepository extends Repository<Passenger,Long> {
 
     List<Passenger> findAll();
 
-
-
     Passenger save(Passenger passenger);
 
     Passenger findByUsernameAndPassword(String username, String password);

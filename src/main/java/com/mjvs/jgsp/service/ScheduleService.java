@@ -2,7 +2,7 @@ package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.model.Schedule;
 
-public interface ScheduleService {
+public interface ScheduleService extends BaseService<Schedule>
+{
 
-    void save(Schedule schedule) throws Exception;
 }

@@ -32,7 +32,7 @@ import javax.crypto.ExemptionMechanismException;
 public class UserController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+    AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -41,7 +41,7 @@ public class UserController {
     private UserService userService;
 	
 	@Autowired
-	TokenUtils tokenUtils;
+    TokenUtils tokenUtils;
     
 
     @RequestMapping(value="/login", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +49,7 @@ public class UserController {
     	try {
         	// Perform the authentication
         	UsernamePasswordAuthenticationToken userInfo = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
-            Authentication authentication = authenticationManager.authenticate(userInfo);            
+            Authentication authentication = authenticationManager.authenticate(userInfo);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Reload user details so we can generate token

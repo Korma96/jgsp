@@ -74,7 +74,7 @@ public class PassengerController {
         }
 
         Passenger p = new Passenger(passengerDTO.getUsername(), passwordEncoder.encode(passengerDTO.getPassword1()),
-        					UserType.PASSENGER,UserStatus.PENDING,passengerDTO.getFirstName(),passengerDTO.getLastName(),
+        					UserType.PASSENGER, UserStatus.PENDING,passengerDTO.getFirstName(),passengerDTO.getLastName(),
         					passengerDTO.getEmail(),passengerDTO.getAddress(),passengerDTO.getPassengerType());
 
 

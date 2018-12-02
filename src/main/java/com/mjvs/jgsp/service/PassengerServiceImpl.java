@@ -3,6 +3,8 @@ package com.mjvs.jgsp.service;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
 import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.repository.PassengerRepository;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Autowired
     private PriceTicketService priceTicketService;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
 
     @Override
@@ -104,8 +109,6 @@ public class PassengerServiceImpl implements PassengerService {
         }
         //boolean activated = ticketType != TicketType.ONETIME; // only a ONETIME ticket
         // will not be activated immediately
-
-
         LineZone lineZone;
         if(ticketType != TicketType.ONETIME) {
             if (hasZoneNotLine) lineZone = zoneService.findById(lineZoneId).getData();
@@ -141,4 +144,21 @@ public class PassengerServiceImpl implements PassengerService {
 
     }
 
+    @Override
+	public Passenger getPassenger(String username)
+	{
+		return passengerRepository.findByUsername(username);
+	}
+
+	@Override
+	public Passenger save(Passenger p) {
+		return passengerRepository.save(p);
+	}
 }
+
+
+    /*public boolean exists(String username,String password){
+        Passenger p = passengerRepository.findByUsernameAndPassword(username,password);
+        return  p != null;
+    }*/
+

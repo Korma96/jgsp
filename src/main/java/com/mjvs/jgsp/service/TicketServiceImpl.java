@@ -3,14 +3,12 @@ package com.mjvs.jgsp.service;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
