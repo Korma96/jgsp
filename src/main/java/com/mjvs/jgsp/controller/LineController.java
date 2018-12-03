@@ -1,9 +1,6 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.dto.LineDTO;
-import com.mjvs.jgsp.dto.LineLiteDTO;
-import com.mjvs.jgsp.dto.LineWithScheduleDTO;
-import com.mjvs.jgsp.dto.LineWithStopDTO;
+import com.mjvs.jgsp.dto.*;
 import com.mjvs.jgsp.helpers.*;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
@@ -22,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/line")
-public class LineController
+public class LineController extends ExtendedBaseController<Line>
 {
     private LineService lineService;
     private StopService stopService;
@@ -31,29 +28,10 @@ public class LineController
     @Autowired
     public LineController(LineService lineService, StopService stopService, ScheduleService scheduleService)
     {
+        super(lineService);
         this.lineService = lineService;
         this.stopService = stopService;
         this.scheduleService = scheduleService;
-    }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity add(@RequestBody LineLiteDTO lineDTO) throws Exception
-    {
-        if(StringExtensions.isEmptyOrWhitespace(lineDTO.getName())) {
-            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
-        }
-
-        Result<Boolean> existsResult = lineService.exists(lineDTO.getName());
-        if(existsResult.getData()) {
-            throw new BadRequestException(existsResult.getMessage());
-        }
-
-        Result addResult = lineService.save(new Line(lineDTO.getName()));
-        if(addResult.isFailure()) {
-            throw new DatabaseException(addResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(addResult);
     }
 
     @RequestMapping(value = "/stop/add", method = RequestMethod.POST)
@@ -116,21 +94,21 @@ public class LineController
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<LineDTO>> getAll()
+    public ResponseEntity<List<BaseDTO>> getAll()
     {
         Result<List<Line>> getResult = lineService.getAll();
         if(getResult.isFailure()) {
             throw new DatabaseException(getResult.getMessage());
         }
 
-        List<LineDTO> lineDTOs = LineConverter.ConvertLinesToLineDTOs(getResult.getData());
+        List<BaseDTO> lineDTOs = LineConverter.ConvertLinesToBaseDTOs(getResult.getData());
         return ResponseHelpers.getResponseData(lineDTOs);
     }
 
     @RequestMapping(value = "/active", method = RequestMethod.GET)
     public ResponseEntity getActiveLines()
     {
-        Result<List<LineDTO>> getResult = lineService.getActiveLines();
+        Result<List<BaseDTO>> getResult = lineService.getActiveLines();
         if(getResult.isFailure()) {
             throw new DatabaseException(getResult.getMessage());
         }
@@ -167,48 +145,4 @@ public class LineController
         return ResponseHelpers.getResponseData(sortedStops);
     }
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
-    public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
-    {
-        Result<Line> lineResult = lineService.findById(id);
-        if(!lineResult.hasData()){
-            throw new BadRequestException(lineResult.getMessage());
-        }
-
-        Line line = lineResult.getData();
-        Result<Boolean> deleteResult = lineService.delete(line);
-        if(deleteResult.isFailure()) {
-            throw new DatabaseException(deleteResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(deleteResult);
-    }
-
-    @RequestMapping(value = "/rename", method = RequestMethod.POST)
-    public ResponseEntity rename(@RequestBody LineDTO lineDTO) throws Exception
-    {
-        if(StringExtensions.isEmptyOrWhitespace(lineDTO.getName())) {
-            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
-        }
-
-        Result<Boolean> existsResult = lineService.exists(lineDTO.getName());
-        if(existsResult.getData()) {
-            throw new BadRequestException(existsResult.getMessage());
-        }
-
-        Result<Line> lineResult = lineService.findById(lineDTO.getId());
-        if(!lineResult.hasData()) {
-            throw new BadRequestException(lineResult.getMessage());
-        }
-
-        Line line = lineResult.getData();
-        line.setName(lineDTO.getName());
-
-        Result<Boolean> saveResult = lineService.save(line);
-        if(saveResult.isFailure()) {
-            throw new DatabaseException(saveResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(saveResult);
-    }
 }

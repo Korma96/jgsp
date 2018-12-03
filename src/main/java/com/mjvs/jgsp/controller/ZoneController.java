@@ -1,10 +1,12 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.dto.LineLiteDTO;
-import com.mjvs.jgsp.dto.ZoneDTO;
-import com.mjvs.jgsp.dto.ZoneLiteDTO;
+import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.BaseLiteDTO;
 import com.mjvs.jgsp.dto.ZoneWithLineDTO;
-import com.mjvs.jgsp.helpers.*;
+import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.helpers.ResponseHelpers;
+import com.mjvs.jgsp.helpers.Result;
+import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.helpers.converter.ZoneConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/zone")
-public class ZoneController
+public class ZoneController extends ExtendedBaseController<Zone>
 {
     private ZoneService zoneService;
     private LineService lineService;
@@ -29,28 +31,9 @@ public class ZoneController
     @Autowired
     public ZoneController(LineService lineService, ZoneService zoneService)
     {
+        super(zoneService);
         this.lineService = lineService;
         this.zoneService = zoneService;
-    }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity add(@RequestBody ZoneLiteDTO zone) throws Exception
-    {
-        if(StringExtensions.isEmptyOrWhitespace(zone.getName())) {
-            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Zone));
-        }
-
-        Result<Boolean> existsResult = zoneService.exists(zone.getName());
-        if(existsResult.getData()) {
-            throw new BadRequestException(existsResult.getMessage());
-        }
-
-        Result addResult = zoneService.save(new Zone(zone.getName()));
-        if(addResult.isFailure()) {
-            throw new DatabaseException(addResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(addResult);
     }
 
     @RequestMapping(value = "/line/add", method = RequestMethod.POST)
@@ -90,7 +73,7 @@ public class ZoneController
             throw new DatabaseException(result.getMessage());
         }
 
-        List<ZoneDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData());
+        List<BaseDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData());
         return ResponseHelpers.getResponseData(zoneLiteDTOs);
     }
 
@@ -103,25 +86,9 @@ public class ZoneController
         }
 
         Zone zone = zoneResult.getData();
-        List<LineLiteDTO> lines = LineConverter.ConvertLinesToLineLiteDTOs(zone.getLines());
+        List<BaseLiteDTO> lines = LineConverter.ConvertLinesToBaseLiteDTOs(zone.getLines());
 
         return ResponseHelpers.getResponseData(lines);
-    }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity delete(@PathVariable Long id) throws Exception
-    {
-        Result<Zone> zoneResult = zoneService.findById(id);
-        if(!zoneResult.hasData()) {
-            throw new BadRequestException(zoneResult.getMessage());
-        }
-
-        Result<Boolean> deleteResult = zoneService.delete(zoneResult.getData());
-        if(deleteResult.isFailure()) {
-            throw new DatabaseException(deleteResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(deleteResult);
     }
 
     @RequestMapping(value = "/line/remove", method = RequestMethod.DELETE)
@@ -140,7 +107,7 @@ public class ZoneController
         Zone zone = zoneResult.getData();
         Line line = lineResult.getData();
         if(!zone.getLines().contains(line)) {
-            throw new BadRequestException(Messages.DoesNotContains(
+            throw new BadRequestException(Messages.DoesNotContain(
                     StringConstants.Zone, zone.getId(), StringConstants.Line, line.getId()));
         }
 
@@ -153,31 +120,4 @@ public class ZoneController
         return ResponseHelpers.getResponseData(saveResult);
     }
 
-    @RequestMapping(value = "/rename", method = RequestMethod.POST)
-    public ResponseEntity rename(@RequestBody ZoneDTO zoneDTO) throws Exception
-    {
-        if(StringExtensions.isEmptyOrWhitespace(zoneDTO.getName())) {
-            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Zone));
-        }
-
-        Result<Boolean> existsResult = zoneService.exists(zoneDTO.getName());
-        if(existsResult.getData()) {
-            throw new BadRequestException(existsResult.getMessage());
-        }
-
-        Result<Zone> zoneResult = zoneService.findById(zoneDTO.getId());
-        if(!zoneResult.hasData()) {
-            throw new BadRequestException(zoneResult.getMessage());
-        }
-
-        Zone zone = zoneResult.getData();
-        zone.setName(zoneDTO.getName());
-
-        Result<Boolean> saveResult = zoneService.save(zone);
-        if(saveResult.isFailure()) {
-            throw new DatabaseException(saveResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(saveResult);
-    }
 }

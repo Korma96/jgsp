@@ -5,7 +5,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface LineRepository extends BaseRepository<Line>, Repository<Line, Long>
+public interface LineRepository extends ExtendedBaseRepository<Line>, Repository<Line, Long>
 {
     List<Line> findByActive(boolean active);
 

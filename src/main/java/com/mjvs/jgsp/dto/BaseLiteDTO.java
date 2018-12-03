@@ -1,13 +1,16 @@
 package com.mjvs.jgsp.dto;
 
-public class ZoneLiteDTO
+public class BaseLiteDTO
 {
     private String name;
 
-    public ZoneLiteDTO() {
+    public BaseLiteDTO()
+    {
+
     }
 
-    public ZoneLiteDTO(String name) {
+    public BaseLiteDTO(String name)
+    {
         this.name = name;
     }
 

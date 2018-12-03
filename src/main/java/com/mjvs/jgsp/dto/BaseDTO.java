@@ -1,23 +1,17 @@
 package com.mjvs.jgsp.dto;
 
-import com.mjvs.jgsp.model.Line;
-
-public class LineDTO {
+public class BaseDTO
+{
     private Long id;
     private String name;
 
-    public LineDTO() {
+    public BaseDTO() {
 
     }
 
-    public LineDTO(Long id, String name) {
+    public BaseDTO(Long id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public LineDTO(Line line) {
-        this.id = line.getId();
-        this.name = line.getName();
     }
 
     public Long getId() {

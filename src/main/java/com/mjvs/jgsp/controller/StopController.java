@@ -1,7 +1,7 @@
 package com.mjvs.jgsp.controller;
 
+import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.StopDTO;
-import com.mjvs.jgsp.dto.StopLite2DTO;
 import com.mjvs.jgsp.dto.StopLiteDTO;
 import com.mjvs.jgsp.helpers.*;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
@@ -11,19 +11,23 @@ import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/stop")
-public class StopController
+public class StopController extends BaseController<Stop>
 {
     private StopService stopService;
 
     @Autowired
     public StopController(StopService stopService)
     {
+        super(stopService);
         this.stopService = stopService;
     }
 
@@ -95,19 +99,19 @@ public class StopController
     }
 
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
-    public ResponseEntity rename(@RequestBody StopLite2DTO stopLite2DTO) throws Exception
+    public ResponseEntity rename(@RequestBody BaseDTO baseDTO) throws Exception
     {
-        if(StringExtensions.isEmptyOrWhitespace(stopLite2DTO.getName())) {
+        if(StringExtensions.isEmptyOrWhitespace(baseDTO.getName())) {
             throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
         }
 
-        Result<Stop> stopResult = stopService.findById(stopLite2DTO.getId());
+        Result<Stop> stopResult = stopService.findById(baseDTO.getId());
         if(!stopResult.hasData()) {
             throw new BadRequestException(stopResult.getMessage());
         }
 
         Stop stop = stopResult.getData();
-        stop.setName(stopLite2DTO.getName());
+        stop.setName(baseDTO.getName());
 
         Result<Boolean> saveResult = stopService.save(stop);
         if(saveResult.isFailure()) {
@@ -115,23 +119,6 @@ public class StopController
         }
 
         return ResponseHelpers.getResponseData(saveResult);
-    }
-
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
-    public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
-    {
-        Result<Stop> stopResult = stopService.findById(id);
-        if(!stopResult.hasData()){
-            throw new BadRequestException(stopResult.getMessage());
-        }
-
-        Stop stop = stopResult.getData();
-        Result<Boolean> deleteResult = stopService.delete(stop);
-        if(deleteResult.isFailure()) {
-            throw new DatabaseException(deleteResult.getMessage());
-        }
-
-        return ResponseHelpers.getResponseData(deleteResult);
     }
 
 }

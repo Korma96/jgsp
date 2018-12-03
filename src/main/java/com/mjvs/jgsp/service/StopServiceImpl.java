@@ -1,6 +1,5 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.model.Stop;
@@ -21,19 +20,6 @@ public class StopServiceImpl extends BaseServiceImpl<Stop> implements StopServic
     {
         super(stopRepository);
         this.stopRepository = stopRepository;
-    }
-
-    @Override
-    public Result<Boolean> exists(String name)
-    {
-        Stop stop = stopRepository.findByName(name);
-        if(stop != null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Stop, name);
-            logger.warn(message);
-            return new Result<>(true, false, message);
-        }
-        return new Result<>(false);
     }
 
     @Override

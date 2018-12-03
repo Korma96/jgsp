@@ -24,37 +24,27 @@ public class BaseServiceImpl<T> implements BaseService<T>
     }
 
     @Override
-    public Result<Boolean> delete(T obj)
+    public Result<Boolean> delete(T obj) throws Exception
     {
         Long id = ReflectionHelpers.InvokeGetIdMethod(obj);
         String message;
         try {
             repository.delete(obj);
 
-            if(id != null) {
-                message = Messages.SuccessfullyDeleted(typeString, id);
-            }
-            else {
-                message = Messages.SuccessfullyDeleted(typeString);
-            }
+            message = Messages.SuccessfullyDeleted(typeString, id);
             logger.info(message);
             return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            if(id != null) {
-                message = Messages.ErrorDeleting(typeString, id, ex.getMessage());
-            }
-            else {
-                message = Messages.ErrorDeleting(typeString, ex.getMessage());
-            }
+            message = Messages.ErrorDeleting(typeString, id, ex.getMessage());
             logger.error(message);
             return new Result<>(false, false, message);
         }
     }
 
     @Override
-    public Result<Boolean> exists(Long id)
+    public Result<Boolean> exists(Long id) throws Exception
     {
         // findById returns Optional :/
         T obj = repository.findById(id);
@@ -69,13 +59,13 @@ public class BaseServiceImpl<T> implements BaseService<T>
     }
 
     @Override
-    public Result<T> findById(Long id)
+    public Result<T> findById(Long id) throws Exception
     {
         T obj = repository.findById(id);
         boolean isPresent = ReflectionHelpers.InvokeOptionalIsPresentMethod(obj);
         if(!isPresent)
         {
-            String message = Messages.DoesNotExists(typeString, id);
+            String message = Messages.DoesNotExist(typeString, id);
             logger.warn(message);
             return new Result<>(null, message);
         }
@@ -102,16 +92,32 @@ public class BaseServiceImpl<T> implements BaseService<T>
             throw new Exception(Messages.CantBeNull(typeString));
         }
 
+        String message;
+        String name = null;
+        try{
+            name = ReflectionHelpers.InvokeGetNameMethod(obj);
+        }catch (Exception ex) {
+        }
         try {
             repository.save(obj);
 
-            String message = Messages.SuccessfullySaved(typeString);
+            if(name == null) {
+                message = Messages.SuccessfullySaved(typeString);
+            }
+            else{
+                message = Messages.SuccessfullySaved(typeString, name);
+            }
             logger.info(message);
             return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            String message = Messages.ErrorSaving(typeString, ex.getMessage());
+            if(name == null) {
+                message = Messages.ErrorSaving(typeString, ex.getMessage());
+            }
+            else{
+                message = Messages.ErrorSaving(typeString, name, ex.getMessage());
+            }
             logger.error(message);
             return new Result<>(false, false, message);
         }

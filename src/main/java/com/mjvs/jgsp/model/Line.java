@@ -27,7 +27,9 @@ public class Line extends LineZone {
     private List<Schedule> schedules;
 
     public Line() {
-
+        this.stops = new ArrayList<>();
+        this.transports = new ArrayList<>();
+        this.schedules = new ArrayList<>();
     }
 
     public Line(String name)

@@ -1,16 +1,12 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.dto.LineDTO;
-import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.helpers.Result;
-import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.repository.LineRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class LineServiceImpl extends BaseServiceImpl<Line> implements LineService
+public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements LineService
 {
-    private final Logger logger = LogManager.getLogger(this.getClass());
     private LineRepository lineRepository;
 
     @Autowired
@@ -33,24 +28,11 @@ public class LineServiceImpl extends BaseServiceImpl<Line> implements LineServic
     }
 
     @Override
-    public Result<Boolean> exists(String name)
-    {
-        Line line = lineRepository.findByName(name);
-        if(line != null)
-        {
-            String message = Messages.AlreadyExists(StringConstants.Line, name);
-            logger.warn(message);
-            return new Result<>(true, false, message);
-        }
-        return new Result<>(false);
-    }
-
-    @Override
-    public Result<List<LineDTO>> getActiveLines()
+    public Result<List<BaseDTO>> getActiveLines()
     {
         try {
-            List<LineDTO> data = LineConverter
-                    .ConvertLinesToLineDTOs(lineRepository.findByActive(true));
+            List<BaseDTO> data = LineConverter
+                    .ConvertLinesToBaseDTOs(lineRepository.findByActive(true));
             return new Result<>(data);
         }
         catch (Exception ex) {
@@ -71,6 +53,7 @@ public class LineServiceImpl extends BaseServiceImpl<Line> implements LineServic
 
         return stops;
     }
+
 
     @Override
     public List<Schedule> getLatestSchedules(List<Schedule> schedules)

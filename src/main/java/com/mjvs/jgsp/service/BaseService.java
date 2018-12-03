@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface BaseService<T>
 {
-    Result<Boolean> delete(T obj);
+    Result<Boolean> delete(T obj) throws Exception;
 
-    Result<Boolean> exists(Long id);
+    Result<Boolean> exists(Long id) throws Exception;
 
-    Result<T> findById(Long id);
+    Result<T> findById(Long id) throws Exception;
 
     Result<List<T>> getAll();
 
