@@ -15,4 +15,6 @@ public interface LineService extends ExtendedBaseService<Line>
     List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
     List<Stop> getSortedStopsById(List<Stop> stops);
+
+	Line findByName(String string);
 }

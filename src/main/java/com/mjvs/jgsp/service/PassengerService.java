@@ -7,7 +7,11 @@ import com.mjvs.jgsp.model.TicketType;
 
 
 public interface PassengerService {
+	
+    Passenger save(Passenger p);
 
+    Passenger getPassenger(String username);
+    
     void buyTicket(boolean hasZoneNotLine, Long id, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception;
 

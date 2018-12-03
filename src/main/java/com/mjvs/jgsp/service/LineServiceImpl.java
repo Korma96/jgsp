@@ -86,4 +86,9 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         return latestSchedules;
     }
 
+	@Override
+	public Line findByName(String name) {
+		return lineRepository.findByName(name);
+	}
+
 }

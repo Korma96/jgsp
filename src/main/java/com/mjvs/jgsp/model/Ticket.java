@@ -23,31 +23,29 @@ public class Ticket {
     @Column(name = "price", unique = false, nullable = false)
     private double price;
 
-    @Column(name = "activated", unique = false, nullable = false)
-    private boolean activated;
+    @Column(name="passenger_type", unique=false, nullable=false)
+    @Enumerated(EnumType.ORDINAL)
+    private PassengerType passengerType;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private LineZone lineZone;
-
-    /*@ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private Line line;
+    //@Column(name = "activated", unique = false, nullable = false)
+    //private boolean activated;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private Zone zone;*/
+    private LineZone lineZone;
+
 
     public Ticket() {
 
     }
 
-    public Ticket(LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, boolean activated, LineZone lineZone/*, Line line, Zone zone*/) {
+    public Ticket(LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, PassengerType passengerType, /*boolean activated,*/ LineZone lineZone) {
         this.startDateAndTime = startDateAndTime;
         this.endDateAndTime = endDateAndTime;
         this.ticketType = ticketType;
+        this.passengerType = passengerType;
         this.price = 0;
-        this.activated = activated;
+        //this.activated = activated;
         this.lineZone = lineZone;
-        //this.line = line;
-        //this.zone = zone;
     }
 
     public void lookAtPriceTicketAndSetPrice(PriceTicket priceTicket) {
@@ -86,6 +84,14 @@ public class Ticket {
         this.ticketType = ticketType;
     }
 
+    public PassengerType getPassengerType() {
+        return passengerType;
+    }
+
+    public void setPassengerType(PassengerType passengerType) {
+        this.passengerType = passengerType;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -94,13 +100,14 @@ public class Ticket {
         this.price = price;
     }
 
+    /*
     public boolean isActivated() {
         return activated;
     }
 
     public void setActivated(boolean activated) {
         this.activated = activated;
-    }
+    }*/
 
     public LineZone getLineZone() {
         return lineZone;
@@ -109,20 +116,4 @@ public class Ticket {
     public void setLineZone(LineZone lineZone) {
         this.lineZone = lineZone;
     }
-
-    /*public Line getLine() {
-        return line;
-    }
-
-    public void setLine(Line line) {
-        this.line = line;
-    }
-
-    public Zone getZone() {
-        return zone;
-    }
-
-    public void setZone(Zone zone) {
-        this.zone = zone;
-    }*/
 }
