@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 
 @Entity
-public class MyLocalTime {
+public class MyLocalTime extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
