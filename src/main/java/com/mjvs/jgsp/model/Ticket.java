@@ -39,6 +39,7 @@ public class Ticket extends EntityForDeleted {
     }
 
     public Ticket(LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, PassengerType passengerType, /*boolean activated,*/ LineZone lineZone) {
+        super();
         this.startDateAndTime = startDateAndTime;
         this.endDateAndTime = endDateAndTime;
         this.ticketType = ticketType;

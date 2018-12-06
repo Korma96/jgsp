@@ -29,6 +29,7 @@ public class User extends EntityForDeleted {
     }
 
     public User(String username, String password, UserType userType, UserStatus userStatus) {
+        super();
         this.username = username;
         this.password = password;
         this.userType = userType;

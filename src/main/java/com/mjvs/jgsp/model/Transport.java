@@ -21,6 +21,7 @@ public class Transport extends EntityForDeleted {
     }
 
     public Transport(TransportType transportType, Stop stop) {
+        super();
         this.transportType = transportType;
         this.stop = stop;
     }

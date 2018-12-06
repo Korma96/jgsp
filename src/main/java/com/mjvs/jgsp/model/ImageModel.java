@@ -27,6 +27,7 @@ public class ImageModel extends EntityForDeleted {
     public ImageModel(){}
 
     public ImageModel(String name, byte[] pic){
+        super();
         this.name = name;
         this.type = "png";
         this.pic = pic;

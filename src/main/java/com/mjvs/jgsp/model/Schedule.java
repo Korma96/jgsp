@@ -26,6 +26,7 @@ public class Schedule extends EntityForDeleted {
     }
 
     public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList) {
+        super();
         this.dayType = dayType;
         this.dateFrom = dateFrom;
         this.departureList = departureList;

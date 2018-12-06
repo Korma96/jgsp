@@ -8,6 +8,8 @@ public abstract class EntityForDeleted {
     @Column(name = "deleted", unique = false, nullable = false)
     protected boolean deleted;
 
+    protected EntityForDeleted() { this.deleted = false; }
+
     public boolean isDeleted() {
         return deleted;
     }

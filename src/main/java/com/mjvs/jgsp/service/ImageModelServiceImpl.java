@@ -1,5 +1,6 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.helpers.exception.ImageModelNotFoundException;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
@@ -32,9 +33,15 @@ public class ImageModelServiceImpl implements ImageModelService {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ImageModelNotFoundException {
+        //ImageModel imageModel = imageModelRepository.findById(id);
+        //imageModelRepository.delete(imageModel);
         ImageModel imageModel = imageModelRepository.findById(id);
-        imageModelRepository.delete(imageModel);
+        if(imageModel == null) throw new ImageModelNotFoundException(String.format("ImageModel with id (%d) was not found" +
+                                                                                    " in database.", id));
+
+        imageModel.setDeleted(true);
+        imageModelRepository.save(imageModel);
     }
 
     //@Async

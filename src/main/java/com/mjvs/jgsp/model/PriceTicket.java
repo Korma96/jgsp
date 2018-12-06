@@ -36,6 +36,7 @@ public class PriceTicket extends EntityForDeleted {
     }
 
     public PriceTicket(LocalDate dateFrom, PassengerType passengerType, TicketType ticketType, double priceLine, double priceZone, Zone zone) {
+        super();
         this.dateFrom = dateFrom;
         this.passengerType = passengerType;
         this.ticketType = ticketType;

@@ -40,6 +40,7 @@ public class Line extends LineZone {
 */
 
     public Line() {
+        super();
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();

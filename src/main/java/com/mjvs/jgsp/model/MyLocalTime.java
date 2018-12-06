@@ -18,6 +18,7 @@ public class MyLocalTime extends EntityForDeleted {
     }
 
     public MyLocalTime(LocalTime time) {
+        super();
         this.time = time;
     }
 

@@ -19,15 +19,16 @@ public class Stop extends EntityForDeleted {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
-    public Stop(double latitude, double longitude, String name) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-		this.name = name;
-    }
-
     public Stop()
     {
 
+    }
+
+    public Stop(double latitude, double longitude, String name) {
+        super();
+        this.latitude = latitude;
+        this.longitude = longitude;
+		this.name = name;
     }
 
     public Long getId() {

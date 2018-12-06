@@ -14,6 +14,7 @@ public class Zone extends LineZone {
     private List<Line> lines;
 
     public Zone(String name, @NotNull List<Line> lines) {
+        super();
         this.name = name;
         this.lines = lines;
     }
