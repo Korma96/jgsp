@@ -10,5 +10,7 @@ public interface TicketService {
     
     Ticket getTicket(Long id);
 
+    Ticket save(Ticket ticket);
+
     ByteArrayInputStream getPdfFileForTicket(Long id) throws TicketNotFoundException;
 }

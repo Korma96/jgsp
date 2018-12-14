@@ -13,7 +13,7 @@ public interface BaseRepository<T>
 
     List<T> findByDeleted(boolean deleted);
 
-    T save(T line);
+    T save(T t);
 
-    void delete(T line);
+    void delete(T t);
 }

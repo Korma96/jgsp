@@ -24,14 +24,13 @@ public class Zone extends LineZone {
         this.lines = new ArrayList<>();
     }
 
+    public void addLine(Line line) { lines.add(line); }
+
     public Zone()
     {
         this.lines = new ArrayList<>();
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getName() {
         return name;

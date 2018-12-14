@@ -2,6 +2,7 @@ package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Ticket extends EntityForDeleted {
@@ -116,5 +117,24 @@ public class Ticket extends EntityForDeleted {
 
     public void setLineZone(LineZone lineZone) {
         this.lineZone = lineZone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return Double.compare(ticket.price, price) == 0 &&
+                Objects.equals(id, ticket.id) &&
+                Objects.equals(startDateAndTime, ticket.startDateAndTime) &&
+                Objects.equals(endDateAndTime, ticket.endDateAndTime) &&
+                ticketType == ticket.ticketType &&
+                passengerType == ticket.passengerType &&
+                Objects.equals(lineZone, ticket.lineZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startDateAndTime, endDateAndTime, ticketType, price, passengerType, lineZone);
     }
 }

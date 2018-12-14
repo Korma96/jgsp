@@ -99,7 +99,7 @@ public class UserAdminController {
 	        try{
 	        	Passenger passenger = passengerService.getPassenger(username);
 	        	if (passenger!=null){
-	        		passenger.setConfirmation(null);
+	        		passenger.setIdConfirmation(null);
 	        		userService.save(passenger);
 	        	}
 	        }

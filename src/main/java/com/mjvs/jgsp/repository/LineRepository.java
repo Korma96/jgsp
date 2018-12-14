@@ -10,4 +10,6 @@ public interface LineRepository extends ExtendedBaseRepository<Line>, Repository
     List<Line> findByActive(boolean active);
 
     Line findByName(String name);
+
+    Line save(Line line);
 }
