@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -127,4 +128,9 @@ public class TicketServiceImpl implements TicketService {
 
         return new ByteArrayInputStream(out.toByteArray());
     }
+
+	@Override
+	public List<Ticket> getAll() {
+		return ticketRepository.findAll();
+	}
 }

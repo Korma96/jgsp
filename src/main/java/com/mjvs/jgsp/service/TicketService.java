@@ -4,11 +4,14 @@ import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.model.Ticket;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 public interface TicketService {
     boolean checkOnetimeTicket(Long ticketId, Long lineId) throws Exception;
     
     Ticket getTicket(Long id);
+    
+    List<Ticket> getAll();
 
     ByteArrayInputStream getPdfFileForTicket(Long id) throws TicketNotFoundException;
 }
