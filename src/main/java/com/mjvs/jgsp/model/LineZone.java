@@ -27,4 +27,5 @@ public abstract class LineZone extends EntityForDeleted {
     public abstract Zone getZone();
 
 	protected abstract double getPrice(PriceTicket priceTicket);
+	
 }
