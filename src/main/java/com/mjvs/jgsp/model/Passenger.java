@@ -110,9 +110,9 @@ public class Passenger extends User {
         this.passengerType = passengerType;
     }
 
-    public Long getConfirmation() { return idConfirmation; }
+    public Long getIdConfirmation() { return idConfirmation; }
 
-    public void setConfirmation(Long idConfirmation) { this.idConfirmation = idConfirmation; }
+    public void setIdConfirmation(Long idConfirmation) { this.idConfirmation = idConfirmation; }
 
     public LocalDate getExpirationDate() { return expirationDate; }
 
@@ -133,4 +133,12 @@ public class Passenger extends User {
     public int getNumOfDelicts() { return numOfDelicts; }
 
     public void setNumOfDelicts(int numOfDelicts) { this.numOfDelicts = numOfDelicts;}
+
+
+    public boolean containsTicket(Ticket ticket) {
+        return tickets.stream()
+                .filter(t -> t.equals(ticket))
+                .count() > 0;
+    }
+
 }

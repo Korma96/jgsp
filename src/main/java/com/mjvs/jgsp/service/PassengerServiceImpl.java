@@ -1,7 +1,8 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
-import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
+import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
+import com.mjvs.jgsp.helpers.exception.ZoneNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
 
@@ -36,11 +37,78 @@ public class PassengerServiceImpl implements PassengerService {
     @Autowired
     private PassengerRepository passengerRepository;
 
+    @Autowired
+    private TicketService ticketService;
 
     @Override
-    public void buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
+    public Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception {
 
+        User loggedUser = userService.getLoggedUser();
+        Passenger loggedPassenger = (Passenger) loggedUser;
+
+        String message;
+
+        LineZone lineZone = getLineZone(hasZoneNotLine, lineZoneId, ticketType);
+
+        LocalDateTime startDateAndTime = null;
+        LocalDateTime endDateAndTime = null;
+        if(ticketType != TicketType.ONETIME) {
+            LocalDateTime[] retDateTimes = createStartAndEndDateTime(ticketType, loggedPassenger.getPassengerType(), dayInMonthOrMonthInYear);
+            startDateAndTime = retDateTimes[0];
+            endDateAndTime = retDateTimes[1];
+        }
+
+        Ticket ticket = new Ticket(startDateAndTime, endDateAndTime, ticketType, loggedPassenger.getPassengerType(),
+                                    /*activated,*/ lineZone);
+        //priprema podataka
+        //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.STUDENT, TicketType.MONTHLY, 3000, 6000, lineZone.getZone()));
+        if(lineZone != null) {
+            PriceTicket priceTicket = priceTicketService.getLatestPriceTicket(loggedPassenger.getPassengerType(), ticketType, lineZone.getZone());
+            ticket.lookAtPriceTicketAndSetPrice(priceTicket);
+        }
+
+        ticket = ticketService.save(ticket); // moglo je i beze ovoga, ali posto hocemo da ova metoda vrati
+                                            // ticket koji je sacuvan u bazi, onda nam je neophodno
+        loggedPassenger.getTickets().add(ticket);
+        userService.save(loggedPassenger);
+
+        return ticket;
+    }
+
+    public LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception {
+        LineZone lineZone;
+        String message;
+
+        if(ticketType != TicketType.ONETIME) {
+            if (hasZoneNotLine) lineZone = zoneService.findById(lineZoneId).getData();
+            else lineZone = lineService.findById(lineZoneId).getData();
+
+            if(lineZone == null) {
+                if(hasZoneNotLine) message = "Zone";
+                else message = "Line";
+
+                message += String.format(" with id %d does not exist!", lineZoneId);
+                logger.error(message);
+
+                if(hasZoneNotLine) throw new ZoneNotFoundException(message);
+                else throw new LineNotFoundException(message);
+            }
+        }
+        else {
+            if(hasZoneNotLine) {
+                message = "A one-time ticket can not be issued for a zone!";
+                logger.error(message);
+                throw new BadRequestException(message);
+            }
+
+            lineZone = null;
+        }
+
+        return lineZone;
+    }
+
+    public LocalDateTime[] createStartAndEndDateTime(TicketType ticketType, PassengerType passengerType, int dayInMonthOrMonthInYear) throws BadRequestException {
         LocalDateTime startDateAndTime, endDateAndTime;
         LocalDateTime dateAndTime = LocalDateTime.now();
         LocalDate date;
@@ -48,9 +116,6 @@ public class PassengerServiceImpl implements PassengerService {
         LocalTime timeThreeZero = LocalTime.of(0, 0, 0);
         LocalTime timeEndOfDay = LocalTime.of(23, 59, 59);
         LocalTime time;
-
-        User loggedUser = userService.getLoggedUser();
-        Passenger loggedPassenger = (Passenger) loggedUser;
 
         String message;
 
@@ -91,57 +156,21 @@ public class PassengerServiceImpl implements PassengerService {
                 break;
             case YEARLY:
                 startDateAndTime = dateAndTime;
+
                 int month;
-                if(loggedPassenger.getPassengerType() == PassengerType.STUDENT) month = 10;
+                if(passengerType == PassengerType.STUDENT) month = 10;
                 else month = 12;
+
                 endDateAndTime = LocalDateTime.of(LocalDate.of(dateAndTime.getYear(), month, 31), timeEndOfDay);
                 break;
             case ONETIME:
-                if(hasZoneNotLine) {
-                    message = "A one-time ticket can not be issued for a zone!";
-                    logger.error(message);
-                    throw new BadRequestException(message);
-                }
             default:
                 startDateAndTime = null;
                 endDateAndTime = null;
                 break;
         }
-        //boolean activated = ticketType != TicketType.ONETIME; // only a ONETIME ticket
-        // will not be activated immediately
-        LineZone lineZone;
-        if(ticketType != TicketType.ONETIME) {
-            if (hasZoneNotLine) lineZone = zoneService.findById(lineZoneId).getData();
-            else lineZone = lineService.findById(lineZoneId).getData();
 
-            if(lineZone == null) {
-                message = String.format("Line or zone with id %d does not exist!", lineZoneId);
-                logger.error(message);
-                throw new BadRequestException(message);
-            }
-        }
-        else lineZone = null;
-
-        Ticket ticket = new Ticket(startDateAndTime, endDateAndTime, ticketType, loggedPassenger.getPassengerType(),
-                                    /*activated,*/ lineZone);
-        //priprema podataka
-        //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.STUDENT, TicketType.MONTHLY, 3000, 6000, lineZone.getZone()));
-        if(lineZone != null) {
-            PriceTicket priceTicket = priceTicketService.getPriceTicket(loggedPassenger.getPassengerType(), ticketType,
-                    lineZone.getZone());
-            if(priceTicket == null) {
-                message = "PriceTicket(passengerType="+loggedPassenger.getPassengerType().name()
-                        +", ticketType="+ticketType+", lineZoneId="+lineZoneId+") was not found in database.";
-                logger.error(message);
-                throw new PriceTicketNotFoundException(message);
-            }
-
-            ticket.lookAtPriceTicketAndSetPrice(priceTicket);
-        }
-
-        loggedPassenger.getTickets().add(ticket);
-        userService.save(loggedPassenger);
-
+        return new LocalDateTime[] {startDateAndTime, endDateAndTime};
     }
 
     @Override

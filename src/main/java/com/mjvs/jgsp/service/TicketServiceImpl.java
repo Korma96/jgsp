@@ -4,9 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
+import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.TicketRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,8 @@ import java.util.List;
 
 @Service
 public class TicketServiceImpl implements TicketService {
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -34,8 +39,12 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public boolean checkOnetimeTicket(Long ticketId, Long lineId) throws Exception {
         Ticket ticket = ticketRepository.findById(ticketId);
-        if(ticket == null) throw new TicketNotFoundException(String.format("Ticket with id (%d) was not found in database.",
-                                                                ticketId));
+        String message;
+        if(ticket == null) {
+            message = String.format("Ticket with id (%d) was not found in database.", ticketId);
+            logger.error(message);
+            throw new TicketNotFoundException(message);
+        }
 
         if(ticket.getStartDateAndTime() != null) {
             // already activated
@@ -43,7 +52,12 @@ public class TicketServiceImpl implements TicketService {
         }
 
         Line line = lineService.findById(lineId).getData();
-        if(line == null) throw new LineNotFoundException(String.format("Line with id (%d) was not found in database.", lineId));
+        if(line == null) {
+            message = String.format("Line with id (%d) was not found in database.", lineId);
+            logger.error(message);
+            throw new LineNotFoundException(message);
+        }
+        ticket.setLineZone(line);
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(line.getMinutesRequiredForWholeRoute());
@@ -54,8 +68,15 @@ public class TicketServiceImpl implements TicketService {
         User loggedUser = userService.getLoggedUser();
         Passenger loggedPassenger = (Passenger) loggedUser;
 
-        PriceTicket priceTicket = priceTicketService.getPriceTicket(loggedPassenger.getPassengerType(), ticket.getTicketType(),
+        PriceTicket priceTicket = priceTicketService.getLatestPriceTicket(loggedPassenger.getPassengerType(), ticket.getTicketType(),
                                                                     line.getZone());
+        if(priceTicket == null) {
+            message = String.format("PriceTicket (passengerType = %s, ticketType = %s, zone = %s) was not found in database.",
+                    loggedPassenger.getPassengerType().name(), ticket.getTicketType().name(), line.getZone().getName());
+            logger.error(message);
+            throw new PriceTicketNotFoundException(message);
+        }
+
         ticket.lookAtPriceTicketAndSetPrice(priceTicket);
 
         ticketRepository.save(ticket);
@@ -66,6 +87,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket getTicket(Long id) {
         return ticketRepository.findById(id);
+    }
+
+    @Override
+    public Ticket save(Ticket ticket) {
+        return ticketRepository.save(ticket);
     }
 
     @Override

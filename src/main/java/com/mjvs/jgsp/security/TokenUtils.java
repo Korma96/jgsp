@@ -22,10 +22,11 @@ public class TokenUtils {
 	private Long expiration;
 	
 	public String getUsernameFromToken(String token) {
-		String username;
+		String username = null;
 		try {
 			Claims claims = this.getClaimsFromToken(token);
-			username = claims.getSubject();
+			if(claims != null) username = claims.getSubject();
+
 		} catch (Exception e) {
 			username = null;
 		}
@@ -44,10 +45,10 @@ public class TokenUtils {
 	}
 	
 	public Date getExpirationDateFromToken(String token) {
-		Date expirationDate;
+		Date expirationDate = null;
 		try {
 			final Claims claims = this.getClaimsFromToken(token);
-			expirationDate = claims.getExpiration();
+			if(claims != null) expirationDate = claims.getExpiration();
 		} catch (Exception e) {
 			expirationDate = null;
 		}

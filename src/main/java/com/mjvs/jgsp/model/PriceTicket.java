@@ -2,6 +2,7 @@ package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class PriceTicket extends EntityForDeleted {
@@ -27,8 +28,8 @@ public class PriceTicket extends EntityForDeleted {
     @Column(name="priceZone", unique=false, nullable=false)
     private double priceZone;
 
-    // nullable se koristi kao ogranicenje nad semom, optinal se koristi u runtime-u, pri proveri, pre kontakta sa bazom
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    // nullable se koristi kao ogranicenje nad semom, a optinal se koristi u runtime-u, pri proveri, pre kontakta sa bazom
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Zone zone;
 
     public PriceTicket() {
@@ -93,4 +94,23 @@ public class PriceTicket extends EntityForDeleted {
     public double getPriceLine() { return priceLine; }
 
     public void setPriceLine(double priceLine) { this.priceLine = priceLine; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceTicket that = (PriceTicket) o;
+        return Double.compare(that.priceLine, priceLine) == 0 &&
+                Double.compare(that.priceZone, priceZone) == 0 &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(dateFrom, that.dateFrom) &&
+                passengerType == that.passengerType &&
+                ticketType == that.ticketType &&
+                Objects.equals(zone, that.zone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dateFrom, passengerType, ticketType, priceLine, priceZone, zone);
+    }
 }
