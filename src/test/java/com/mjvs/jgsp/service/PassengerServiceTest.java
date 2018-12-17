@@ -174,7 +174,7 @@ public class PassengerServiceTest {
     public void createStartAndEndDateTimeTestSuccessDAILY() {
         LocalDateTime[] retValue = null;
         LocalDateTime dateAndTime = LocalDateTime.now();
-        int day = 15;
+        int day = dateAndTime.getDayOfMonth();
 
         try {
             retValue = passengerService.createStartAndEndDateTime(TicketType.DAILY, PassengerType.OTHER, day);

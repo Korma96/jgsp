@@ -2,6 +2,8 @@ package com.mjvs.jgsp.dto;
 
 import com.mjvs.jgsp.model.PassengerType;
 
+import java.util.Objects;
+
 public class PassengerDTO {
     private String username;
     private String password1;
@@ -103,5 +105,26 @@ public class PassengerDTO {
 
     public void setPassengerType(PassengerType passengerType) {
         this.passengerType = passengerType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PassengerDTO that = (PassengerDTO) o;
+        return Objects.equals(username, that.username) &&
+                Objects.equals(password1, that.password1) &&
+                Objects.equals(password2, that.password2) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(address, that.address) &&
+                passengerType == that.passengerType;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(username, password1, password2, firstName, lastName, email, address, passengerType);
     }
 }

@@ -1,5 +1,6 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.model.*;
 
@@ -14,6 +15,8 @@ public interface PassengerService {
     
     Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception;
+
+    boolean registrate(PassengerDTO passengerDTO);
 
     LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception;
 

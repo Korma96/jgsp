@@ -1,14 +1,18 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.helpers.exception.ZoneNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,6 +43,9 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
@@ -74,6 +81,45 @@ public class PassengerServiceImpl implements PassengerService {
         userService.save(loggedPassenger);
 
         return ticket;
+    }
+
+    @Override
+    public boolean registrate(PassengerDTO passengerDTO) {
+        if(passengerDTO.getUsername() == null || passengerDTO.getPassword1() == null || passengerDTO.getPassword2() == null ||
+                passengerDTO.getFirstName() == null || passengerDTO.getLastName() == null || passengerDTO.getEmail() == null
+                || passengerDTO.getAddress() == null){
+            return false;
+        }
+
+        if(passengerDTO.getUsername().equals("") || passengerDTO.getPassword1().equals("") || passengerDTO.getPassword2().equals("") ||
+                passengerDTO.getFirstName().equals("") || passengerDTO.getLastName().equals("") || passengerDTO.getEmail().equals("")
+                || passengerDTO.getAddress().equals("")){
+            return false;
+        }
+
+        /*if(!passengerDTO.getPassengerType().equalsIgnoreCase("student") || !passengerDTO.getPassengerType().equalsIgnoreCase("pensioner") || !passengerDTO.getPassengerType().equalsIgnoreCase("other")){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }*/
+
+
+
+        if(!passengerDTO.getPassword1().equals(passengerDTO.getPassword2())){
+            return false;
+        }
+
+        Passenger p = new Passenger(passengerDTO.getUsername(), passwordEncoder.encode(passengerDTO.getPassword1()),
+                UserType.PASSENGER, UserStatus.PENDING,passengerDTO.getFirstName(),passengerDTO.getLastName(),
+                passengerDTO.getEmail(),passengerDTO.getAddress(),passengerDTO.getPassengerType());
+
+        try{
+            passengerRepository.save(p);
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+
+        return  false;
     }
 
     public LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception {
