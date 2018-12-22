@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
@@ -14,7 +15,7 @@ public interface LineService extends ExtendedBaseService<Line>
 
     List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
-    List<Stop> getSortedStopsById(List<Stop> stops);
+    List<StopDTO> getSortedStopsById(List<Stop> stops);
 
 	Line findByName(String string);
 }

@@ -2,6 +2,7 @@ package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.TestLog4j2Appender;
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.DayType;
 import com.mjvs.jgsp.model.Line;
@@ -117,23 +118,32 @@ public class LineServiceTests
         }};
 
         // Act
-        List<Stop> sortedStops = lineService.getSortedStopsById(stops);
+        List<StopDTO> sortedStopDTOs = lineService.getSortedStopsById(stops);
 
         // Assert
-        assertEquals(stops.size(), sortedStops.size());
-        assertSame(stop2, sortedStops.get(0));
-        assertSame(stop3, sortedStops.get(1));
-        assertSame(stop1, sortedStops.get(2));
+        assertEquals(stops.size(), sortedStopDTOs.size());
+
+        assertEquals(stop2.getName(), sortedStopDTOs.get(0).getName());
+        assertEquals(stop2.getLatitude(), sortedStopDTOs.get(0).getLatitude(), 0);
+        assertEquals(stop2.getLongitude(), sortedStopDTOs.get(0).getLongitude(), 0);
+
+        assertEquals(stop3.getName(), sortedStopDTOs.get(1).getName());
+        assertEquals(stop3.getLatitude(), sortedStopDTOs.get(1).getLatitude(), 0);
+        assertEquals(stop3.getLongitude(), sortedStopDTOs.get(1).getLongitude(), 0);
+
+        assertEquals(stop1.getName(), sortedStopDTOs.get(2).getName());
+        assertEquals(stop1.getLatitude(), sortedStopDTOs.get(2).getLatitude(), 0);
+        assertEquals(stop1.getLongitude(), sortedStopDTOs.get(2).getLongitude(), 0);
     }
 
     @Test
     public void GetSortedStopsById_EmptyList_ReturnsEmptyList()
     {
         // Act
-        List<Stop> sortedStops = lineService.getSortedStopsById(new ArrayList<>());
+        List<StopDTO> sortedStopDTOs = lineService.getSortedStopsById(new ArrayList<>());
 
         // Assert
-        assertEquals(0, sortedStops.size());
+        assertEquals(0, sortedStopDTOs.size());
     }
 
     @Test(expected = NullPointerException.class)
