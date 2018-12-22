@@ -1,19 +1,14 @@
 package com.mjvs.jgsp.unit_tests.service;
 
-import com.mjvs.jgsp.TestLog4j2Appender;
 import com.mjvs.jgsp.dto.BaseDTO;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.LineServiceImpl;
+import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.DayType;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.repository.LineRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
+import com.mjvs.jgsp.service.LineService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +34,7 @@ public class LineServiceTests
 
     @MockBean
     private LineRepository lineRepository;
-
+/*
     private TestLog4j2Appender appender;
 
     // logger`s appender initialization
@@ -59,7 +54,7 @@ public class LineServiceTests
     {
         appender.clearMessages();
     }
-
+*/
     @Test(expected = Exception.class)
     public void GetActiveLines_FindByActiveThrowsException_ExceptionThrown()
     {
@@ -107,10 +102,13 @@ public class LineServiceTests
         // Arrange
         Stop stop1 = new Stop();
         stop1.setId(3L);
+        stop1.setName("stop3");
         Stop stop2 = new Stop();
         stop2.setId(1L);
+        stop2.setName("stop1");
         Stop stop3 = new Stop();
         stop3.setId(2L);
+        stop3.setName("stop2");
         List<Stop> stops = new ArrayList<Stop>()
         {{
             add(stop1);
@@ -119,20 +117,20 @@ public class LineServiceTests
         }};
 
         // Act
-        List<Stop> sortedStops = lineService.getSortedStopsById(stops);
+        List<StopDTO> sortedStops = lineService.getSortedStopsById(stops);
 
         // Assert
         assertEquals(stops.size(), sortedStops.size());
-        assertSame(stop2, sortedStops.get(0));
-        assertSame(stop3, sortedStops.get(1));
-        assertSame(stop1, sortedStops.get(2));
+        assertSame(stop2.getName(), sortedStops.get(0).getName());
+        assertSame(stop3.getName(), sortedStops.get(1).getName());
+        assertSame(stop1.getName(), sortedStops.get(2).getName());
     }
 
     @Test
     public void GetSortedStopsById_EmptyList_ReturnsEmptyList()
     {
         // Act
-        List<Stop> sortedStops = lineService.getSortedStopsById(new ArrayList<>());
+        List<StopDTO> sortedStops = lineService.getSortedStopsById(new ArrayList<>());
 
         // Assert
         assertEquals(0, sortedStops.size());

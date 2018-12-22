@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mjvs.jgsp.controller.LineController;
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.ErrorDTO;
+import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
@@ -50,7 +51,7 @@ public class LineControllerTests
 
     private JacksonTester<List<BaseDTO>> jsonTester;
     private JacksonTester<ErrorDTO> jsonTesterError;
-    private JacksonTester<List<Stop>> jsonTesterStops;
+    private JacksonTester<List<StopDTO>> jsonTesterStops;
     private JacksonTester<List<Schedule>> jsonTesterSchedules;
 
     @Before
@@ -180,7 +181,7 @@ public class LineControllerTests
         line.setStops(stops);
         Result<Line> lineResult = new Result<>(line, Messages.DoesNotExist(StringConstants.Line, id));
         when(lineService.findById(id)).thenReturn(lineResult);
-        List<Stop> sortedStops = lineService.getSortedStopsById(stops);
+        List<StopDTO> sortedStops = lineService.getSortedStopsById(stops);
 
         // Act
         MockHttpServletResponse response = mockMvc.perform(get("/line/1/stop")).andReturn().getResponse();

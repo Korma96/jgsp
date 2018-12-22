@@ -61,11 +61,9 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
             }
         });
 
-        List<StopDTO> stopDTOs = stops.stream()
+        return stops.stream()
                 .map(stop -> new StopDTO(stop))
                 .collect(Collectors.toList());
-
-        return stopDTOs;
     }
 
 

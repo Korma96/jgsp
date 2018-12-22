@@ -157,11 +157,16 @@ public class ReflectionHelpersTests
         assertEquals(newName, zone.getName());
     }
 
+    private abstract class AbstractClassHelper
+    {
+
+    }
+
     @Test(expected = InstantiationException.class)
     public void GetInstanceOfT_TypeDoesntHaveDefaultConstructor_ThrowsException() throws Exception
     {
         // Arrange
-        Class<LineZone> type = LineZone.class;
+        Class<AbstractClassHelper> type = AbstractClassHelper.class;
 
         // Act
         GetInstanceOfT(type);
