@@ -1,5 +1,6 @@
-package com.mjvs.jgsp.helpers;
+package com.mjvs.jgsp.unit_tests.helpers;
 
+import com.mjvs.jgsp.helpers.StringExtensions;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

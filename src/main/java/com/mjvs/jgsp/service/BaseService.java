@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.helpers.Result;
+
 import java.util.List;
 
 public interface BaseService<T>

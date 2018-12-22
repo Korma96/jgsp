@@ -1,11 +1,12 @@
 package com.mjvs.jgsp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BaseRepository<T>
 {
-    T findById(Long id);
+    Optional<T> findById(Long id);
 
     List<T> findAll();
 

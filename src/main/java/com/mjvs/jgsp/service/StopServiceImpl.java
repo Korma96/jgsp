@@ -27,9 +27,9 @@ public class StopServiceImpl extends BaseServiceImpl<Stop> implements StopServic
     {
         Stop stop = stopRepository.findByLatitudeAndLongitude(latitude, longitude);
         if(stop == null) {
-            String message = String.format("%s with lat %f and lng %f doesn`t exist!",
+            String message = String.format("%s with lat %f and lng %f doesn`t exist.",
                     StringConstants.Stop, latitude, longitude);
-            logger.warn(message);
+            logger.info(message);
             return new Result<>(null, message);
         }
         return new Result<>(stop, String.format("%s with lat %f and lng %f already exist!",

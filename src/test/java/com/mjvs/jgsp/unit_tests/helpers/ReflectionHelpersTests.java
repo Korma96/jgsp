@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.helpers;
+package com.mjvs.jgsp.unit_tests.helpers;
 
 import com.mjvs.jgsp.model.LineZone;
 import com.mjvs.jgsp.model.Zone;

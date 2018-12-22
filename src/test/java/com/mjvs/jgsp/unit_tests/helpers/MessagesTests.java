@@ -1,5 +1,7 @@
-package com.mjvs.jgsp.helpers;
+package com.mjvs.jgsp.unit_tests.helpers;
 
+import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.helpers.StringConstants;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

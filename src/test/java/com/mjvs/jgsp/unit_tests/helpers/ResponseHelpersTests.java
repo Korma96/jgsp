@@ -1,5 +1,6 @@
-package com.mjvs.jgsp.helpers;
+package com.mjvs.jgsp.unit_tests.helpers;
 
+import com.mjvs.jgsp.helpers.ResponseHelpers;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

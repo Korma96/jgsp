@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.core.GenericTypeResolver;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BaseServiceImpl<T> implements BaseService<T>
 {
@@ -39,21 +40,20 @@ public class BaseServiceImpl<T> implements BaseService<T>
         {
             message = Messages.ErrorDeleting(typeString, id, ex.getMessage());
             logger.error(message);
-            return new Result<>(false, false, message);
+            return new Result<>(false, false, Messages.DatabaseError());
         }
     }
 
     @Override
     public Result<Boolean> exists(Long id) throws Exception
     {
-        // findById returns Optional :/
-        T obj = repository.findById(id);
+        Optional<T> obj = repository.findById(id);
         boolean isPresent = ReflectionHelpers.InvokeOptionalIsPresentMethod(obj);
         if(isPresent)
         {
             String message = Messages.AlreadyExists(typeString, id);
             logger.warn(message);
-            return new Result<>(true, false, message);
+            return new Result<>(true, message);
         }
         return new Result<>(false);
     }
@@ -61,7 +61,7 @@ public class BaseServiceImpl<T> implements BaseService<T>
     @Override
     public Result<T> findById(Long id) throws Exception
     {
-        T obj = repository.findById(id);
+        Optional<T> obj = repository.findById(id);
         boolean isPresent = ReflectionHelpers.InvokeOptionalIsPresentMethod(obj);
         if(!isPresent)
         {
@@ -81,7 +81,8 @@ public class BaseServiceImpl<T> implements BaseService<T>
             return new Result<>(data);
         }
         catch (Exception ex) {
-            return new Result<>(null, false, ex.getMessage());
+            logger.error(ex.getMessage());
+            return new Result<>(null, false, Messages.DatabaseError());
         }
     }
 
@@ -92,34 +93,18 @@ public class BaseServiceImpl<T> implements BaseService<T>
             throw new Exception(Messages.CantBeNull(typeString));
         }
 
-        String message;
-        String name = null;
-        try{
-            name = ReflectionHelpers.InvokeGetNameMethod(obj);
-        }catch (Exception ex) {
-        }
         try {
             repository.save(obj);
 
-            if(name == null) {
-                message = Messages.SuccessfullySaved(typeString);
-            }
-            else{
-                message = Messages.SuccessfullySaved(typeString, name);
-            }
+            String message = Messages.SuccessfullySaved(typeString);
             logger.info(message);
             return new Result<>(true, message);
         }
         catch (Exception ex)
         {
-            if(name == null) {
-                message = Messages.ErrorSaving(typeString, ex.getMessage());
-            }
-            else{
-                message = Messages.ErrorSaving(typeString, name, ex.getMessage());
-            }
+            String message = Messages.ErrorSaving(typeString, ex.getMessage());
             logger.error(message);
-            return new Result<>(false, false, message);
+            return new Result<>(false, false, Messages.DatabaseError());
         }
     }
 }

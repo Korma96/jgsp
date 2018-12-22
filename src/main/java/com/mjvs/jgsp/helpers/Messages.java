@@ -27,6 +27,11 @@ public class Messages
         return String.format("%s can`t be null!", object);
     }
 
+    public static String DatabaseError()
+    {
+        return "Database error, please try again later!";
+    }
+
     public static String DoesNotExist(String object, Long id)
     {
         return String.format("%s with id %d does not exist.", object, id);

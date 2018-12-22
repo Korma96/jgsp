@@ -1,15 +1,18 @@
 package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.*;
-import com.mjvs.jgsp.helpers.*;
+import com.mjvs.jgsp.service.LineService;
+import com.mjvs.jgsp.service.ScheduleService;
+import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.helpers.ResponseHelpers;
+import com.mjvs.jgsp.helpers.Result;
+import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.ScheduleService;
 import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -106,14 +109,14 @@ public class LineController extends ExtendedBaseController<Line>
     }
 
     @RequestMapping(value = "/active", method = RequestMethod.GET)
-    public ResponseEntity getActiveLines()
+    public ResponseEntity<List<BaseDTO>> getActiveLines()
     {
         Result<List<BaseDTO>> getResult = lineService.getActiveLines();
         if(getResult.isFailure()) {
             throw new DatabaseException(getResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(getResult);
+        return ResponseHelpers.getResponseData(getResult.getData());
     }
 
     @RequestMapping(value = "/{id}/schedule", method = RequestMethod.GET)

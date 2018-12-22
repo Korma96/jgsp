@@ -1,7 +1,8 @@
-package com.mjvs.jgsp.helpers.converter;
+package com.mjvs.jgsp.unit_tests.helpers.converter;
 
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.BaseLiteDTO;
+import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.model.Line;
 import org.junit.Test;
 

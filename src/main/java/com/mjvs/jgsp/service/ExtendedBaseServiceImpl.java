@@ -43,7 +43,7 @@ public class ExtendedBaseServiceImpl<T> extends BaseServiceImpl<T> implements Ex
             String message = Messages.ErrorSaving(typeString,
                     ReflectionHelpers.InvokeGetNameMethod(obj), ex.getMessage());
             logger.error(message);
-            return new Result<>(false, false, message);
+            return new Result<>(false, false, Messages.DatabaseError());
         }
     }
 

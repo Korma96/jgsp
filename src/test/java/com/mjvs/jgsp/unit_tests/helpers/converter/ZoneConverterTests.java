@@ -1,6 +1,7 @@
-package com.mjvs.jgsp.helpers.converter;
+package com.mjvs.jgsp.unit_tests.helpers.converter;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.helpers.converter.ZoneConverter;
 import com.mjvs.jgsp.model.Zone;
 import org.junit.Test;
 

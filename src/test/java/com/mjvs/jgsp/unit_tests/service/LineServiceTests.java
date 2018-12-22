@@ -1,7 +1,9 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.unit_tests.service;
 
 import com.mjvs.jgsp.TestLog4j2Appender;
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.service.LineService;
+import com.mjvs.jgsp.service.LineServiceImpl;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.model.DayType;
 import com.mjvs.jgsp.model.Line;

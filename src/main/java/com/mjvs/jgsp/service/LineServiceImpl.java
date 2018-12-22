@@ -1,12 +1,15 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.repository.LineRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.util.List;
 @Service
 public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements LineService
 {
+    private final Logger logger = LogManager.getLogger(this.getClass());
     private LineRepository lineRepository;
 
     @Autowired
@@ -35,8 +39,10 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
                     .ConvertLinesToBaseDTOs(lineRepository.findByActive(true));
             return new Result<>(data);
         }
-        catch (Exception ex) {
-            return new Result<>(null, false, ex.getMessage());
+        catch (Exception ex)
+        {
+            logger.error(ex.getMessage());
+            return new Result<>(null, false, Messages.DatabaseError());
         }
     }
 

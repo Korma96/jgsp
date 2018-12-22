@@ -1,10 +1,13 @@
 package com.mjvs.jgsp.controller;
 
+import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
+import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.Ticket;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.service.UserService;
+import com.mjvs.jgsp.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,14 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
-import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.security.TokenUtils;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import com.mjvs.jgsp.model.Passenger;
-
-import javax.crypto.ExemptionMechanismException;
 
 @RestController
 @RequestMapping(value = "/users")

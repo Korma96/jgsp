@@ -1,13 +1,10 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.repository.ImageModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

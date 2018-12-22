@@ -1,13 +1,7 @@
 package com.mjvs.jgsp.controller;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpSession;
-
+import com.mjvs.jgsp.service.PassengerService;
+import com.mjvs.jgsp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.service.PassengerService;
-import com.mjvs.jgsp.service.UserService;
 
 @RestController
 @RequestMapping(value = "/userAdmin")
