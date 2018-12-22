@@ -64,62 +64,14 @@ public class UserController {
     @PreAuthorize("hasAuthority('CONTROLLOR')")
     @RequestMapping(value ="/checkticket/{username}", method = RequestMethod.PUT)
     public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username) {
-        User loggedUser = null;
-        try {
-            loggedUser = userService.getLoggedUser();
-        }
-        catch (UserNotFoundException e){
+        boolean valid;
+        try{
+            valid = userService.checkTicket(username);
+        }catch (Exception e){
             return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
 
-        Passenger passenger = (Passenger) userService.getUser(username);
-
-        LocalDateTime dateAndTime = LocalDateTime.now();
-
-        Ticket ticket = null;
-        boolean valid = false;
-        for(int i = 0;i<passenger.getTickets().size();i++){
-            ticket = passenger.getTickets().get(i);
-            if(ticket.getStartDateAndTime() != null && ticket.getEndDateAndTime() != null){
-
-                long dif = computeSubtractTwoDateTime(dateAndTime,ticket.getStartDateAndTime());
-
-                if(dif>=0){
-                    dif = computeSubtractTwoDateTime(dateAndTime,ticket.getEndDateAndTime());
-                    if(dif<=0){
-                        valid = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        if(!valid){
-            int num_d = passenger.getNumOfDelicts();
-            num_d++;
-            passenger.setNumOfDelicts(num_d);
-
-            if(num_d == 3){
-                passenger.setUserStatus(UserStatus.DEACTIVATED);
-            }
-
-
-            try{
-                userService.save(passenger);
-            }catch (Exception e){
-                return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
-            }
-
-
-
-            if(num_d == 3) {
-                return new ResponseEntity<Boolean>(false,HttpStatus.FORBIDDEN);
-            }
-
-        }
-
-        return new ResponseEntity<Boolean>(true,HttpStatus.ACCEPTED);
+        return new ResponseEntity<Boolean>(valid,HttpStatus.OK);
     }
 
 

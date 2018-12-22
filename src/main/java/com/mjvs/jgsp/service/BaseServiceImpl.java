@@ -87,6 +87,12 @@ public class BaseServiceImpl<T> implements BaseService<T>
     }
 
     @Override
+    public Result<List<T>> getAllUndeletd() {
+        List<T> data = repository.findByDeleted(false);
+        return new Result<>(data);
+    }
+
+    @Override
     public Result<Boolean> save(T obj) throws Exception
     {
         if(obj == null) {

@@ -1,0 +1,8 @@
+Which dialect are you using? You must be specifying spring.jpa.properties.hibernate.dialect
+
+Springboot 2.0 @Transaction doesn't get supported by org.hibernate.dialect.MySQL5Dialect
+
+Rather use org.hibernate.dialect.MySQL5InnoDBDialect
+
+https://stackoverflow.com/questions/50534913/spring-boot-transaction-rollback
+https://stackoverflow.com/questions/49470187/no-rollback-on-transaction-spring-boot-2-0

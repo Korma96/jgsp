@@ -2,9 +2,10 @@ package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-public class Ticket {
+public class Ticket extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -39,6 +40,7 @@ public class Ticket {
     }
 
     public Ticket(LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, PassengerType passengerType, /*boolean activated,*/ LineZone lineZone) {
+        super();
         this.startDateAndTime = startDateAndTime;
         this.endDateAndTime = endDateAndTime;
         this.ticketType = ticketType;
@@ -48,6 +50,18 @@ public class Ticket {
         this.lineZone = lineZone;
     }
 
+    public Ticket(Long id, LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, PassengerType passengerType, /*boolean activated,*/ LineZone lineZone) {
+        super();
+        this.id = id;
+        this.startDateAndTime = startDateAndTime;
+        this.endDateAndTime = endDateAndTime;
+        this.ticketType = ticketType;
+        this.passengerType = passengerType;
+        this.price = 0;
+        //this.activated = activated;
+        this.lineZone = lineZone;
+    }
+    
     public void lookAtPriceTicketAndSetPrice(PriceTicket priceTicket) {
         this.price = lineZone.getPrice(priceTicket);
     }
@@ -115,5 +129,24 @@ public class Ticket {
 
     public void setLineZone(LineZone lineZone) {
         this.lineZone = lineZone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return Double.compare(ticket.price, price) == 0 &&
+                Objects.equals(id, ticket.id) &&
+                Objects.equals(startDateAndTime, ticket.startDateAndTime) &&
+                Objects.equals(endDateAndTime, ticket.endDateAndTime) &&
+                ticketType == ticket.ticketType &&
+                passengerType == ticket.passengerType &&
+                Objects.equals(lineZone, ticket.lineZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startDateAndTime, endDateAndTime, ticketType, price, passengerType, lineZone);
     }
 }

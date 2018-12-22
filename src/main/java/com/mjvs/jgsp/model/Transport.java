@@ -3,7 +3,7 @@ package com.mjvs.jgsp.model;
 import javax.persistence.*;
 
 @Entity
-public class Transport {
+public class Transport extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -21,6 +21,7 @@ public class Transport {
     }
 
     public Transport(TransportType transportType, Stop stop) {
+        super();
         this.transportType = transportType;
         this.stop = stop;
     }

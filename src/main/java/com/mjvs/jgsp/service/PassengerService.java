@@ -1,7 +1,10 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.TicketType;
+import com.mjvs.jgsp.dto.PassengerDTO;
+import com.mjvs.jgsp.helpers.exception.BadRequestException;
+import com.mjvs.jgsp.model.*;
+
+import java.time.LocalDateTime;
 
 
 public interface PassengerService {
@@ -10,7 +13,14 @@ public interface PassengerService {
 
     Passenger getPassenger(String username);
     
-    void buyTicket(boolean hasZoneNotLine, Long id, int dayInMonthOrMonthInYear, TicketType ticketType)
+    Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception;
+
+    boolean registrate(PassengerDTO passengerDTO);
+
+    LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception;
+
+    LocalDateTime[] createStartAndEndDateTime(TicketType ticketType, PassengerType passengerType, int dayInMonthOrMonthInYear)
+            throws BadRequestException;
 
 }

@@ -14,6 +14,7 @@ public class Zone extends LineZone {
     private List<Line> lines;
 
     public Zone(String name, @NotNull List<Line> lines) {
+        super();
         this.name = name;
         this.lines = lines;
     }
@@ -23,14 +24,13 @@ public class Zone extends LineZone {
         this.lines = new ArrayList<>();
     }
 
+    public void addLine(Line line) { lines.add(line); }
+
     public Zone()
     {
         this.lines = new ArrayList<>();
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getName() {
         return name;

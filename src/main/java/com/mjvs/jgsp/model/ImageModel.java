@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class ImageModel {
+public class ImageModel extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique=true, nullable=false)
@@ -27,6 +27,7 @@ public class ImageModel {
     public ImageModel(){}
 
     public ImageModel(String name, byte[] pic){
+        super();
         this.name = name;
         this.type = "png";
         this.pic = pic;

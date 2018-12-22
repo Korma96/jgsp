@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-public class Schedule {
+public class Schedule extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -26,6 +26,7 @@ public class Schedule {
     }
 
     public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList) {
+        super();
         this.dayType = dayType;
         this.dateFrom = dateFrom;
         this.departureList = departureList;

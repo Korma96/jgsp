@@ -1,12 +1,8 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.model.DayType;
-import com.mjvs.jgsp.model.Line;
-import com.mjvs.jgsp.model.MyLocalTime;
-import com.mjvs.jgsp.model.Schedule;
-import com.mjvs.jgsp.model.Stop;
-import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.MyLocalTImeRepository;
+import com.mjvs.jgsp.repository.PriceTicketRepository;
 import com.mjvs.jgsp.repository.StopRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import com.mjvs.jgsp.service.LineService;
@@ -44,6 +40,12 @@ public class DatabaseController {
 	@Autowired
 	private ScheduleService scheduleService;
 
+
+
+	@Autowired
+	private PriceTicketRepository priceTicketRepository;
+
+
 	@RequestMapping(value = "/stanice" , method = RequestMethod.GET)
 	public void databaseFill() throws Exception
     {	
@@ -63,14 +65,15 @@ public class DatabaseController {
     		Line line;
     		Zone zone;
     		Stop stop;
-    		
+			BufferedReader br = null;
+
     		for (File subDirectory : directoryListing) {
     			zone = new Zone(subDirectory.getName());
     			
     			for (File child : subDirectory.listFiles()) {
     				try {
     					String readline = "";
-    					BufferedReader br = new BufferedReader(new FileReader(child));
+    					br = new BufferedReader(new FileReader(child));
     					line = new Line(child.getName().substring(25).split("\\.")[0], zone);
     					System.out.println(child.getName().substring(25).split("\\.")[0]);
     					ArrayList<Stop> stops = new ArrayList<Stop>();
@@ -104,6 +107,9 @@ public class DatabaseController {
     					// TODO Auto-generated catch block
     					e.printStackTrace();
     				}
+					finally {
+						if(br != null) br.close();
+					}
 				}
     			
     			zoneRepository.save(zone);
@@ -130,7 +136,7 @@ public class DatabaseController {
     	if (directoryListing != null) 
     	{
     		MyLocalTime mlt;
-			BufferedReader br;
+			BufferedReader br = null;
 			LocalTime time;
 			String dateFromStr = "2018-09-01";
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -150,16 +156,16 @@ public class DatabaseController {
 	    		{
 	    			
 	    			departureList =  new ArrayList<MyLocalTime>();
-	    			
-	    			try 
+
+	    			try
 	    			{
 						String readline = "";
 						br = new BufferedReader(new FileReader(child));
 						System.out.println(child.getName().split("\\.")[0]);
 						line = lineService.findByName(child.getName().split("\\.")[0]);
-						
+
 						String[] tokens;
-						
+
 						while ((readline = br.readLine())!=null)
 						{
 							tokens = readline.split(" ");
@@ -173,10 +179,10 @@ public class DatabaseController {
 						}
 						schedule = new Schedule(dayType,dateFrom,departureList);
 						line.getSchedules().add(schedule);
-						
+
 						lineService.save(line);
-	    			
-	
+
+
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -187,6 +193,9 @@ public class DatabaseController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					finally {
+	    				if(br != null) br.close();
+					}
 	    		}
     		}
     	}
@@ -196,6 +205,13 @@ public class DatabaseController {
     	}
     	System.out.println("Zavrsio");
     }
+
+    @RequestMapping(value = "aaa", method = RequestMethod.GET)
+	public void aaa() {
+		PriceTicket priceTicket1 = new PriceTicket(LocalDate.now(), PassengerType.OTHER, TicketType.MONTHLY,
+				1500, 3500, new Zone("sedma zona"));
+		priceTicketRepository.save(priceTicket1);
+	}
 
 }
 	

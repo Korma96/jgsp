@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements LineService
@@ -69,7 +70,11 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         }
 
         List<Schedule> latestSchedules = new ArrayList<>();
-        LocalDate latestDate = schedules.stream().findFirst().get().getDateFrom();
+        Optional<Schedule> optional = schedules.stream().findFirst();
+        if(!optional.isPresent()) {
+            return latestSchedules;
+        }
+        LocalDate latestDate = optional.get().getDateFrom();
 
         for(Schedule schedule : schedules)
         {

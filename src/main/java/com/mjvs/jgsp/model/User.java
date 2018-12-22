@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User extends EntityForDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -29,6 +29,7 @@ public class User {
     }
 
     public User(String username, String password, UserType userType, UserStatus userStatus) {
+        super();
         this.username = username;
         this.password = password;
         this.userType = userType;
