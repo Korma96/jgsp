@@ -56,12 +56,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and()
 			.authorizeRequests()
 				.antMatchers("/users/login", "/passengers/registrate")
-					.permitAll(); 
+					.permitAll();
 				//.antMatchers(HttpMethod.POST, "/api/**")
 				//	.hasAuthority("ROLE_ADMIN") //only administrator can add and edit data
 				/*.anyRequest().authenticated();*/
 				//if we use AngularJS on client side
-				//.and().csrf().csrfTokenRepository(csrfTokenRepository()); 
+				//.and().csrf().csrfTokenRepository(csrfTokenRepository());
 		
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),

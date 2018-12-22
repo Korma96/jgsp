@@ -60,7 +60,7 @@ public class PassengerControllerTests {
     public void registrateTest(){
         HttpEntity<PassengerDTO> httpEntity = new HttpEntity<PassengerDTO>(passengerDTO);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/passengers/registrate",HttpMethod.PUT,httpEntity,Boolean.class);
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/passengers/registrate",HttpMethod.POST,httpEntity,Boolean.class);
         boolean registrated = responseEntity.getBody();
         assertEquals(HttpStatus.CREATED,responseEntity.getStatusCode());
         assertTrue(registrated);
@@ -70,7 +70,7 @@ public class PassengerControllerTests {
     public void Test(){
         HttpEntity<PassengerDTO> httpEntity = new HttpEntity<PassengerDTO>(passengerDTO);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/passengers/registrate",HttpMethod.PUT,httpEntity,Boolean.class);
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/passengers/registrate",HttpMethod.POST,httpEntity,Boolean.class);
         boolean registrated = responseEntity.getBody();
         assertEquals(HttpStatus.CREATED,responseEntity.getStatusCode());
         assertTrue(registrated);

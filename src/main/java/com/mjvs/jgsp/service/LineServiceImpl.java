@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements LineService
@@ -48,8 +50,9 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
     }
 
     @Override
-    public List<Stop> getSortedStopsById(List<Stop> stops)
+    public List<StopDTO> getSortedStopsById(List<Stop> stops)
     {
+
         stops.sort(new Comparator<Stop>() { // sortiramo jer u dokumentaciji nije garantovano
             // da cemo dobiti sortirane objekte po id
             @Override
@@ -58,7 +61,11 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
             }
         });
 
-        return stops;
+        List<StopDTO> stopDTOs = stops.stream()
+                .map(stop -> new StopDTO(stop))
+                .collect(Collectors.toList());
+
+        return stopDTOs;
     }
 
 

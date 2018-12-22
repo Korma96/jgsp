@@ -14,7 +14,7 @@ public class Line extends LineZone {
     @Column(name = "active", unique = false, nullable = false)
     private boolean active;
 
-    @Column(name = "minutes_required_for_whole_route")
+    @Column(name = "minutes_required_for_whole_route", unique = false, nullable = false)
     private int minutesRequiredForWholeRoute;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)

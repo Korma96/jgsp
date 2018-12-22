@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.dto;
 
+import com.mjvs.jgsp.model.Stop;
+
 public class StopDTO {
 
     private String name;
@@ -11,6 +13,12 @@ public class StopDTO {
     public StopDTO()
     {
 
+    }
+
+    public StopDTO(Stop stop) {
+        this.name = stop.getName();
+        this.latitude = stop.getLatitude();
+        this.longitude = stop.getLongitude();
     }
 
     public String getName() {

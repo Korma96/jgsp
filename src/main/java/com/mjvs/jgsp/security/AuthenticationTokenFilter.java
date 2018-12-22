@@ -38,6 +38,7 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		}
+
 		chain.doFilter(request, response);
 	}
 
