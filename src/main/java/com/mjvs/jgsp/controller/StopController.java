@@ -88,7 +88,7 @@ public class StopController extends BaseController<Stop>
             throw new DatabaseException(getResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(getResult);
+        return ResponseHelpers.getResponseData(getResult.getData());
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.POST)
