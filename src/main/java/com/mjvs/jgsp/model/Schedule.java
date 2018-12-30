@@ -18,11 +18,22 @@ public class Schedule extends EntityForDeleted {
     @Column(name="date_from", unique=false, nullable=false)
     private LocalDate dateFrom;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL/*, orphanRemoval = true*/)
     private List<MyLocalTime> departureList;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    private Line line;
 
     public Schedule() {
 
+    }
+
+    public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList, Line line) {
+        super();
+        this.dayType = dayType;
+        this.dateFrom = dateFrom;
+        this.departureList = departureList;
+        this.line = line;
     }
 
     public Schedule(DayType dayType, LocalDate dateFrom, List<MyLocalTime> departureList) {
@@ -62,5 +73,13 @@ public class Schedule extends EntityForDeleted {
 
     public void setDepartureList(List<MyLocalTime> departureList) {
         this.departureList = departureList;
+    }
+
+    public Line getLine() {
+        return line;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
     }
 }

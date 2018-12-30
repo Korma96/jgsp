@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 import java.io.*;
 import java.net.URL;
@@ -93,12 +95,22 @@ public class JgspApplication {
         String sortiraneStaniceDirektorijumRelativnaPutanja = "." + File.separator + "src" + File.separator + "main"
                 + File.separator + "resources" + File.separator + "sortirane_stanice";
 
+        String bazniUrlZaTacke = "http://www.gspns.co.rs/mreza-get-linija-tacke";
+        String tackeDirektorijumRelativnaPutanja = "." + File.separator + "src" + File.separator + "main"
+                + File.separator + "resources" + File.separator + "tacke";
+
         napraviDirektorijumAkoNePostoji(staniceDirektorijumRelativnaPutanja);
         napraviDirektorijumAkoNePostoji(sortiraneStaniceDirektorijumRelativnaPutanja);
 
-        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
-        //dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
+        napraviDirektorijumAkoNePostoji(tackeDirektorijumRelativnaPutanja);
+
+        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
+        dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
         dobaviStaniceIUpisiUFajl(bazniUrlZaStanice, staniceDirektorijumRelativnaPutanja, sortiraneStaniceDirektorijumRelativnaPutanja, "medjumesne_linije", medjumesneLinije);
+
+        dobaviTackeIUpisiUFajl(bazniUrlZaTacke, tackeDirektorijumRelativnaPutanja, "gradske_linije", gradskeLinije);
+        dobaviTackeIUpisiUFajl(bazniUrlZaTacke, tackeDirektorijumRelativnaPutanja, "prigradske_linije", prigradskeLinije);
+        dobaviTackeIUpisiUFajl(bazniUrlZaTacke, tackeDirektorijumRelativnaPutanja, "medjumesne_linije", medjumesneLinije);
 
         System.out.println("***** Podaci o stanicama svih linija su dobavljeni i smesteni u fajlove. *****");
     }
@@ -114,6 +126,90 @@ public class JgspApplication {
             }
         }
     }
+
+    private void dobaviTackeIUpisiUFajl(String bazniUrlZaTacke, String tackeDirektorijumRelativnaPutanja, String vrstaLinija, HashMap<Integer, String[]> linije) {
+        BufferedReader in = null;
+        PrintWriter out = null;
+
+        URL url;
+        URLConnection connection;
+
+        String procitanaLinija;
+
+        String direktorijumVrstaLinijaPutanja = tackeDirektorijumRelativnaPutanja + File.separator + vrstaLinija;
+        napraviDirektorijumAkoNePostoji(direktorijumVrstaLinijaPutanja);
+
+        String[] tokens;
+        String[] oznakaINaziv;
+        StringBuilder sb;
+
+        for (int linijaBroj : linije.keySet()) {
+            try {
+                url = new URL(bazniUrlZaTacke + "?linija=" + linijaBroj);
+                connection = url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+
+                oznakaINaziv = linije.get(linijaBroj);
+
+                in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                out = new PrintWriter(new FileWriter(direktorijumVrstaLinijaPutanja+ File.separator
+                        + "tacke_linije_" + oznakaINaziv[0] + ".txt"));
+
+                sb = new StringBuilder("");
+
+                while ((procitanaLinija = in.readLine()) != null) {
+                    procitanaLinija = procitanaLinija.trim();
+
+                    if(procitanaLinija.equals("")) continue;
+
+                    procitanaLinija = procitanaLinija.replace("[\"", "");
+                    procitanaLinija = procitanaLinija.replace("\\r", "");
+                    procitanaLinija = procitanaLinija.replace("\\n", "");
+                    procitanaLinija = procitanaLinija.replace("\",\"\"]", "");
+
+                    System.out.println(procitanaLinija);
+                    sb.append(procitanaLinija);
+
+                }
+
+                String[] tokensLinije = sb.toString().split("\",\"");
+                for (int i = 0; i < tokensLinije.length; i++) {
+                    tokens = tokensLinije[i].split(",");
+                    /*String str = tokens[0].trim() + tokens[1].trim();
+                    char c;
+                    for(int k = 0; k < str.length(); k++) {
+                        c = str.charAt(k);
+                        if(!Character.isDigit(c) && !".".equals(""+c)) {
+                            System.out.println("+++"+c+"+++");
+                        }
+                    }*/
+                    out.println(tokens[0].trim() + "|" + tokens[1].trim());
+                }
+
+            }
+            catch (Exception e) {
+                System.out.println("\nError while calling Crunchify REST Service");
+                System.out.println(e.getMessage());
+            }
+            finally {
+                if(in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(out != null) out.close();
+            }
+
+        }
+
+        System.out.println("\nCrunchify REST Service Invoked Successfully..");
+	}
 
     private static void dobaviStaniceIUpisiUFajl(String bazniUrlZaStanice, String staniceDirektorijumRelativnaPutanja, String sortiraneStaniceDirektorijumRelativnaPutanja, String vrstaLinija, HashMap<Integer, String[]> linije) {
         BufferedReader in = null;
@@ -132,7 +228,6 @@ public class JgspApplication {
         napraviDirektorijumAkoNePostoji(direktorijumVrstaLinijaPutanjaSortiraneStanice);
 
         int indexOfFirstStop = -1;
-        String[] aOrB = {"A", "B"};
 
         ArrayList<Stop> stops;
         String[] tokens;

@@ -37,8 +37,16 @@ public abstract class LineZone extends EntityForDeleted {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         LineZone lineZone = (LineZone) o;
-        return Objects.equals(id, lineZone.id);
+        boolean retValue = Objects.equals(id, lineZone.id);
+
+        if((o instanceof Line) && (this instanceof Line)) return ((Line) o).equals((Line)this) &&retValue;
+
+        if((o instanceof Zone) && (this instanceof Zone)) return ((Zone) o).equals((Zone)this) && retValue;
+
+
+        return retValue;
     }
 
     @Override

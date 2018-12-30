@@ -2,9 +2,11 @@ package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.StopDTO;
+import com.mjvs.jgsp.dto.TimesDTO;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
+import com.mjvs.jgsp.model.DayType;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +29,9 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private LineRepository lineRepository;
+
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 
     @Autowired
     public LineServiceImpl(LineRepository lineRepository)
@@ -107,4 +113,55 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 		return lineRepository.findByName(name);
 	}
 
+
+	@Override
+    public ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines) {
+        try {
+            LocalDate date = LocalDate.parse(dateStr, dateFormatter);
+            DayType day = DayType.valueOf(dayStr.toUpperCase());
+
+            ArrayList<TimesDTO> timesDTOs = new ArrayList<TimesDTO>();
+
+            Line lineA, lineB;
+            TimesDTO timesDTO;
+            String[] sufixes = {"A", "B"};
+            List<String> timesA, timesB;
+
+            for (String lineStr : lines) {
+                timesDTO = new TimesDTO();
+                lineA = lineRepository.findByName(lineStr+sufixes[0]);
+                lineB = lineRepository.findByName(lineStr+sufixes[1]);
+                if(lineA == null && lineB == null) return null;
+
+                if(lineA == null) timesDTO.setTimesA(new ArrayList<>());
+                else {
+                    timesA = lineA.getSchedules().stream()
+                            .filter(schedule -> schedule.getDateFrom().equals(date) && schedule.getDayType() == day)
+                            .map(schedule -> schedule.getDepartureList()).findFirst().get()
+                            .stream()
+                            .map(myLocalTime -> myLocalTime.getTime().format(timeFormatter))
+                            .collect(Collectors.toList());
+                    timesDTO.setTimesA(timesA);
+                }
+
+                if(lineB == null) timesDTO.setTimesB(new ArrayList<>());
+                else {
+                    timesB = lineB.getSchedules().stream()
+                            .filter(schedule -> schedule.getDateFrom().equals(date))
+                            .map(schedule -> schedule.getDepartureList()).findFirst().get()
+                            .stream()
+                            .map(myLocalTime -> myLocalTime.getTime().format(timeFormatter))
+                            .collect(Collectors.toList());
+                    timesDTO.setTimesB(timesB);
+                }
+
+                timesDTOs.add(timesDTO);
+            }
+
+            return timesDTOs;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
 }

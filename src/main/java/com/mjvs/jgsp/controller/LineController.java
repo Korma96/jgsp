@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.*;
+import com.mjvs.jgsp.helpers.converter.StopConverter;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.ScheduleService;
 import com.mjvs.jgsp.helpers.Messages;
@@ -15,10 +16,14 @@ import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/line")
@@ -167,9 +172,46 @@ public class LineController extends ExtendedBaseController<Line>
         }
 
         Line line = lineResult.getData();
-        List<StopDTO> sortedStopDTOs = lineService.getSortedStopsById(line.getStops());
+        List<StopDTO> sortedStopDTOs = StopConverter.convertStopsToStopDTOs(line.getStops());
 
         return ResponseHelpers.getResponseData(sortedStopDTOs);
+    }
+
+    @RequestMapping(value = "/{id}/points-and-stops", method = RequestMethod.GET)
+    public ResponseEntity<PointsAndStopsDTO> getLinePointsAndStops(@PathVariable("id") Long id) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(id);
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        List<StopDTO> stopDTOs = StopConverter.convertStopsToStopDTOs(line.getStops());
+
+        List<PointDTO> points = line.getPoints().stream()
+                                                .map(point -> new PointDTO(point))
+                                                .collect(Collectors.toList());
+        PointsAndStopsDTO pointsAndStopsDTO = new PointsAndStopsDTO(points, stopDTOs);
+
+        return ResponseHelpers.getResponseData(pointsAndStopsDTO);
+    }
+
+    @RequestMapping(value = "/times", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<TimesDTO>> getDepartureLists(@RequestParam("date") String date, @RequestParam("day") String day, @RequestParam("lines") String linesStr) {
+        try {
+            String[] lines = linesStr.split(",");
+
+            for(int i = 0; i < lines.length; i++) {
+                if(lines[i].trim().equals("")) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
+            ArrayList<TimesDTO> timesDTOs = lineService.getDepartureLists(date, day, lines);
+            if(timesDTOs == null) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<ArrayList<TimesDTO>>(timesDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line extends LineZone {
@@ -21,6 +22,9 @@ public class Line extends LineZone {
     private Zone zone;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Point> points;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Stop> stops;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -28,7 +32,7 @@ public class Line extends LineZone {
 
     // orphanRemoval znaci da kad izbrisemo neki Schedule iz ove liste, on ce postati siroce, i bice automatski obrisan
     // i iz tabele schedule
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="line" /*, orphanRemoval = true*/)
     private List<Schedule> schedules;
 
     /*@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -42,6 +46,7 @@ public class Line extends LineZone {
     public Line() {
         super();
         this.stops = new ArrayList<>();
+        this.points = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
     }
@@ -54,12 +59,13 @@ public class Line extends LineZone {
 
 
 
-    public Line(String name, boolean active, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules
+    public Line(String name, boolean active, Zone zone, List<Point> points, List<Stop> stops, List<Transport> transports, List<Schedule> schedules
 			/*Schedule scheduleWorkDay, Schedule scheduleSaturday, Schedule scheduleSunday*/) {
 
 		this.name = name;
 		this.active = active;
 		this.zone = zone;
+		this.points = points;
 		this.stops = stops;
 		this.transports = transports;
 		this.schedules = schedules;
@@ -67,21 +73,23 @@ public class Line extends LineZone {
 //		this.scheduleSaturday = scheduleSaturday;
 //		this.scheduleSunday = scheduleSunday;
 	}
-    public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
+    public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Point> points, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
         this.name = name;
         this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
         this.zone = zone;
         this.active = true;
+        this.points = points;
         this.stops = stops;
         this.transports = transports;
         this.schedules = schedules;
     }
 
-	public Line(String name, Zone zone) {
+	public Line(String name, Zone zone, int minutesRequiredForWholeRoute) {
         this.name = name;
         this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
         this.zone = zone;
         this.active = false;
+        this.points = new ArrayList<>();
         this.stops = new ArrayList<>();
         this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
@@ -135,6 +143,13 @@ public class Line extends LineZone {
         this.schedules = schedules;
     }
 
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
 
     /*public Schedule getScheduleWorkDay() {
 		return scheduleWorkDay;
@@ -188,5 +203,20 @@ public class Line extends LineZone {
     @Override
     public String toString() {
         return name + " ("+ zone.getName() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Line line = (Line) o;
+        return Objects.equals(name, line.name) &&
+                Objects.equals(zone, line.zone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, zone);
     }
 }

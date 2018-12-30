@@ -70,6 +70,9 @@ public class PassengerServiceImpl implements PassengerService {
                                     /*activated,*/ lineZone);
         //priprema podataka
         //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.STUDENT, TicketType.MONTHLY, 3000, 6000, lineZone.getZone()));
+        //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.PENSIONER, TicketType.MONTHLY, 3100, 6100, lineZone.getZone()));
+        //priceTicketService.save(new PriceTicket(LocalDate.of(2018, 11, 20), PassengerType.OTHER, TicketType.MONTHLY, 3500, 6500, lineZone.getZone()));
+
         if(lineZone != null) {
             PriceTicket priceTicket = priceTicketService.getLatestPriceTicket(loggedPassenger.getPassengerType(), ticketType, lineZone.getZone());
             ticket.lookAtPriceTicketAndSetPrice(priceTicket);
@@ -84,16 +87,15 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public boolean registrate(PassengerDTO passengerDTO) {
-        if(passengerDTO.getUsername() == null || passengerDTO.getPassword1() == null || passengerDTO.getPassword2() == null ||
-                passengerDTO.getFirstName() == null || passengerDTO.getLastName() == null || passengerDTO.getEmail() == null
-                || passengerDTO.getAddress() == null){
+    public boolean registrate(String username, String password1, String password2, String firstName,
+                              String lastName, String email, String address, PassengerType passengerType) {
+        if(username == null || password1 == null || password2 == null || firstName == null || lastName == null
+                || email == null || address == null){
             return false;
         }
 
-        if(passengerDTO.getUsername().equals("") || passengerDTO.getPassword1().equals("") || passengerDTO.getPassword2().equals("") ||
-                passengerDTO.getFirstName().equals("") || passengerDTO.getLastName().equals("") || passengerDTO.getEmail().equals("")
-                || passengerDTO.getAddress().equals("")){
+        if(username.equals("") || password1.equals("") || password2.equals("") || firstName.equals("")
+                || lastName.equals("") || email.equals("") || address.equals("")){
             return false;
         }
 
@@ -101,15 +103,15 @@ public class PassengerServiceImpl implements PassengerService {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }*/
 
+        if(userService.exists(username)) return false;
 
-
-        if(!passengerDTO.getPassword1().equals(passengerDTO.getPassword2())){
+        if(!password1.equals(password2)){
             return false;
         }
 
-        Passenger p = new Passenger(passengerDTO.getUsername(), passwordEncoder.encode(passengerDTO.getPassword1()),
-                UserType.PASSENGER, UserStatus.PENDING,passengerDTO.getFirstName(),passengerDTO.getLastName(),
-                passengerDTO.getEmail(),passengerDTO.getAddress(),passengerDTO.getPassengerType());
+        Passenger p = new Passenger(username, passwordEncoder.encode(password1),
+                UserType.PASSENGER, UserStatus.PENDING,firstName,lastName,
+                email,address,passengerType);
 
         try{
             passengerRepository.save(p);

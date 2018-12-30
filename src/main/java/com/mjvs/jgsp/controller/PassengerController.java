@@ -54,7 +54,9 @@ public class PassengerController {
     @RequestMapping(value ="/registrate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> registrate(@RequestBody PassengerDTO passengerDTO) {
 
-        boolean registrated = passengerService.registrate(passengerDTO);
+        boolean registrated = passengerService.registrate(passengerDTO.getUsername(), passengerDTO.getPassword1(),
+                passengerDTO.getPassword2(), passengerDTO.getFirstName(), passengerDTO.getLastName(), passengerDTO.getEmail(),
+                passengerDTO.getAddress(), passengerDTO.getPassengerType());
 
         if(registrated){
             return new ResponseEntity<Boolean>(registrated,HttpStatus.CREATED);

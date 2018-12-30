@@ -53,7 +53,9 @@ public class PassengerControllerTests {
     @Before
     public void setUp() {
         passengerDTO = new PassengerDTO("Slaven96","slaven","slaven","Slaven","Garic","slavengaric@gmail.com","Kralja Petra 60",PassengerType.STUDENT);
-        when(passengerService.registrate(passengerDTO)).thenReturn(true);
+        when(passengerService.registrate(passengerDTO.getUsername(), passengerDTO.getPassword1(),
+                passengerDTO.getPassword2(), passengerDTO.getFirstName(), passengerDTO.getLastName(), passengerDTO.getEmail(),
+                passengerDTO.getAddress(), passengerDTO.getPassengerType())).thenReturn(true);
     }
 
     @Test

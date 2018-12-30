@@ -2,6 +2,7 @@ package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.BaseLiteDTO;
+import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneWithLineDTO;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.helpers.Messages;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -74,6 +76,43 @@ public class ZoneController extends ExtendedBaseController<Zone>
         }
 
         List<BaseDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData());
+        return ResponseHelpers.getResponseData(zoneLiteDTOs);
+    }
+
+    @RequestMapping(value = "/all-with-line", method = RequestMethod.GET)
+    public ResponseEntity<List<ZoneDTO>> getAllWithLine()
+    {
+        Result<List<Zone>> result = zoneService.getAll();
+        if(result.isFailure()) {
+            throw new DatabaseException(result.getMessage());
+        }
+
+        result.getData().stream()
+                .forEach(zone -> zone.getLines().sort(new Comparator<Line>() {
+                    @Override
+                    public int compare(Line o1, Line o2) {
+                        int num1 = extractInt(o1.getName());
+                        int num2 = extractInt(o2.getName());
+
+                        if(num1 == 0 && num2 == 0) return o1.getName().compareTo(o2.getName());
+
+                        return num1 - num2;
+                    }
+
+                    int extractInt(String s) {
+                        String sCopy = new String(s);
+                        String num = sCopy.replaceAll("\\D", "");
+                        // return 0 if no digits found
+                        if(num.isEmpty()) return 0;
+                        else {
+                            if(s.startsWith(num)) return Integer.parseInt(num);
+
+                            return 0;
+                        }
+
+                    }
+                }));
+        List<ZoneDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOsWithLine(result.getData());
         return ResponseHelpers.getResponseData(zoneLiteDTOs);
     }
 

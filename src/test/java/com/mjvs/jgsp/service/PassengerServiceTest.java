@@ -5,6 +5,7 @@ import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PriceTicketRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.Assert.*;
 
 import  static com.mjvs.jgsp.JgspApplicationTests.prepareLoggedUser;
@@ -55,7 +58,7 @@ public class PassengerServiceTest {
     @Test
     public void buyTicketTestSuccessWithLine() {
         Zone zone = new Zone("osma_zona");
-        Line line = new Line("888A", zone);
+        Line line = new Line("888A", zone, 45);
         zone.addLine(line);
         zone = zoneRepository.save(zone);
         line = zone.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
@@ -138,7 +141,7 @@ public class PassengerServiceTest {
     @Test(expected = Exception.class)
     public void getLineZoneTestThrowsExceptionForLine() throws Exception {
         Zone zone = new Zone("osma_zona");
-        Line line = new Line("888A", zone);
+        Line line = new Line("888A", zone, 45);
         zone.addLine(line);
         zone = zoneRepository.save(zone);
         line = zone.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
@@ -156,6 +159,30 @@ public class PassengerServiceTest {
         passengerService.getLineZone(false, zone.getId(), TicketType.DAILY);
     }
 
+    @Transactional
+    @Rollback(true)
+    @Test
+    public void getLineZoneTestSuccessForZone() throws Exception {
+        Zone zone = new Zone("osma_zona");
+        zone = zoneRepository.save(zone);
+
+        LineZone retZone = passengerService.getLineZone(true, zone.getId(), TicketType.DAILY);
+        assertEquals(zone, retZone);
+    }
+
+    @Transactional
+    @Rollback(true)
+    @Test
+    public void getLineZoneTestSuccessForLine() throws Exception {
+        Zone z = new Zone("sedma_zona");
+        Line l = new Line("777B", z,45);
+        z.addLine(l);
+        z = zoneRepository.save(z);
+        l = z.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
+
+        LineZone line =passengerService.getLineZone(false, l.getId(), TicketType.DAILY);
+        assertEquals(l, line);
+    }
 
     @Test
     public void createStartAndEndDateTimeTestSuccessONETIME() {
@@ -190,8 +217,8 @@ public class PassengerServiceTest {
         LocalDateTime expectedStartDateAndTime = LocalDateTime.of(date, timeStart);
         LocalDateTime expectedEndDateAndTime = LocalDateTime.of(date, LocalTime.of(23, 59, 59));
 
-        assertEquals(expectedStartDateAndTime, retValue[0]);
-        assertEquals(expectedEndDateAndTime, retValue[1]);
+        Assertions.assertThat(retValue[0]).isCloseTo(expectedStartDateAndTime, within(500, ChronoUnit.MILLIS));
+        Assertions.assertThat(retValue[1]).isCloseTo(expectedEndDateAndTime, within(500, ChronoUnit.MILLIS));
     }
 
     @Test
@@ -224,8 +251,8 @@ public class PassengerServiceTest {
         LocalDateTime expectedEndDateAndTime = LocalDateTime.of(LocalDate.of(dateAndTime.getYear(), month, day),
                 LocalTime.of(23, 59, 59));
 
-        assertEquals(expectedStartDateAndTime, retValue[0]);
-        assertEquals(expectedEndDateAndTime, retValue[1]);
+        Assertions.assertThat(retValue[0]).isCloseTo(expectedStartDateAndTime, within(500, ChronoUnit.MILLIS));
+        Assertions.assertThat(retValue[1]).isCloseTo(expectedEndDateAndTime, within(500, ChronoUnit.MILLIS));
     }
 
     @Test
@@ -245,8 +272,8 @@ public class PassengerServiceTest {
         LocalDate date = LocalDate.of(dateAndTime.getYear(), month, 31);
         LocalDateTime expectedEndDateAndTime = LocalDateTime.of(date, LocalTime.of(23, 59, 59));
 
-        assertEquals(expectedStartDateAndTime, retValue[0]);
-        assertEquals(expectedEndDateAndTime, retValue[1]);
+        Assertions.assertThat(retValue[0]).isCloseTo(expectedStartDateAndTime, within(500, ChronoUnit.MILLIS));
+        Assertions.assertThat(retValue[1]).isCloseTo(expectedEndDateAndTime, within(500, ChronoUnit.MILLIS));
     }
 
     @Test
@@ -266,8 +293,8 @@ public class PassengerServiceTest {
         LocalDate date = LocalDate.of(dateAndTime.getYear(), month, 31);
         LocalDateTime expectedEndDateAndTime = LocalDateTime.of(date, LocalTime.of(23, 59, 59));
 
-        assertEquals(expectedStartDateAndTime, retValue[0]);
-        assertEquals(expectedEndDateAndTime, retValue[1]);
+        Assertions.assertThat(retValue[0]).isCloseTo(expectedStartDateAndTime, within(500, ChronoUnit.MILLIS));
+        Assertions.assertThat(retValue[1]).isCloseTo(expectedEndDateAndTime, within(500, ChronoUnit.MILLIS));
     }
 
     @Transactional
@@ -282,17 +309,6 @@ public class PassengerServiceTest {
     @Test(expected = BadRequestException.class)
     public void createStartAndEndDateTimeTestThrowsBadRequestExceptionForInvalidMonth() throws BadRequestException {
         passengerService.createStartAndEndDateTime(TicketType.MONTHLY, PassengerType.OTHER, 13);
-    }
-
-    @Transactional
-    @Rollback(true)
-    @Test
-    public void createStartAndEndDateTimeTestSuccess() throws BadRequestException {
-        Zone zone = new Zone("osma_zona");
-        zone = zoneRepository.save(zone);
-        int month = LocalDate.now().getMonthValue();
-
-        passengerService.createStartAndEndDateTime(TicketType.MONTHLY, PassengerType.OTHER, month);
     }
 
 }

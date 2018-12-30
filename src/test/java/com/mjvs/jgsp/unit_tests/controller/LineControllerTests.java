@@ -9,6 +9,7 @@ import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
+import com.mjvs.jgsp.helpers.converter.StopConverter;
 import com.mjvs.jgsp.helpers.exception.ExceptionResolver;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
@@ -181,7 +182,7 @@ public class LineControllerTests
         line.setStops(stops);
         Result<Line> lineResult = new Result<>(line, Messages.DoesNotExist(StringConstants.Line, id));
         when(lineService.findById(id)).thenReturn(lineResult);
-        List<StopDTO> sortedStops = lineService.getSortedStopsById(stops);
+        List<StopDTO> sortedStops = StopConverter.convertStopsToStopDTOs(stops);
 
         // Act
         MockHttpServletResponse response = mockMvc.perform(get("/line/1/stop")).andReturn().getResponse();
