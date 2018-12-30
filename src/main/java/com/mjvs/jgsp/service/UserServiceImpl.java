@@ -1,10 +1,7 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.User;
-import com.mjvs.jgsp.model.UserStatus;
+import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public boolean checkTicket(String username) throws Exception {
+    public boolean checkTicket(String username, Long id) throws Exception {
 
         Passenger passenger = (Passenger) this.getUser(username);
 
@@ -48,6 +47,24 @@ public class UserServiceImpl implements UserService {
         boolean valid = false;
         for (int i = 0; i < passenger.getTickets().size(); i++) {
             ticket = passenger.getTickets().get(i);
+
+            if(!ticket.getLineZone().getId().equals(id)){
+                if(ticket.getLineZone() instanceof Zone) {
+                    List<Line> lines = ticket.getLineZone().getZone().getLines();
+
+                    boolean condition =  lines.stream().filter(line -> line.getId() == id).count() == 0;
+
+                    if(condition){
+                        continue;
+                    }
+                }
+                else {
+                    continue;
+                }
+
+            }
+
+
             if (ticket.getStartDateAndTime() != null && ticket.getEndDateAndTime() != null) {
 
                 long dif = computeSubtractTwoDateTime(dateAndTime, ticket.getStartDateAndTime());

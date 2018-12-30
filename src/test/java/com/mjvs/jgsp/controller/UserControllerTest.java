@@ -98,9 +98,9 @@ public class UserControllerTest {
         when(tokenUtils.validateToken(accessToken3, userDetails3)).thenReturn(true);
 
 
-        when(userService.checkTicket(userDetails1.getUsername())).thenReturn(true);
+        /*when(userService.checkTicket(userDetails1.getUsername())).thenReturn(true);
         when(userService.checkTicket(userDetails2.getUsername())).thenReturn(false);
-        when(userService.checkTicket(userDetails3.getUsername())).thenThrow(Exception.class);
+        when(userService.checkTicket(userDetails3.getUsername())).thenThrow(Exception.class);*/
     }
 
 

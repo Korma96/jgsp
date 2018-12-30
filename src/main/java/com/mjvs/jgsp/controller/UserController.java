@@ -67,11 +67,11 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('CONTROLLOR')")
-    @RequestMapping(value ="/checkticket/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username) {
+    @RequestMapping(value ="/checkticket/{username}/zoneLine/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username,@PathVariable Long id) {
         boolean valid;
         try{
-            valid = userService.checkTicket(username);
+            valid = userService.checkTicket(username,id);
         }catch (Exception e){
             return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
