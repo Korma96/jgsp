@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -41,8 +43,8 @@ public class UserController {
     TokenUtils tokenUtils;
     
 
-    @RequestMapping(value="/login", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
+    @RequestMapping(value="/login", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity login(@RequestBody UserDTO userDTO) {
     	try {
         	// Perform the authentication
         	UsernamePasswordAuthenticationToken userInfo = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
@@ -53,8 +55,11 @@ public class UserController {
             //authentication.getDetails()
             UserDetails details = userDetailsService.loadUserByUsername(userDTO.getUsername());
             String generatedToken = tokenUtils.generateToken(details);
-            return new ResponseEntity<String>(generatedToken, HttpStatus.OK);
-        } 
+            Map<String,String> result = new HashMap<>();
+            result.put("token",generatedToken);
+            return new ResponseEntity< Map<String,String>>(result,HttpStatus.OK);
+            //return new ResponseEntity<String>(generatedToken, HttpStatus.OK);
+        }
     	catch (Exception e) {
             return new ResponseEntity<String>("Invalid login", HttpStatus.BAD_REQUEST);
         }
@@ -62,11 +67,11 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('CONTROLLOR')")
-    @RequestMapping(value ="/checkticket/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username) {
+    @RequestMapping(value ="/checkticket/{username}/zoneLine/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username,@PathVariable Long id) {
         boolean valid;
         try{
-            valid = userService.checkTicket(username);
+            valid = userService.checkTicket(username,id);
         }catch (Exception e){
             return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }

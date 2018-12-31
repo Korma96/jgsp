@@ -88,7 +88,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public boolean registrate(String username, String password1, String password2, String firstName,
-                              String lastName, String email, String address, PassengerType passengerType) {
+                              String lastName, String email, String address) {
         if(username == null || password1 == null || password2 == null || firstName == null || lastName == null
                 || email == null || address == null){
             return false;
@@ -110,8 +110,8 @@ public class PassengerServiceImpl implements PassengerService {
         }
 
         Passenger p = new Passenger(username, passwordEncoder.encode(password1),
-                UserType.PASSENGER, UserStatus.PENDING,firstName,lastName,
-                email,address,passengerType);
+                UserType.PASSENGER, UserStatus.ACTIVATED,firstName,lastName,
+                email,address,PassengerType.OTHER);
 
         try{
             passengerRepository.save(p);

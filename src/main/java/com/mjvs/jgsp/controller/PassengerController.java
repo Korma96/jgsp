@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.dto.TicketDTO;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.UserType;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -35,14 +33,8 @@ public class PassengerController {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
-	@Autowired
-    private UserService userService;
-
     @Autowired
     private PassengerService passengerService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ImageModelService imageModelService;
@@ -56,7 +48,7 @@ public class PassengerController {
 
         boolean registrated = passengerService.registrate(passengerDTO.getUsername(), passengerDTO.getPassword1(),
                 passengerDTO.getPassword2(), passengerDTO.getFirstName(), passengerDTO.getLastName(), passengerDTO.getEmail(),
-                passengerDTO.getAddress(), passengerDTO.getPassengerType());
+                passengerDTO.getAddress());
 
         if(registrated){
             return new ResponseEntity<Boolean>(registrated,HttpStatus.CREATED);

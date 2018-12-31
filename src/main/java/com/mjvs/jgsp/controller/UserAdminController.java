@@ -109,7 +109,7 @@ public class UserAdminController {
 	        try{
 	        	Passenger passenger = passengerService.getPassenger(username);
 	        	User userAdmin = userService.getLoggedUser();
-	        	if (passenger!=null){
+	        	if (passenger!=null && passenger.getUserStatus().equals(UserStatus.PENDING)){
 	        		if (passengerType.equals("student"))
 	        		{
 	        			passenger.setPassengerType(PassengerType.STUDENT);
@@ -117,8 +117,11 @@ public class UserAdminController {
 	        		else if (passengerType.equals("pensioner"))
 	        		{
 	        			passenger.setPassengerType(PassengerType.PENSIONER);
+	        		} else {
+						passenger.setPassengerType(PassengerType.OTHER);
 	        		}
-	        		
+
+	        		passenger.setUserStatus(UserStatus.ACTIVATED);
 	        		passenger.setVerifiedBy(userAdmin);
 	        		userService.save(passenger);
 	        	}

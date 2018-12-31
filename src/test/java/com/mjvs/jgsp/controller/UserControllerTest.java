@@ -98,9 +98,9 @@ public class UserControllerTest {
         when(tokenUtils.validateToken(accessToken3, userDetails3)).thenReturn(true);
 
 
-        when(userService.checkTicket(userDetails1.getUsername())).thenReturn(true);
+        /*when(userService.checkTicket(userDetails1.getUsername())).thenReturn(true);
         when(userService.checkTicket(userDetails2.getUsername())).thenReturn(false);
-        when(userService.checkTicket(userDetails3.getUsername())).thenThrow(Exception.class);
+        when(userService.checkTicket(userDetails3.getUsername())).thenThrow(Exception.class);*/
     }
 
 
@@ -109,9 +109,10 @@ public class UserControllerTest {
 
         HttpEntity<UserDTO> httpEntity = new HttpEntity<UserDTO>(userDTO1);
 
-        ResponseEntity<String> responseEntity = testRestTemplate.exchange("/users/login",HttpMethod.PUT,httpEntity,String.class);
+        ResponseEntity<HashMap> responseEntity = testRestTemplate.exchange("/users/login",HttpMethod.PUT,httpEntity,HashMap.class);
 
-        String token = responseEntity.getBody();
+        HashMap<String, String> hmToken = responseEntity.getBody();
+        String token = hmToken.get("token");
 
         assertNotNull(token);
         assertEquals(accessToken1,token);

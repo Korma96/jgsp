@@ -12,7 +12,6 @@ public class PassengerDTO {
     private String lastName;
     private String email;
     private String address;
-    private PassengerType passengerType;
 
 
     public PassengerDTO(){
@@ -31,7 +30,7 @@ public class PassengerDTO {
 
     }*/
 
-    public PassengerDTO(String username, String password1, String password2, String firstName, String lastName, String email, String address, PassengerType passengerType) {
+    public PassengerDTO(String username, String password1, String password2, String firstName, String lastName, String email, String address) {
         this.username = username;
         this.password1 = password1;
         this.password2 = password2;
@@ -39,7 +38,6 @@ public class PassengerDTO {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
-        this.passengerType = passengerType;
     }
 
 
@@ -99,13 +97,7 @@ public class PassengerDTO {
         this.address = address;
     }
 
-    public PassengerType getPassengerType() {
-        return passengerType;
-    }
 
-    public void setPassengerType(PassengerType passengerType) {
-        this.passengerType = passengerType;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -118,13 +110,12 @@ public class PassengerDTO {
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(email, that.email) &&
-                Objects.equals(address, that.address) &&
-                passengerType == that.passengerType;
+                Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(username, password1, password2, firstName, lastName, email, address, passengerType);
+        return Objects.hash(username, password1, password2, firstName, lastName, email, address);
     }
 }
