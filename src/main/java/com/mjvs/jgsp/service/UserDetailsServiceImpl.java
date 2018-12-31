@@ -2,6 +2,7 @@ package com.mjvs.jgsp.service;
 
 
 import com.mjvs.jgsp.model.User;
+import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,11 +34,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-    
+
         if(user == null) {
             String message = String.format("No user found with username '%s' in database.", username);
             logger.error(message);
         	throw new UsernameNotFoundException(message);
+        }
+
+        if(user.getUserStatus() != UserStatus.ACTIVATED) {
+            String message = String.format("No user found with username '%s' in database.", username);
+            logger.error(message);
+            throw new UsernameNotFoundException(message);
         }
 
         List<GrantedAuthority> garantedAuthorities = AuthorityUtils.createAuthorityList(user.getUserType().toString());

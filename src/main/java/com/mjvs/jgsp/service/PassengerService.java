@@ -16,8 +16,7 @@ public interface PassengerService {
     Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception;
 
-    boolean registrate(String username, String password1, String Password2, String firstName, String lastName, String email, String addres,
-                       PassengerType passengerType);
+    boolean registrate(String username, String password1, String Password2, String firstName, String lastName, String email, String address);
 
     LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception;
 

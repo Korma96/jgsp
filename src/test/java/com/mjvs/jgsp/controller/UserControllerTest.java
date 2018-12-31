@@ -109,9 +109,10 @@ public class UserControllerTest {
 
         HttpEntity<UserDTO> httpEntity = new HttpEntity<UserDTO>(userDTO1);
 
-        ResponseEntity<String> responseEntity = testRestTemplate.exchange("/users/login",HttpMethod.PUT,httpEntity,String.class);
+        ResponseEntity<HashMap> responseEntity = testRestTemplate.exchange("/users/login",HttpMethod.PUT,httpEntity,HashMap.class);
 
-        String token = responseEntity.getBody();
+        HashMap<String, String> hmToken = responseEntity.getBody();
+        String token = hmToken.get("token");
 
         assertNotNull(token);
         assertEquals(accessToken1,token);
