@@ -65,8 +65,16 @@ public class UserControllerTest {
     private UserDTO userDTO2;
     private UserDTO userDTO3;
 
+    private long idSuccess;
+    private long idUnsuccess;
+    private long idBadRequest;
+
     @Before
     public void setUp() throws Exception {
+        idSuccess = 1;
+        idUnsuccess = 2;
+        idBadRequest = 3;
+
         userDTO1 = new UserDTO("user1","111");
         userDTO2 = new UserDTO("user2","222");
         userDTO3 = new UserDTO("user3","333");
@@ -98,9 +106,9 @@ public class UserControllerTest {
         when(tokenUtils.validateToken(accessToken3, userDetails3)).thenReturn(true);
 
 
-        /*when(userService.checkTicket(userDetails1.getUsername())).thenReturn(true);
-        when(userService.checkTicket(userDetails2.getUsername())).thenReturn(false);
-        when(userService.checkTicket(userDetails3.getUsername())).thenThrow(Exception.class);*/
+        when(userService.checkTicket(userDTO1.getUsername(), idSuccess)).thenReturn(true);
+        when(userService.checkTicket(userDTO2.getUsername(), idUnsuccess)).thenReturn(false);
+        when(userService.checkTicket(userDTO3.getUsername(), idBadRequest)).thenThrow(Exception.class);
     }
 
 
@@ -128,7 +136,8 @@ public class UserControllerTest {
         headers.add("X-Auth-Token",accessToken1);
         HttpEntity httpEntity = new HttpEntity(headers);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO1.getUsername(),HttpMethod.PUT,httpEntity, Boolean.class);
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO1.getUsername()+"/zoneLine/"+idSuccess,
+                HttpMethod.PUT,httpEntity, Boolean.class);
 
         boolean valid = responseEntity.getBody();
 
@@ -142,8 +151,9 @@ public class UserControllerTest {
         HttpHeaders h = new HttpHeaders();
         h.add("X-Auth-Token",accessToken2);
         HttpEntity httpEntity = new HttpEntity(h);
-
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO2.getUsername(),HttpMethod.PUT,httpEntity, Boolean.class);
+        int id = 5;
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO2.getUsername()+"/zoneLine/"+idUnsuccess,
+                HttpMethod.PUT,httpEntity, Boolean.class);
 
         boolean valid = responseEntity.getBody();
 
@@ -152,12 +162,13 @@ public class UserControllerTest {
     }
 
     @Test
-    public void checkTicketTestException(){
+    public void checkTicketTestBadRequest(){
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token",accessToken3);
         HttpEntity httpEntity = new HttpEntity(headers);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO3.getUsername(),HttpMethod.PUT,httpEntity, Boolean.class);
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO3.getUsername()+"/zoneLine/"+idBadRequest,
+                HttpMethod.PUT,httpEntity, Boolean.class);
 
         Boolean valid = responseEntity.getBody();
 
