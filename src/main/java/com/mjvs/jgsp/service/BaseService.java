@@ -14,7 +14,5 @@ public interface BaseService<T>
 
     Result<List<T>> getAll();
 
-    Result<List<T>> getAllUndeletd();
-
     Result<Boolean> save(T obj) throws Exception;
 }

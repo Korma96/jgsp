@@ -30,7 +30,8 @@ public class BaseServiceImpl<T> implements BaseService<T>
         Long id = ReflectionHelpers.InvokeGetIdMethod(obj);
         String message;
         try {
-            repository.delete(obj);
+            ReflectionHelpers.InvokeSetDeleted(obj);
+            repository.save(obj);
 
             message = Messages.SuccessfullyDeleted(typeString, id);
             logger.info(message);
@@ -77,19 +78,13 @@ public class BaseServiceImpl<T> implements BaseService<T>
     public Result<List<T>> getAll()
     {
         try {
-            List<T> data = repository.findAll();
+            List<T> data = repository.findByDeleted(false);
             return new Result<>(data);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage());
             return new Result<>(null, false, Messages.DatabaseError());
         }
-    }
-
-    @Override
-    public Result<List<T>> getAllUndeletd() {
-        List<T> data = repository.findByDeleted(false);
-        return new Result<>(data);
     }
 
     @Override

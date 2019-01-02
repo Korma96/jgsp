@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 public class Zone extends LineZone {
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

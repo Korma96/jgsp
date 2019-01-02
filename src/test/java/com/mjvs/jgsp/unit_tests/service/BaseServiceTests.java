@@ -104,7 +104,7 @@ public class BaseServiceTests
         Long id = 1L;
         Schedule s = new Schedule();
         s.setId(id);
-        doThrow(IllegalArgumentException.class).when(baseRepository).delete(s);
+        doThrow(IllegalArgumentException.class).when(baseRepository).save(s);
 
         // Act
         Result<Boolean> result = baseService.delete(s);
@@ -136,7 +136,7 @@ public class BaseServiceTests
     public void GetAll_UnableToFindAll_ThrowsException()
     {
         // Arrange
-        when(baseRepository.findAll()).thenThrow(EntityExistsException.class);
+        when(baseRepository.findByDeleted(false)).thenThrow(EntityExistsException.class);
 
         // Act
         Result<List<Schedule>> result = baseService.getAll();
@@ -155,7 +155,7 @@ public class BaseServiceTests
            add(new Schedule());
            add(new Schedule());
         }};
-        doReturn(data).when(baseRepository).findAll();
+        doReturn(data).when(baseRepository).findByDeleted(false);
 
         // Act
         Result<List<Schedule>> result = baseService.getAll();

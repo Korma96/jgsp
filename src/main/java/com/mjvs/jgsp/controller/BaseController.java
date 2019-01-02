@@ -22,13 +22,13 @@ public class BaseController<T>
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
     {
-        Result<T> lineResult = baseService.findById(id);
-        if(!lineResult.hasData()){
-            throw new BadRequestException(lineResult.getMessage());
+        Result<T> findResult = baseService.findById(id);
+        if(!findResult.hasData()){
+            throw new BadRequestException(findResult.getMessage());
         }
 
-        T line = lineResult.getData();
-        Result<Boolean> deleteResult = baseService.delete(line);
+        T data = findResult.getData();
+        Result<Boolean> deleteResult = baseService.delete(data);
         if(deleteResult.isFailure()) {
             throw new DatabaseException(deleteResult.getMessage());
         }

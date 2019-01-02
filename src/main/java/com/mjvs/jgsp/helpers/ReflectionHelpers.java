@@ -47,4 +47,11 @@ public class ReflectionHelpers
         return (String)method.invoke(obj);
     }
 
+    public static void InvokeSetDeleted(Object obj)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
+    {
+        Method method = obj.getClass().getMethod("setDeleted", boolean.class);
+        method.invoke(obj, true);
+    }
+
 }
