@@ -1,10 +1,7 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
-import com.mjvs.jgsp.model.PassengerType;
-import com.mjvs.jgsp.model.PriceTicket;
-import com.mjvs.jgsp.model.TicketType;
-import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PriceTicketRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import org.junit.Before;
@@ -39,7 +36,7 @@ public class PriceTicketServiceTest {
     @Test
     public void getPriceTicketTestSuccess() {
         PriceTicket priceTicket1 = new PriceTicket(LocalDate.now(), PassengerType.OTHER, TicketType.MONTHLY,
-                1500, 3500, new Zone("sedma zona"));
+                1500, 3500, new Zone("sedma zona", TransportType.BUS));
         priceTicketRepository.save(priceTicket1);
 
         PriceTicket priceTicket = null;
@@ -59,7 +56,7 @@ public class PriceTicketServiceTest {
     @Rollback(true)
     @Test
     public void getPriceTicketTestSuccess2() {
-        Zone zone = zoneRepository.save(new Zone("sedma zona"));
+        Zone zone = zoneRepository.save(new Zone("sedma zona", TransportType.BUS));
 
         PriceTicket priceTicket1 = new PriceTicket(LocalDate.of(2018, 10, 1), PassengerType.OTHER, TicketType.MONTHLY,
                 1500, 3500, zone);
@@ -88,7 +85,7 @@ public class PriceTicketServiceTest {
     @Rollback(true)
     @Test(expected = PriceTicketNotFoundException.class)
     public void getPriceTicketTestThrowsPriceTicketNotFoundException1() throws PriceTicketNotFoundException {
-        Zone zone = zoneRepository.save(new Zone("sedma zona"));
+        Zone zone = zoneRepository.save(new Zone("sedma zona", TransportType.BUS));
         priceTicketService.getLatestPriceTicket(PassengerType.OTHER, TicketType.MONTHLY,  zone);
     }
 

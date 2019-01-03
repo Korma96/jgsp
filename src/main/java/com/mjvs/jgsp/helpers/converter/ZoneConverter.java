@@ -28,7 +28,7 @@ public class ZoneConverter
             for (Line line: zone.getLines()) {
                 lines.add(new BaseDTO(line.getId(), line.getName()));
             }
-            zoneDTOS.add(new ZoneDTO(zone.getName(), lines));
+            zoneDTOS.add(new ZoneDTO(zone.getName(), lines, zone.getTransportType()));
         }
 
         return zoneDTOS;

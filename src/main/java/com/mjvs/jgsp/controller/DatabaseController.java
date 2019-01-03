@@ -80,7 +80,7 @@ public class DatabaseController {
     		for (int i = 0; i < staniceDirectoryListing.length; i++) {
     			subDirectoryStanice = staniceDirectoryListing[i];
     			subDirectoryTacke = tackeDirectoryListing[i];
-    			zone = new Zone(subDirectoryStanice.getName());
+    			zone = new Zone(subDirectoryStanice.getName(), TransportType.BUS);
     			
     			for (int j = 0; j < subDirectoryStanice.listFiles().length; j++) {
     				try {
@@ -238,7 +238,7 @@ public class DatabaseController {
     @RequestMapping(value = "aaa", method = RequestMethod.GET)
 	public void aaa() {
 		PriceTicket priceTicket1 = new PriceTicket(LocalDate.now(), PassengerType.OTHER, TicketType.MONTHLY,
-				1500, 3500, new Zone("sedma zona"));
+				1500, 3500, new Zone("sedma zona", TransportType.BUS));
 		priceTicketRepository.save(priceTicket1);
 	}
 

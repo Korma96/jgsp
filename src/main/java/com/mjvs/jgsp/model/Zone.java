@@ -11,17 +11,22 @@ public class Zone extends LineZone {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "transport_type", unique = false, nullable = false)
+    private TransportType transportType;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Line> lines;
 
-    public Zone(String name, @NotNull List<Line> lines) {
+    public Zone(String name, @NotNull List<Line> lines, TransportType transportType) {
         super();
         this.name = name;
         this.lines = lines;
+        this.transportType = transportType;
     }
 
-    public Zone(String name) {
+    public Zone(String name, TransportType transportType) {
         this.name = name;
+        this.transportType = transportType;
         this.lines = new ArrayList<>();
     }
 
@@ -39,6 +44,14 @@ public class Zone extends LineZone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public TransportType getTransportType() {
+        return transportType;
+    }
+
+    public void setTransportType(TransportType transportType) {
+        this.transportType = transportType;
     }
 
     public List<Line> getLines() {

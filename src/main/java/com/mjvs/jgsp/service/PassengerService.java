@@ -13,12 +13,12 @@ public interface PassengerService {
 
     Passenger getPassenger(String username);
     
-    Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
+    Ticket buyTicket(boolean hasZoneNotLine, String lineZoneName, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception;
 
     boolean registrate(String username, String password1, String Password2, String firstName, String lastName, String email, String address);
 
-    LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception;
+    LineZone getLineZone(boolean hasZoneNotLine, String lineZoneName, TicketType ticketType) throws Exception;
 
     LocalDateTime[] createStartAndEndDateTime(TicketType ticketType, PassengerType passengerType, int dayInMonthOrMonthInYear)
             throws BadRequestException;

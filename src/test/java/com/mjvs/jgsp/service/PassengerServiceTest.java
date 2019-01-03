@@ -57,7 +57,7 @@ public class PassengerServiceTest {
     @Rollback(true)
     @Test
     public void buyTicketTestSuccessWithLine() {
-        Zone zone = new Zone("osma_zona");
+        Zone zone = new Zone("osma_zona", TransportType.BUS);
         Line line = new Line("888A", zone, 45);
         zone.addLine(line);
         zone = zoneRepository.save(zone);
@@ -70,7 +70,7 @@ public class PassengerServiceTest {
 
         Ticket ticket = null;
         try {
-            ticket = passengerService.buyTicket(false, line.getId(), 12, ticketType);
+            ticket = passengerService.buyTicket(false, line.getName(), 12, ticketType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class PassengerServiceTest {
     @Rollback(true)
     @Test
     public void buyTicketTestSuccessWithZone() {
-        Zone zone = new Zone("osma_zona");
+        Zone zone = new Zone("osma_zona", TransportType.BUS);
 
         final TicketType ticketType = TicketType.MONTHLY;
         PriceTicket priceTicket = new PriceTicket(LocalDate.of(2018, 12, 1), PassengerType.OTHER, ticketType, 2000, 4000, zone);
@@ -106,7 +106,7 @@ public class PassengerServiceTest {
 
         Ticket ticket = null;
         try {
-            ticket = passengerService.buyTicket(true, zone.getId(), 12, ticketType);
+            ticket = passengerService.buyTicket(true, zone.getName(), 12, ticketType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -133,40 +133,40 @@ public class PassengerServiceTest {
     @Rollback(true)
     @Test(expected = BadRequestException.class)
     public void getLineZoneTestThrowsBadRequestException() throws Exception {
-        passengerService.getLineZone(true, 1L, TicketType.ONETIME);
+        passengerService.getLineZone(true, "tamo_neka_leva_zona", TicketType.ONETIME);
     }
 
     @Transactional
     @Rollback(true)
     @Test(expected = Exception.class)
     public void getLineZoneTestThrowsExceptionForLine() throws Exception {
-        Zone zone = new Zone("osma_zona");
+        Zone zone = new Zone("osma_zona", TransportType.BUS);
         Line line = new Line("888A", zone, 45);
         zone.addLine(line);
         zone = zoneRepository.save(zone);
         line = zone.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
 
-        passengerService.getLineZone(true, line.getId(), TicketType.DAILY);
+        passengerService.getLineZone(true, line.getName(), TicketType.DAILY);
     }
 
     @Transactional
     @Rollback(true)
     @Test(expected = Exception.class)
     public void getLineZoneTestThrowsExceptionForZone() throws Exception {
-        Zone zone = new Zone("osma_zona");
+        Zone zone = new Zone("osma_zona", TransportType.BUS);
         zone = zoneRepository.save(zone);
 
-        passengerService.getLineZone(false, zone.getId(), TicketType.DAILY);
+        passengerService.getLineZone(false, zone.getName(), TicketType.DAILY);
     }
 
     @Transactional
     @Rollback(true)
     @Test
     public void getLineZoneTestSuccessForZone() throws Exception {
-        Zone zone = new Zone("osma_zona");
+        Zone zone = new Zone("osma_zona", TransportType.BUS);
         zone = zoneRepository.save(zone);
 
-        LineZone retZone = passengerService.getLineZone(true, zone.getId(), TicketType.DAILY);
+        LineZone retZone = passengerService.getLineZone(true, zone.getName(), TicketType.DAILY);
         assertEquals(zone, retZone);
     }
 
@@ -174,13 +174,13 @@ public class PassengerServiceTest {
     @Rollback(true)
     @Test
     public void getLineZoneTestSuccessForLine() throws Exception {
-        Zone z = new Zone("sedma_zona");
+        Zone z = new Zone("sedma_zona", TransportType.BUS);
         Line l = new Line("777B", z,45);
         z.addLine(l);
         z = zoneRepository.save(z);
         l = z.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
 
-        LineZone line =passengerService.getLineZone(false, l.getId(), TicketType.DAILY);
+        LineZone line =passengerService.getLineZone(false, l.getName(), TicketType.DAILY);
         assertEquals(l, line);
     }
 

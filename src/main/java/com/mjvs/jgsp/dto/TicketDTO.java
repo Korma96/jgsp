@@ -4,7 +4,7 @@ import com.mjvs.jgsp.model.TicketType;
 
 public class TicketDTO {
     private boolean hasZoneNotLine;
-    private Long id;
+    private String name;
     private int dayInMonthOrMonthInYear;
     private TicketType ticketType;
 
@@ -12,9 +12,9 @@ public class TicketDTO {
 
     }
 
-    public TicketDTO(boolean hasZoneNotLine, Long id, int dayInMonthOrMonthInYear, TicketType ticketType) {
+    public TicketDTO(boolean hasZoneNotLine, String id, int dayInMonthOrMonthInYear, TicketType ticketType) {
         this.hasZoneNotLine = hasZoneNotLine;
-        this.id = id;
+        this.name = name;
         this.dayInMonthOrMonthInYear = dayInMonthOrMonthInYear;
         this.ticketType = ticketType;
     }
@@ -27,12 +27,12 @@ public class TicketDTO {
         this.hasZoneNotLine = hasZoneNotLine;
     }
 
-    public Long getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getDayInMonthOrMonthInYear() {

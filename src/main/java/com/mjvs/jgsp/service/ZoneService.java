@@ -6,4 +6,5 @@ import com.mjvs.jgsp.model.Zone;
 public interface ZoneService extends ExtendedBaseService<Zone>
 {
 
+    Zone findByName(String name);
 }

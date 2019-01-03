@@ -74,7 +74,7 @@ public class PassengerController {
     @RequestMapping(value ="/buy-ticket", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity buyTicket(@RequestBody TicketDTO ticketDTO) {
         try {
-            passengerService.buyTicket(ticketDTO.hasZoneNotLine(), ticketDTO.getId(), ticketDTO.getDayInMonthOrMonthInYear(),
+            passengerService.buyTicket(ticketDTO.hasZoneNotLine(), ticketDTO.getName(), ticketDTO.getDayInMonthOrMonthInYear(),
                     ticketDTO.getTicketType());
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -48,7 +48,7 @@ public class PassengerServiceImpl implements PassengerService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Ticket buyTicket(boolean hasZoneNotLine, Long lineZoneId, int dayInMonthOrMonthInYear, TicketType ticketType)
+    public Ticket buyTicket(boolean hasZoneNotLine, String lineZoneName, int dayInMonthOrMonthInYear, TicketType ticketType)
             throws Exception {
 
         User loggedUser = userService.getLoggedUser();
@@ -56,7 +56,7 @@ public class PassengerServiceImpl implements PassengerService {
 
         String message;
 
-        LineZone lineZone = getLineZone(hasZoneNotLine, lineZoneId, ticketType);
+        LineZone lineZone = getLineZone(hasZoneNotLine, lineZoneName, ticketType);
 
         LocalDateTime startDateAndTime = null;
         LocalDateTime endDateAndTime = null;
@@ -124,19 +124,19 @@ public class PassengerServiceImpl implements PassengerService {
         return  false;
     }
 
-    public LineZone getLineZone(boolean hasZoneNotLine, Long lineZoneId, TicketType ticketType) throws Exception {
+    public LineZone getLineZone(boolean hasZoneNotLine, String lineZoneName, TicketType ticketType) throws Exception {
         LineZone lineZone;
         String message;
 
         if(ticketType != TicketType.ONETIME) {
-            if (hasZoneNotLine) lineZone = zoneService.findById(lineZoneId).getData();
-            else lineZone = lineService.findById(lineZoneId).getData();
+            if (hasZoneNotLine) lineZone = zoneService.findByName(lineZoneName);
+            else lineZone = lineService.findByName(lineZoneName);
 
             if(lineZone == null) {
                 if(hasZoneNotLine) message = "Zone";
                 else message = "Line";
 
-                message += String.format(" with id %d does not exist!", lineZoneId);
+                message += String.format(" with name %d does not exist!", lineZoneName);
                 logger.error(message);
 
                 if(hasZoneNotLine) throw new ZoneNotFoundException(message);

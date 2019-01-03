@@ -2,6 +2,7 @@ package com.mjvs.jgsp.unit_tests.helpers.converter;
 
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.helpers.converter.ZoneConverter;
+import com.mjvs.jgsp.model.TransportType;
 import com.mjvs.jgsp.model.Zone;
 import org.junit.Test;
 
@@ -20,9 +21,9 @@ public class ZoneConverterTests
         // Arrange
         List<Zone> zones = new ArrayList<Zone>()
         {{
-          add(new Zone("zone1"));
-          add(new Zone("zone2"));
-          add(new Zone("zone3"));
+          add(new Zone("zone1", TransportType.BUS));
+          add(new Zone("zone2", TransportType.BUS));
+          add(new Zone("zone3", TransportType.BUS));
         }};
 
         // Act
