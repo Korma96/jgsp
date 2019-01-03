@@ -67,7 +67,7 @@ public class ExtendedBaseServiceTests
     {
         // Arrange
         String name = "zone1";
-        when(baseRepository.findByName(name)).thenReturn(null);
+        when(baseRepository.findByNameAndDeleted(name, false)).thenReturn(null);
 
         // Act
         Result<Boolean> result = baseService.exists(name);
@@ -83,7 +83,7 @@ public class ExtendedBaseServiceTests
         String name = "zone1";
         Zone z = new Zone();
         z.setName(name);
-        when(baseRepository.findByName(name)).thenReturn(z);
+        when(baseRepository.findByNameAndDeleted(name, false)).thenReturn(z);
 
         // Act
         Result<Boolean> result = baseService.exists(name);

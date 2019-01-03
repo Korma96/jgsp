@@ -50,7 +50,7 @@ public class ExtendedBaseServiceImpl<T> extends BaseServiceImpl<T> implements Ex
     @Override
     public Result<Boolean> exists(String name)
     {
-        T obj = extendedBaseRepository.findByName(name);
+        T obj = extendedBaseRepository.findByNameAndDeleted(name, false);
         if(obj != null)
         {
             String message = Messages.AlreadyExists(typeString, name);
