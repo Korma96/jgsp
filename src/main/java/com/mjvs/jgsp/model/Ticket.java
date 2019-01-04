@@ -2,6 +2,7 @@ package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
@@ -33,6 +34,10 @@ public class Ticket extends EntityForDeleted {
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private LineZone lineZone;
+
+    @Transient // ovaj atribut se nece naci u bazi zbog ove @Transient anotacije
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
+
 
 
     public Ticket() {
@@ -148,5 +153,39 @@ public class Ticket extends EntityForDeleted {
     @Override
     public int hashCode() {
         return Objects.hash(id, startDateAndTime, endDateAndTime, ticketType, price, passengerType, lineZone);
+    }
+
+    public String getStartDateAndTimeStr() {
+        String startDateAndTimeStr;
+        if(this.startDateAndTime == null) {
+            if(ticketType != TicketType.ONETIME) startDateAndTimeStr = "unknown";
+            else startDateAndTimeStr = "not yet activated";
+        }
+        else startDateAndTimeStr = this.startDateAndTime.format(dateTimeFormatter);
+
+        return  startDateAndTimeStr;
+    }
+
+    public String getEndDateAndTimeStr() {
+        String endDateAndTimeStr;
+        if(this.endDateAndTime == null) {
+            if(ticketType != TicketType.ONETIME) endDateAndTimeStr = "unknown";
+            else endDateAndTimeStr = "not yet activated";
+        }
+        else endDateAndTimeStr = this.endDateAndTime.format(dateTimeFormatter);
+
+        return  endDateAndTimeStr;
+    }
+
+    public String getLineZoneCompleteName() {
+        String lineZoneCompleteName;
+
+        if(lineZone == null) {
+            if(ticketType != TicketType.ONETIME) lineZoneCompleteName = "unknown";
+            else lineZoneCompleteName = "not yet activated";
+        }
+        else lineZoneCompleteName = lineZone.getCompleteName();
+
+        return lineZoneCompleteName;
     }
 }

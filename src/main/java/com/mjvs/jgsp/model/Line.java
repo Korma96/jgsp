@@ -193,7 +193,12 @@ public class Line extends LineZone {
         return zone;
     }
 
-	@Override
+    @Override
+    public String getCompleteName() {
+        return name + " (line)";
+    }
+
+    @Override
 	protected double getPrice(PriceTicket priceTicket) {
 		return priceTicket.getPriceLine();
 	}

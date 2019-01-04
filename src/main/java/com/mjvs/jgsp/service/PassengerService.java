@@ -1,10 +1,13 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
+import com.mjvs.jgsp.dto.TicketFrontendDTO;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public interface PassengerService {
@@ -23,4 +26,5 @@ public interface PassengerService {
     LocalDateTime[] createStartAndEndDateTime(TicketType ticketType, PassengerType passengerType, int dayInMonthOrMonthInYear)
             throws BadRequestException;
 
+    List<TicketFrontendDTO> getTickets() throws UserNotFoundException;
 }

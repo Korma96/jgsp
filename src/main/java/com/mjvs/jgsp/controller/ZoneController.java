@@ -127,31 +127,35 @@ public class ZoneController extends ExtendedBaseController<Zone>
         }
 
         result.getData().stream()
-                .forEach(zone -> zone.getLines().stream()
-                        .filter(x -> !x.isDeleted()).collect(Collectors.toList()).sort(new Comparator<Line>() {
-                    @Override
-                    public int compare(Line o1, Line o2) {
-                        int num1 = extractInt(o1.getName());
-                        int num2 = extractInt(o2.getName());
+                .forEach(zone -> {
+                    List<Line> filteredLines = zone.getLines().stream()
+                        .filter(x -> !x.isDeleted()).collect(Collectors.toList());
+                    filteredLines.sort(new Comparator<Line>() {
+                        @Override
+                        public int compare(Line o1, Line o2) {
+                            int num1 = extractInt(o1.getName());
+                            int num2 = extractInt(o2.getName());
 
-                        if(num1 == 0 && num2 == 0) return o1.getName().compareTo(o2.getName());
+                            if(num1 == 0 && num2 == 0) return o1.getName().compareTo(o2.getName());
 
-                        return num1 - num2;
-                    }
-
-                    int extractInt(String s) {
-                        String sCopy = new String(s);
-                        String num = sCopy.replaceAll("\\D", "");
-                        // return 0 if no digits found
-                        if(num.isEmpty()) return 0;
-                        else {
-                            if(s.startsWith(num)) return Integer.parseInt(num);
-
-                            return 0;
+                            return num1 - num2;
                         }
 
-                    }
-                }));
+                        int extractInt(String s) {
+                            String sCopy = new String(s);
+                            String num = sCopy.replaceAll("\\D", "");
+                            // return 0 if no digits found
+                            if(num.isEmpty()) return 0;
+                            else {
+                                if(s.startsWith(num)) return Integer.parseInt(num);
+
+                                return 0;
+                            }
+
+                        }
+                    });
+                    zone.setLines(filteredLines);
+                });
         List<ZoneDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOsWithLine(result.getData());
         return ResponseHelpers.getResponseData(zoneLiteDTOs);
     }

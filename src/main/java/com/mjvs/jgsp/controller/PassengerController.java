@@ -1,22 +1,19 @@
 package com.mjvs.jgsp.controller;
 
+import com.mjvs.jgsp.dto.TicketFrontendDTO;
 import com.mjvs.jgsp.service.ImageModelService;
 import com.mjvs.jgsp.service.PassengerService;
 import com.mjvs.jgsp.service.TicketService;
-import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
@@ -24,7 +21,7 @@ import com.mjvs.jgsp.dto.TicketDTO;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
+import java.util.List;
 
 
 @RestController
@@ -85,6 +82,19 @@ public class PassengerController {
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value ="/get-tickets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TicketFrontendDTO>> getTickets() {
+        try {
+            List<TicketFrontendDTO> tickets = passengerService.getTickets();
+            return new ResponseEntity(tickets, HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value ="/check-onetime-ticket", method = RequestMethod.PUT)
     public ResponseEntity<Boolean> checkOnetimeTicket(@RequestParam("ticketId") Long ticketId, @RequestParam("lineId") Long lineId) throws Exception{
         String message;
@@ -105,26 +115,16 @@ public class PassengerController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('PASSENGER')")
-    @RequestMapping(value ="/print-ticket", method = RequestMethod.GET)
-    public ResponseEntity<InputStreamResource> printTicket(@RequestParam("id") Long id) {
-        ByteArrayInputStream bis = null;
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value ="/print-ticket/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<byte[]> printTicket(@PathVariable("id") Long id) {
+        byte[] bytes = null;
         try {
-            bis = ticketService.getPdfFileForTicket(id);
+            bytes = ticketService.getPdfFileForTicket(id);
         } catch (TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        String fileName = "myTicket.pdf";
-
-        return ResponseEntity.ok()
-                // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
-                //.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=citiesreport.pdf")
-                // Content-Type
-                .contentType(MediaType.APPLICATION_PDF)
-                // Contet-Length
-                //.contentLength(out.size())
-                .body(new InputStreamResource(bis));
+        return new ResponseEntity(bytes, HttpStatus.OK);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -36,6 +37,8 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private UserService userService;
 
+
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 
     @Override
     public boolean checkOnetimeTicket(Long ticketId, Long lineId) throws Exception {
@@ -96,10 +99,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public ByteArrayInputStream getPdfFileForTicket(Long id) throws TicketNotFoundException {
+    public byte[] getPdfFileForTicket(Long id) throws TicketNotFoundException {
         Ticket ticket = getTicket(id);
         if(ticket == null) throw new TicketNotFoundException(String.format("Ticket with id (%d) was not found in database.", id));
-        if(ticket.getStartDateAndTime() == null) throw new TicketNotFoundException(String.format("Ticket with id (%d) was not activated.", id));
+        //if(ticket.getStartDateAndTime() == null) throw new TicketNotFoundException(String.format("Ticket with id (%d) was not activated.", id));
 
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -137,8 +140,12 @@ public class TicketServiceImpl implements TicketService {
 
 
         PdfPTable table = new PdfPTable(1);
-        table.addCell("Type:  " + ticket.getTicketType().name());
-        table.addCell("Passenger type:  " + ticket.getPassengerType());
+
+        table.addCell("Start date and time:  " + ticket.getStartDateAndTimeStr());
+        table.addCell("End date and time:  " + ticket.getEndDateAndTimeStr());
+        table.addCell("Ticket type:  " + ticket.getTicketType().name().toLowerCase());
+        table.addCell("Passenger type:  " + ticket.getPassengerType().name().toLowerCase());
+        table.addCell("Line/Zone:  " + ticket.getLineZoneCompleteName());
         table.addCell("Price:  " + ticket.getPrice());
 
         try {
@@ -153,7 +160,8 @@ public class TicketServiceImpl implements TicketService {
 
         document.close();
 
-        return new ByteArrayInputStream(out.toByteArray());
+        //return new ByteArrayInputStream(out.toByteArray());
+        return out.toByteArray();
     }
 
 	@Override

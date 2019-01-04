@@ -1,8 +1,11 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.dto.PassengerDTO;
+import com.mjvs.jgsp.dto.TicketFrontendDTO;
+import com.mjvs.jgsp.helpers.converter.TicketConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.helpers.exception.ZoneNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
@@ -19,6 +22,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.util.Comparator;
+import java.util.List;
 
 
 @Service
@@ -127,10 +132,10 @@ public class PassengerServiceImpl implements PassengerService {
     public LineZone getLineZone(boolean hasZoneNotLine, String lineZoneName, TicketType ticketType) throws Exception {
         LineZone lineZone;
         String message;
-
+        final String sufix = "A";
         if(ticketType != TicketType.ONETIME) {
             if (hasZoneNotLine) lineZone = zoneService.findByName(lineZoneName);
-            else lineZone = lineService.findByName(lineZoneName);
+            else lineZone = lineService.findByName(lineZoneName+sufix);
 
             if(lineZone == null) {
                 if(hasZoneNotLine) message = "Zone";
@@ -219,6 +224,25 @@ public class PassengerServiceImpl implements PassengerService {
         }
 
         return new LocalDateTime[] {startDateAndTime, endDateAndTime};
+    }
+
+    @Override
+    public List<TicketFrontendDTO> getTickets() throws UserNotFoundException {
+        User loggedUser = userService.getLoggedUser();
+        Passenger loggedPassenger = (Passenger) loggedUser;
+
+        loggedPassenger.getTickets().sort(new Comparator<Ticket>() {
+            @Override
+            public int compare(Ticket o1, Ticket o2) {
+                if(o1.getStartDateAndTime() == null && o2.getStartDateAndTime() != null) return -1;
+                else if (o1.getStartDateAndTime() != null && o2.getStartDateAndTime() == null) return 1;
+                else if(o1.getStartDateAndTime() == null && o2.getStartDateAndTime() == null) return 0;
+
+                return o1.getStartDateAndTime().compareTo(o2.getStartDateAndTime());
+            }
+        });
+
+        return TicketConverter.ConvertTicketsToTicketFrontendDTOs(loggedPassenger.getTickets());
     }
 
     @Override

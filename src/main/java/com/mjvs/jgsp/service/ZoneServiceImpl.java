@@ -20,6 +20,6 @@ public class ZoneServiceImpl extends ExtendedBaseServiceImpl<Zone> implements Zo
     }
 
     public Zone findByName(String name) {
-        return this.zoneRepository.findByName(name);
+        return this.zoneRepository.findByNameAndDeleted(name, false);
     }
 }

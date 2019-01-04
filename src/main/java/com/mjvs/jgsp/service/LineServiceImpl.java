@@ -129,8 +129,8 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 
             for (String lineStr : lines) {
                 timesDTO = new TimesDTO();
-                lineA = lineRepository.findByName(lineStr+sufixes[0]);
-                lineB = lineRepository.findByName(lineStr+sufixes[1]);
+                lineA = lineRepository.findByNameAndDeleted(lineStr+sufixes[0], false);
+                lineB = lineRepository.findByNameAndDeleted(lineStr+sufixes[1], false);
                 if(lineA == null && lineB == null) return null;
 
                 if(lineA == null) timesDTO.setTimesA(new ArrayList<>());
