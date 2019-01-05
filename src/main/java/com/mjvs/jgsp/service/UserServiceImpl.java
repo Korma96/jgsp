@@ -1,27 +1,36 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.*;
-import com.mjvs.jgsp.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
+import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.Passenger;
+import com.mjvs.jgsp.model.Ticket;
+import com.mjvs.jgsp.model.User;
+import com.mjvs.jgsp.model.UserStatus;
+import com.mjvs.jgsp.model.UserType;
+import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -120,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean exists(String username)
     {
-        User u = userRepository.findByUsername(username);
+        User u = userRepository.findByUsernameAndDeleted(username, false);
         return u != null;
     }
 
@@ -128,5 +137,39 @@ public class UserServiceImpl implements UserService {
         long sub = ChronoUnit.SECONDS.between(ldt1, ldt2);
         return sub;
     }
+
+	@Override
+	public List<User> getAdmins() {
+		return userRepository.findByDeleted(false).stream()
+				.filter(user -> user.getUserType() != UserType.PASSENGER).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean save(String username, String password, UserStatus userStatus, UserType userType) {
+		if (username == null || password == null || userStatus == null || userType == null) return false;
+		if (username == "" || password == "") return false;
+		
+		if (exists(username)) return false;
+		if (userType == userType.PASSENGER) return false;
+		
+		User user = new User(username,passwordEncoder.encode(password),userType,userStatus);
+		try {
+			userRepository.save(user);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
+		
+	}
+
+	@Override
+	public void deleteUser(Long id) throws UserNotFoundException {
+		User user = userRepository.findByIdAndDeleted(id, false);
+		if(user == null) throw new UserNotFoundException();
+		
+		user.setDeleted(true);
+		userRepository.save(user);
+	}
     
 }

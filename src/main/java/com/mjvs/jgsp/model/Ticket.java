@@ -67,6 +67,17 @@ public class Ticket extends EntityForDeleted {
         this.lineZone = lineZone;
     }
     
+    public Ticket(Long id, LocalDateTime startDateAndTime, LocalDateTime endDateAndTime, TicketType ticketType, PassengerType passengerType, double price, LineZone lineZone) {
+        super();
+        this.id = id;
+        this.startDateAndTime = startDateAndTime;
+        this.endDateAndTime = endDateAndTime;
+        this.ticketType = ticketType;
+        this.passengerType = passengerType;
+        this.price = price;
+        this.lineZone = lineZone;
+    }
+    
     public void lookAtPriceTicketAndSetPrice(PriceTicket priceTicket) {
         this.price = lineZone.getPrice(priceTicket);
     }
