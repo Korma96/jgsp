@@ -71,7 +71,7 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
-    @RequestMapping(value = "schedule/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/schedule/add", method = RequestMethod.POST)
     public ResponseEntity addScheduleToLine(LineWithScheduleDTO lineWithScheduleDTO) throws Exception
     {
 
