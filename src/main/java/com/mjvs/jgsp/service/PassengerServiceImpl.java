@@ -1,12 +1,6 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.TicketFrontendDTO;
-import com.mjvs.jgsp.helpers.converter.TicketConverter;
-import com.mjvs.jgsp.helpers.exception.BadRequestException;
-import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.helpers.exception.ZoneNotFoundException;
+import com.mjvs.jgsp.helpers.exception.*;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,9 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,7 +43,11 @@ public class PassengerServiceImpl implements PassengerService {
     private TicketService ticketService;
 
     @Autowired
+    private ImageModelService imageModelService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Override
     public Ticket buyTicket(boolean hasZoneNotLine, String lineZoneName, int dayInMonthOrMonthInYear, TicketType ticketType)
@@ -132,30 +129,30 @@ public class PassengerServiceImpl implements PassengerService {
     public LineZone getLineZone(boolean hasZoneNotLine, String lineZoneName, TicketType ticketType) throws Exception {
         LineZone lineZone;
         String message;
-        final String sufix = "A";
-        if(ticketType != TicketType.ONETIME) {
-            if (hasZoneNotLine) lineZone = zoneService.findByName(lineZoneName);
-            else lineZone = lineService.findByName(lineZoneName+sufix);
 
-            if(lineZone == null) {
-                if(hasZoneNotLine) message = "Zone";
-                else message = "Line";
-
-                message += String.format(" with name %d does not exist!", lineZoneName);
-                logger.error(message);
-
-                if(hasZoneNotLine) throw new ZoneNotFoundException(message);
-                else throw new LineNotFoundException(message);
-            }
-        }
-        else {
-            if(hasZoneNotLine) {
+        if(hasZoneNotLine) {
+            if(ticketType == TicketType.ONETIME) {
                 message = "A one-time ticket can not be issued for a zone!";
                 logger.error(message);
                 throw new BadRequestException(message);
             }
 
-            lineZone = null;
+            lineZone = zoneService.findByName(lineZoneName);
+        }
+        else {
+            final String sufix = "A";
+            lineZone = lineService.findByName(lineZoneName+sufix);
+        }
+
+        if(lineZone == null) {
+            if(hasZoneNotLine) message = "Zone";
+            else message = "Line";
+
+            message += String.format(" with name %d does not exist!", lineZoneName);
+            logger.error(message);
+
+            if(hasZoneNotLine) throw new ZoneNotFoundException(message);
+            else throw new LineNotFoundException(message);
         }
 
         return lineZone;
@@ -227,7 +224,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public List<TicketFrontendDTO> getTickets() throws UserNotFoundException {
+    public List<Ticket> getTickets() throws UserNotFoundException {
         User loggedUser = userService.getLoggedUser();
         Passenger loggedPassenger = (Passenger) loggedUser;
 
@@ -242,7 +239,79 @@ public class PassengerServiceImpl implements PassengerService {
             }
         });
 
-        return TicketConverter.ConvertTicketsToTicketFrontendDTOs(loggedPassenger.getTickets());
+       return loggedPassenger.getTickets();
+    }
+
+    @Override
+    public double[] getPrice(TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException {
+        User loggedUser = userService.getLoggedUser();
+        Passenger loggedPassenger = (Passenger) loggedUser;
+
+        Zone zone = zoneService.findByName(zoneName);
+        if(zone == null) {
+            String message = String.format("Zone with name %s not found!", zoneName);
+            logger.error(message);
+            throw new ZoneNotFoundException(message);
+        }
+
+        PriceTicket priceTicket = priceTicketService.getLatestPriceTicket(loggedPassenger.getPassengerType(), ticketType, zone);
+
+        return new double[] {priceTicket.getPriceLine(), priceTicket.getPriceZone()};
+    }
+
+    @Override
+    public void changeAccountType(PassengerType newPassengerType, MultipartFile image) throws Exception {
+        User loggedUser = userService.getLoggedUser();
+        Passenger loggedPassenger = (Passenger) loggedUser;
+        loggedPassenger.setNewPassengerType(newPassengerType);
+        passengerRepository.save(loggedPassenger);
+
+        imageModelService.save(image);
+    }
+
+    @Override
+    public void removeTicket(Long id) throws UserNotFoundException, TicketNotFoundException, CanNotBeDeletedException {
+        User loggedUser = userService.getLoggedUser();
+        Passenger loggedPassenger = (Passenger) loggedUser;
+
+        Ticket ticket;
+        int indexForRemove = -1;
+        boolean ticketNotFound = true;
+
+        for(int i = 0; i < loggedPassenger.getTickets().size(); i++) {
+            ticket = loggedPassenger.getTickets().get(i);
+
+            if(ticket.getId() == id) {
+                ticketNotFound = false;
+
+                if(ticket.getStartDateAndTime() == null || ticket.getEndDateAndTime() == null) {
+                    indexForRemove = i;
+                }
+                else {
+                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    // 10 sec lufta
+                    if(ticket.getStartDateAndTime().isAfter(currentDateTime.minusSeconds(10))
+                            || currentDateTime.isAfter(ticket.getEndDateAndTime())) {
+                        indexForRemove = i;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if(ticketNotFound) throw new TicketNotFoundException();
+        else {
+            if(indexForRemove == -1) throw new CanNotBeDeletedException();
+        }
+
+        ticket = loggedPassenger.getTickets().get(indexForRemove);
+        ticket.setDeleted(true);
+        ticketService.save(ticket);
+
+        loggedPassenger.getTickets().remove(indexForRemove);
+        passengerRepository.save(loggedPassenger);
+
     }
 
     @Override

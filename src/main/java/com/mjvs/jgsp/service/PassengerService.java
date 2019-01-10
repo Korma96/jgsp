@@ -1,10 +1,8 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.TicketFrontendDTO;
-import com.mjvs.jgsp.helpers.exception.BadRequestException;
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
+import com.mjvs.jgsp.helpers.exception.*;
 import com.mjvs.jgsp.model.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,5 +24,12 @@ public interface PassengerService {
     LocalDateTime[] createStartAndEndDateTime(TicketType ticketType, PassengerType passengerType, int dayInMonthOrMonthInYear)
             throws BadRequestException;
 
-    List<TicketFrontendDTO> getTickets() throws UserNotFoundException;
+    List<Ticket> getTickets() throws UserNotFoundException;
+
+    double[] getPrice(TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException;
+
+    void changeAccountType(PassengerType newPassengerType, MultipartFile image) throws Exception;
+
+    void removeTicket(Long id) throws UserNotFoundException, TicketNotFoundException, CanNotBeDeletedException;
+
 }

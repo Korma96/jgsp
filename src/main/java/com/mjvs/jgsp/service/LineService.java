@@ -15,6 +15,8 @@ public interface LineService extends ExtendedBaseService<Line>
 {
     Result<List<BaseDTO>> getActiveLines();
 
+    List<Line> getLines();
+
     List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
     List<StopDTO> getSortedStopsById(List<Stop> stops);

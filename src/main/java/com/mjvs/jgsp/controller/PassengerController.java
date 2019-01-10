@@ -1,8 +1,12 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.dto.TicketFrontendDTO;
+import com.mjvs.jgsp.dto.*;
+import com.mjvs.jgsp.helpers.converter.TicketConverter;
+import com.mjvs.jgsp.helpers.exception.CanNotBeDeletedException;
+import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.service.ImageModelService;
 import com.mjvs.jgsp.service.PassengerService;
+import com.mjvs.jgsp.service.PriceTicketService;
 import com.mjvs.jgsp.service.TicketService;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
@@ -16,11 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.TicketDTO;
-
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -32,9 +34,6 @@ public class PassengerController {
 
     @Autowired
     private PassengerService passengerService;
-
-    @Autowired
-    private ImageModelService imageModelService;
 
     @Autowired
     private TicketService ticketService;
@@ -54,12 +53,14 @@ public class PassengerController {
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
-    @RequestMapping(value = "/upload-confirmation", method = RequestMethod.POST)
-    public ResponseEntity uploadConfirmation(@RequestParam("image") MultipartFile image) {
+    @RequestMapping(value = "/change-account-type/{passengerType}", method = RequestMethod.POST/*, consumes = MediaType.APPLICATION_JSON_VALUE*/)
+    public ResponseEntity uploadConfirmation(@PathVariable("passengerType") PassengerType passengerType, @RequestParam("image") MultipartFile image) {
         try {
-            imageModelService.save(image);
+            //PassengerType newPassengerType = PassengerType.valueOf(newPassengerTypeStr);
+            passengerService.changeAccountType(passengerType,image);
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Error upload image!");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -69,24 +70,26 @@ public class PassengerController {
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value ="/buy-ticket", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity buyTicket(@RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketFrontendDTO> buyTicket(@RequestBody TicketDTO ticketDTO) {
         try {
-            passengerService.buyTicket(ticketDTO.hasZoneNotLine(), ticketDTO.getName(), ticketDTO.getDayInMonthOrMonthInYear(),
+            Ticket ticket = passengerService.buyTicket(ticketDTO.hasZoneNotLine(), ticketDTO.getName(), ticketDTO.getDayInMonthOrMonthInYear(),
                     ticketDTO.getTicketType());
+            TicketFrontendDTO ticketFrontendDTO = new TicketFrontendDTO(ticket);
+            return new ResponseEntity(ticketFrontendDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value ="/get-tickets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TicketFrontendDTO>> getTickets() {
         try {
-            List<TicketFrontendDTO> tickets = passengerService.getTickets();
-            return new ResponseEntity(tickets, HttpStatus.OK);
+            List<Ticket> tickets = passengerService.getTickets();
+            List<TicketFrontendDTO> ticketFrontendDTOs = TicketConverter.ConvertTicketsToTicketFrontendDTOs(tickets);
+            return new ResponseEntity(ticketFrontendDTOs, HttpStatus.OK);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -95,23 +98,40 @@ public class PassengerController {
     }
 
     @PreAuthorize("hasAuthority('PASSENGER')")
-    @RequestMapping(value ="/check-onetime-ticket", method = RequestMethod.PUT)
-    public ResponseEntity<Boolean> checkOnetimeTicket(@RequestParam("ticketId") Long ticketId, @RequestParam("lineId") Long lineId) throws Exception{
-        String message;
-        Boolean retValue;
+    @RequestMapping(value ="/get-price", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PriceDTO> getPriceForTicket(@RequestParam("ticketType") String ticketTypeStr,
+                                                       @RequestParam("zone") String zoneName) {
         try {
-            retValue = ticketService.checkOnetimeTicket(ticketId, lineId);
+            TicketType ticketType = TicketType.valueOf(ticketTypeStr);
+            double[] prices = passengerService.getPrice(ticketType, zoneName);
+            PriceDTO priceDTO = new PriceDTO(prices[0], prices[1]);
+
+            return new ResponseEntity(priceDTO, HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value ="/check-onetime-ticket", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DateTimesAndPriceDTO> checkOnetimeTicket(@RequestBody Long ticketId) throws Exception{
+        try {
+            DateTimesAndPriceDTO retValue = ticketService.checkOnetimeTicket(ticketId);
+            if(retValue == null) return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+
             return new ResponseEntity<>(retValue, HttpStatus.OK);
 
         } catch (TicketNotFoundException e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         } catch (LineNotFoundException e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         } catch (UserNotFoundException e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -126,5 +146,17 @@ public class PassengerController {
         }
 
         return new ResponseEntity(bytes, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('PASSENGER')")
+    @RequestMapping(value ="/{id}/delete", method = RequestMethod.DELETE)
+    public ResponseEntity removeTicket(@PathVariable("id") Long id) {
+        try {
+            passengerService.removeTicket(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

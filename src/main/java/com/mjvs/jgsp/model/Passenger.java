@@ -8,23 +8,27 @@ import java.util.List;
 @Entity
 public class Passenger extends User {
     @Column(name = "first_name", unique = false, nullable = false)
-    protected String firstName;
+    private String firstName;
 
     @Column(name = "last_name", unique = false, nullable = false)
-    protected String lastName;
+    private String lastName;
 
     @Column(name = "email", unique = true, nullable = false)
-    protected String email;
+    private String email;
 
     @Column(name = "address", unique = false, nullable = false)
-    protected String address;
+    private String address;
 
     @Column(name = "num_of_delicts", unique = false, nullable = true)
-    protected int numOfDelicts;
+    private int numOfDelicts;
 
     @Column(name = "passenger_type", unique = false, nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    protected PassengerType passengerType;
+    private PassengerType passengerType;
+
+    @Column(name = "new_passenger_type", unique = false, nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private PassengerType newPassengerType;
 
     @Column(name = "id_confirmation", unique = false, nullable = true)
     private Long idConfirmation;
@@ -36,7 +40,7 @@ public class Passenger extends User {
     private List<Ticket> tickets;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    protected User verifiedBy;
+    private User verifiedBy;
 
     public Passenger() {
 
@@ -141,4 +145,11 @@ public class Passenger extends User {
                 .count() > 0;
     }
 
+    public PassengerType getNewPassengerType() {
+        return newPassengerType;
+    }
+
+    public void setNewPassengerType(PassengerType newPassengerType) {
+        this.newPassengerType = newPassengerType;
+    }
 }
