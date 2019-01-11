@@ -99,14 +99,14 @@ public class PassengerController {
 
     @PreAuthorize("hasAuthority('PASSENGER')")
     @RequestMapping(value ="/get-price", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PriceDTO> getPriceForTicket(@RequestParam("ticketType") String ticketTypeStr,
+    public ResponseEntity<Double> getPriceForTicket(@RequestParam("hasZoneNotLine") boolean hasZoneNotLine,
+                                                    @RequestParam("ticketType") String ticketTypeStr,
                                                        @RequestParam("zone") String zoneName) {
         try {
             TicketType ticketType = TicketType.valueOf(ticketTypeStr);
-            double[] prices = passengerService.getPrice(ticketType, zoneName);
-            PriceDTO priceDTO = new PriceDTO(prices[0], prices[1]);
+            double price = passengerService.getPrice(hasZoneNotLine, ticketType, zoneName);
 
-            return new ResponseEntity(priceDTO, HttpStatus.OK);
+            return new ResponseEntity(price, HttpStatus.OK);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
