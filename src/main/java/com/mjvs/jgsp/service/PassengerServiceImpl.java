@@ -243,7 +243,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public double[] getPrice(TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException {
+    public double getPrice(boolean hasZoneNotLine, TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException {
         User loggedUser = userService.getLoggedUser();
         Passenger loggedPassenger = (Passenger) loggedUser;
 
@@ -256,7 +256,8 @@ public class PassengerServiceImpl implements PassengerService {
 
         PriceTicket priceTicket = priceTicketService.getLatestPriceTicket(loggedPassenger.getPassengerType(), ticketType, zone);
 
-        return new double[] {priceTicket.getPriceLine(), priceTicket.getPriceZone()};
+        if(hasZoneNotLine) return priceTicket.getPriceZone();
+        return priceTicket.getPriceLine();
     }
 
     @Override

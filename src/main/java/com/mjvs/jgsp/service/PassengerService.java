@@ -26,7 +26,7 @@ public interface PassengerService {
 
     List<Ticket> getTickets() throws UserNotFoundException;
 
-    double[] getPrice(TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException;
+    double getPrice(boolean hasZoneNotLine, TicketType ticketType, String zoneName) throws UserNotFoundException, ZoneNotFoundException, PriceTicketNotFoundException;
 
     void changeAccountType(PassengerType newPassengerType, MultipartFile image) throws Exception;
 
