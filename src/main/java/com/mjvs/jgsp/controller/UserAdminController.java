@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,9 +128,9 @@ public class UserAdminController {
     }
 
     
-    
+    @PreAuthorize("hasAuthority('USER_ADMINISTRATOR')")
     @RequestMapping(value = "/request-review/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity acceptPassengerRequest(@PathVariable("id") Long id, @RequestParam("accepted") boolean accepted) {
+    public ResponseEntity acceptPassengerRequest(@PathVariable("id") Long id, @RequestBody boolean accepted) {
         try{
   
         		userService.acceptPassengerRequest(id, accepted);
