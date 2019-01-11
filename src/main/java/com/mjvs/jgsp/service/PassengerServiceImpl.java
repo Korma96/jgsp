@@ -324,7 +324,26 @@ public class PassengerServiceImpl implements PassengerService {
 	public Passenger save(Passenger p) {
 		return passengerRepository.save(p);
 	}
+	
+	@Override
+	public List<Passenger> getAll(){
+		return passengerRepository.findAll();
+	}
+	
+	@Override
+	public List<Passenger> getRequests(){
+		List<Passenger> requests = passengerRepository.findAll();
+		for (Passenger p: requests){
+			if (p.getNewPassengerType() == null){
+				requests.remove(p);
+			}
+		}
+		return requests;
+	}
+	 
+	
 }
+
 
 
     /*public boolean exists(String username,String password){

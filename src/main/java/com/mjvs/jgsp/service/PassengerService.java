@@ -31,5 +31,9 @@ public interface PassengerService {
     void changeAccountType(PassengerType newPassengerType, MultipartFile image) throws Exception;
 
     void removeTicket(Long id) throws UserNotFoundException, TicketNotFoundException, CanNotBeDeletedException;
+    
+    List <Passenger> getAll();
+
+	List<Passenger> getRequests();
 
 }
