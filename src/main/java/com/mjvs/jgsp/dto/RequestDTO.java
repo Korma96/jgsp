@@ -1,9 +1,4 @@
 package com.mjvs.jgsp.dto;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.PassengerType;
 
@@ -13,7 +8,6 @@ public class RequestDTO {
 	private String firstName;
 	private String lastName;
 	private String address;
-	private int numOfDelicts;
 	private PassengerType passengerType;
 	private PassengerType newPassengerType;
 	private Long idConfirmation;
@@ -27,20 +21,18 @@ public class RequestDTO {
 		this.firstName = passenger.getFirstName();
 		this.lastName = passenger.getLastName();
 		this.address = passenger.getAddress();
-		this.numOfDelicts = passenger.getNumOfDelicts();
 		this.passengerType = passenger.getPassengerType();
 		this.newPassengerType = passenger.getNewPassengerType();
 		this.idConfirmation = passenger.getIdConfirmation();
 	}
 
-	public RequestDTO(Long id, String firstName, String lastName, String address, int numOfDelicts,
+	public RequestDTO(Long id, String firstName, String lastName, String address,
 			PassengerType passengerType, PassengerType newPassengerType, Long idConfirmation) {
 
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
-		this.numOfDelicts = numOfDelicts;
 		this.passengerType = passengerType;
 		this.newPassengerType = newPassengerType;
 		this.idConfirmation = idConfirmation;
@@ -76,14 +68,6 @@ public class RequestDTO {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public int getNumOfDelicts() {
-		return numOfDelicts;
-	}
-
-	public void setNumOfDelicts(int numOfDelicts) {
-		this.numOfDelicts = numOfDelicts;
 	}
 
 	public PassengerType getPassengerType() {

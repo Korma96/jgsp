@@ -21,6 +21,7 @@ public class UserBackendDTO {
 	}
 	
 	public UserBackendDTO(Long id,String username, String password, UserType userType) {
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.userType = userType;

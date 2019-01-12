@@ -183,21 +183,23 @@ public class UserServiceImpl implements UserService {
 	public boolean acceptPassengerRequest(Long id, boolean accepted) throws UserNotFoundException {
 		Passenger passenger = passengerRepository.findById(id);
 		User userAdmin = getLoggedUser();
-		if (passenger != null && accepted ) {
-			passenger.setPassengerType(passenger.getNewPassengerType());
-			passenger.setNewPassengerType(null);
-			passenger.setVerifiedBy(userAdmin);
-			userRepository.save(passenger);
+
+		if (passenger != null) {
+			if(accepted) {
+				passenger.setPassengerType(passenger.getNewPassengerType());
+				passenger.setNewPassengerType(null);
+				passenger.setVerifiedBy(userAdmin);
+				userRepository.save(passenger);
+			}
+			else {
+				passenger.setNewPassengerType(null);
+				userRepository.save(passenger);
+				
+			}
 			return true;
 		}
-		else if (passenger != null && !accepted){
-			passenger.setNewPassengerType(null);
-			userRepository.save(passenger);
-			return true;
-			
-		} else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

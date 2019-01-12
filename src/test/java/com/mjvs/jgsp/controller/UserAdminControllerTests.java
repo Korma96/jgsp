@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,77 +71,84 @@ public class UserAdminControllerTests {
     @MockBean
     TokenUtils tokenUtils;
 	
+	private HttpHeaders headers;
 	
-	private UserBackendDTO userDtoSuccess;
+	private UserBackendDTO userDtoSuccessAccept;
+	private UserBackendDTO userDtoUnsuccessAccept;
+	private UserBackendDTO userDtoSuccessDecline;
+	private UserBackendDTO userDtoUnsuccessDecline;
 	private UserBackendDTO userDtoFail;
 	
-	 private String accessToken1;
-	 private  UserDetails userDetails1;
-	
-	 private UserDTO userDTO1;
+	private String accessToken;
+	private UserDetails adminDetails;
+	private UserDTO adminDTO;
 	
 	@Before
 	public void setUp() throws Exception {
-		userDTO1 = new UserDTO("user1","111");
-		
-		userDtoSuccess = new UserBackendDTO(1L,"1", "1", UserType.TRANSPORT_ADMINISTRATOR);
-		userDtoFail = new UserBackendDTO("", "1", UserType.TRANSPORT_ADMINISTRATOR);
+		adminDTO = new UserDTO("user1","111");
+
+		userDtoSuccessAccept = new UserBackendDTO(1L,"1", "1", UserType.TRANSPORT_ADMINISTRATOR);
+		userDtoUnsuccessAccept = new UserBackendDTO(2L,"2", "2", UserType.TRANSPORT_ADMINISTRATOR);
+		userDtoSuccessDecline = new UserBackendDTO(3L,"3", "3", UserType.TRANSPORT_ADMINISTRATOR);
+		userDtoUnsuccessDecline = new UserBackendDTO(4L,"4", "4", UserType.TRANSPORT_ADMINISTRATOR);
+		userDtoFail = new UserBackendDTO(5L,"5", "5", UserType.TRANSPORT_ADMINISTRATOR);
 		
 		List<GrantedAuthority> garantedAuthorities = AuthorityUtils.createAuthorityList(UserType.USER_ADMINISTRATOR.toString());
 
-        userDetails1 = new org.springframework.security.core.userdetails.User(userDTO1.getUsername(), userDTO1.getPassword(), garantedAuthorities);
-        when(userDetailsService.loadUserByUsername(userDTO1.getUsername())).thenReturn(userDetails1);
-        accessToken1 = "token1";
+		adminDetails = new org.springframework.security.core.userdetails.User(adminDTO.getUsername(), adminDTO.getPassword(), garantedAuthorities);
+        when(userDetailsService.loadUserByUsername(adminDTO.getUsername())).thenReturn(adminDetails);
+        accessToken = "token1";
         
-        when(tokenUtils.generateToken(userDetails1)).thenReturn(accessToken1);
+        when(tokenUtils.generateToken(adminDetails)).thenReturn(accessToken);
 
 
-        when(tokenUtils.getUsernameFromToken(accessToken1)).thenReturn(userDTO1.getUsername());
-        when(tokenUtils.validateToken(accessToken1, userDetails1)).thenReturn(true);
+        when(tokenUtils.getUsernameFromToken(accessToken)).thenReturn(adminDTO.getUsername());
+        when(tokenUtils.validateToken(accessToken, adminDetails)).thenReturn(true);
 
-
+        headers = new HttpHeaders();
+	    headers.add("X-Auth-Token", accessToken);
+	    
 		ArrayList<Ticket> tickets = new ArrayList<>();
 		tickets.add(new Ticket(1L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.OTHER ,65, new Zone("1", null)));
 		tickets.add(new Ticket(2L, LocalDateTime.now(), LocalDateTime.now(), TicketType.MONTHLY, PassengerType.OTHER ,935, new Line("2")));
 		tickets.add(new Ticket(3L, LocalDateTime.now(), LocalDateTime.now(), TicketType.YEARLY, PassengerType.OTHER , 1800 , new Zone("3", null)));
 		tickets.add(new Ticket(4L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.OTHER , 65 , new Zone("1", null)));
 		tickets.add(new Ticket(5L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.STUDENT ,135, new Zone("1", null)));
-		when(userService.save(userDtoSuccess.getUsername(), userDtoSuccess.getPassword(), UserStatus.ACTIVATED, userDtoSuccess.getUserType())).thenReturn(true);
+
+		when(userService.save(userDtoSuccessAccept.getUsername(), userDtoSuccessAccept.getPassword(), UserStatus.ACTIVATED, userDtoSuccessAccept.getUserType())).thenReturn(true);
 		when(userService.save(userDtoFail.getUsername(), userDtoFail.getPassword(), UserStatus.ACTIVATED, userDtoFail.getUserType())).thenReturn(false);
 		when(ticketService.getAll()).thenReturn(tickets);
-		when(ticketService.getAll()).thenReturn(tickets);
-		when(userService.acceptPassengerRequest(userDtoFail.getId(), true)).thenThrow(UserNotFoundException.class);
-		when(userService.acceptPassengerRequest(userDtoSuccess.getId(), true)).thenThrow(UserNotFoundException.class);
-
-		
-		
-
+		//when(ticketService.getAll()).thenReturn(tickets);
+		when(userService.acceptPassengerRequest(userDtoSuccessAccept.getId(), true)).thenReturn(true);
+		when(userService.acceptPassengerRequest(userDtoUnsuccessAccept.getId(), true)).thenReturn(false);
+		when(userService.acceptPassengerRequest(userDtoSuccessDecline.getId(), false)).thenReturn(true);
+		when(userService.acceptPassengerRequest(userDtoUnsuccessDecline.getId(), false)).thenReturn(false);
 	}
 	
 	@Test
 	public void testAddSuccess() {
-		/*ResponseEntity<Boolean> response = testRestTemplate.postForEntity("/userAdmin/add-admin", userDtoSuccess, Boolean.class);
+	    HttpEntity<UserBackendDTO> requestEntity = new HttpEntity<UserBackendDTO>(userDtoSuccessAccept, headers);
+		ResponseEntity<Boolean> response = testRestTemplate.exchange("/userAdmin/add-admin", HttpMethod.POST, requestEntity, Boolean.class);
 		boolean added = response.getBody();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertTrue(added);*/
+        assertTrue(added);
 	}
 	
 	@Test
 	public void testAddFail() {
-		/*ResponseEntity<Boolean> response = testRestTemplate.postForEntity("/userAdmin/add-admin", userDtoFail, Boolean.class);
+	    HttpEntity<UserBackendDTO> requestEntity = new HttpEntity<UserBackendDTO>(userDtoFail, headers);
+		ResponseEntity<Boolean> response = testRestTemplate.exchange("/userAdmin/add-admin", HttpMethod.POST, requestEntity, Boolean.class);
 		boolean added = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertFalse(added);*/
+        assertFalse(added);
 	}
 
 	@Test
-	
-	public void acceptPassengerRequestException() {
-		/*
-	    HttpEntity<Boolean> requestEntity = new HttpEntity<Boolean>(true);
-		
-	    ResponseEntity response = testRestTemplate.exchange("/request-review/"+userDtoSuccess.getId(), HttpMethod.PUT, requestEntity, Void.class);
-		assertEquals(HttpStatus.OK, response.getStatusCode());*/
+	public void acceptPassengerRequestTest() {
+	    HttpEntity<Boolean> requestEntity = new HttpEntity<Boolean>(true, headers);
+	    ResponseEntity<Boolean> response = testRestTemplate.exchange("/userAdmin/request-review/"+userDtoSuccessAccept.getId(), HttpMethod.PUT, requestEntity, Boolean.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody());
 
 	}
 
@@ -148,27 +156,25 @@ public class UserAdminControllerTests {
 	@Test
 	public void testDelete() {
 		
-		fail("Not yet implemented");
+
 		
 	}
 
 	@Test
 	public void testAcceptPassengerRequest() {
-		fail("Not yet implemented");
-	}
 
-	@Test
-	public void testDeclinePassengerRequest() {
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testGeneralReport() throws ParseException {
-		/*ReportDTO r = new ReportDTO(0,3,1,1,3000);
+		ReportDTO r = new ReportDTO(0,3,1,1,3000);
 		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-12-01";
-		ResponseEntity<ReportDTO> response = testRestTemplate.getForEntity("/userAdmin//line-zone-report?id=startDate="+
-														startDateStr+"&endDate="+endDateStr, ReportDTO.class);
+		
+		HttpEntity requestEntity = new HttpEntity(headers);
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/general-report?startDate="+ startDateStr +
+														"&endDate="+endDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
+
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
 		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOneTime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
@@ -177,13 +183,13 @@ public class UserAdminControllerTests {
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(),retValue.getProfit());
-		assertEquals(r.getYearly(), retValue.getYearly());*/
+		assertEquals(r.getYearly(), retValue.getYearly());
 
 	}
-	
+	/*
 	@Test
 	public void testGeneralLineZoneReport() throws ParseException {
-		/*ReportDTO r = new ReportDTO(0,3,1,1,3000);
+		ReportDTO r = new ReportDTO(0,3,1,1,3000);
 		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-12-01";
 		
@@ -197,32 +203,35 @@ public class UserAdminControllerTests {
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(),retValue.getProfit());
-		assertEquals(r.getYearly(), retValue.getYearly());*/
+		assertEquals(r.getYearly(), retValue.getYearly());
 
 	}
-	
+	*/
 	
 	
 	@Test
 	public void testGeneralReportBadDate() throws ParseException {
-		/*String startDateStr = "2018-08-01";
+		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-13-01";
 		
-		ResponseEntity<ReportDTO> response = testRestTemplate.getForEntity("/userAdmin/general-report?startDate="+
-														startDateStr+"&endDate="+endDateStr, ReportDTO.class);
+		HttpEntity requestEntity = new HttpEntity(headers);
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/general-report?startDate="+ startDateStr +
+														"&endDate="+endDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());*/
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 	
 	@Test
 	public void testGeneralReportBadDates() throws ParseException {
-		/*String startDateStr = "2018-12-01";
+		String startDateStr = "2018-12-01";
 		String endDateStr = "2018-11-01";
 		
-		ResponseEntity<ReportDTO> response = testRestTemplate.getForEntity("/userAdmin/general-report?startDate="+
-														startDateStr+"&endDate="+endDateStr, ReportDTO.class);
+		HttpEntity requestEntity = new HttpEntity(headers);
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/general-report?startDate="+ startDateStr +
+														"&endDate="+endDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());*/
+		
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 	
 

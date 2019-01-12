@@ -1,47 +1,33 @@
 package com.mjvs.jgsp.controller;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.persistence.criteria.CriteriaBuilder.Case;
-import javax.servlet.http.HttpSession;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mjvs.jgsp.dto.ReportDTO;
 import com.mjvs.jgsp.dto.RequestDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
 import com.mjvs.jgsp.dto.UserDTO;
 import com.mjvs.jgsp.dto.UserFrontendDTO;
-import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.converter.UserConverter;
-import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.TicketType;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.service.ImageModelService;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.PassengerService;
 import com.mjvs.jgsp.service.TicketService;
@@ -51,6 +37,8 @@ import com.mjvs.jgsp.service.ZoneService;
 @RestController
 @RequestMapping(value = "/userAdmin")
 public class UserAdminController {
+	
+	 private final Logger logger = LogManager.getLogger(this.getClass());
 	
 	@Autowired
 	private UserService userService;
@@ -66,6 +54,9 @@ public class UserAdminController {
 	
 	@Autowired
 	private ZoneService zoneService;
+
+	@Autowired
+	private ImageModelService imageModelService;
 	
 
 	
@@ -83,8 +74,15 @@ public class UserAdminController {
     	List<RequestDTO> requestDtos = UserConverter.ConvertPassengerToRequestDTOs(passengers);
     	return new ResponseEntity<List<RequestDTO>>(requestDtos, HttpStatus.OK);
     }
-    
-    
+
+	@RequestMapping(value = "/get-image/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<byte[]> getImage(@PathVariable("id") Long id){
+		ImageModel imageModel = imageModelService.getImageModel(id);
+
+		if(imageModel != null) return new ResponseEntity<byte[]>(imageModel.getPic(), HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 	
     @RequestMapping(value = "/add-admin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> add(@RequestBody UserBackendDTO userDTO) {
@@ -99,7 +97,7 @@ public class UserAdminController {
 
     }    
     
-   /* @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+   @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(@RequestBody UserDTO userDTO) {
         try{
         	User user = userService.getUser(userDTO.getUsername());
@@ -112,7 +110,7 @@ public class UserAdminController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-    */
+
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) {
@@ -128,18 +126,16 @@ public class UserAdminController {
     }
 
     
-    @PreAuthorize("hasAuthority('USER_ADMINISTRATOR')")
     @RequestMapping(value = "/request-review/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity acceptPassengerRequest(@PathVariable("id") Long id, @RequestBody boolean accepted) {
+    public ResponseEntity<Boolean> acceptPassengerRequest(@PathVariable("id") Long id, @RequestBody boolean accepted) {
         try{
-  
-        		userService.acceptPassengerRequest(id, accepted);
+        		boolean success = userService.acceptPassengerRequest(id, accepted);
+        		return new ResponseEntity<Boolean>(success,HttpStatus.OK);
         	}
         catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        	logger.error(e.getMessage());
+            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity(HttpStatus.OK);
     }
     /*
     @RequestMapping(value = "/decline-request", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)

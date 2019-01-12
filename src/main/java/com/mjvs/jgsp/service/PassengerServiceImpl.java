@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -333,12 +334,12 @@ public class PassengerServiceImpl implements PassengerService {
 	
 	@Override
 	public List<Passenger> getRequests(){
-		List<Passenger> requests = passengerRepository.findAll();
-		for (Passenger p: requests){
-			if (p.getNewPassengerType() == null){
-				requests.remove(p);
-			}
-		}
+		List<Passenger> passengers = passengerRepository.findAll();
+		
+		List<Passenger> requests = passengers.stream()
+				.filter(p -> p.getNewPassengerType() != null)
+				.collect(Collectors.toList());
+		
 		return requests;
 	}
 	 

@@ -26,7 +26,7 @@ public class Passenger extends User {
     @Enumerated(EnumType.ORDINAL)
     private PassengerType passengerType;
 
-    @Column(name = "new_passenger_type", unique = false, nullable = false)
+    @Column(name = "new_passenger_type", unique = false, nullable = true)
     @Enumerated(EnumType.ORDINAL)
     private PassengerType newPassengerType;
 
@@ -70,7 +70,6 @@ public class Passenger extends User {
         this.address = address;
         this.passengerType = passengerType;
         this.numOfDelicts = 0;
-
         this.tickets = new ArrayList<Ticket>();
     }
 
