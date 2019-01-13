@@ -8,6 +8,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.*;
 import java.net.URL;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @SpringBootApplication
+@EnableScheduling
+//@EnableAsync
 public class JgspApplication {
 	private static final Logger logger = LogManager.getLogger(JgspApplication.class);
 

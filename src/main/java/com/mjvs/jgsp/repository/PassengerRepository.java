@@ -10,6 +10,8 @@ import com.mjvs.jgsp.model.Passenger;
 public interface PassengerRepository extends Repository<Passenger,Long> {
 
     Passenger findByUsername(String name);
+    
+    Passenger findById(Long id);
 
     List<Passenger> findAll();
 

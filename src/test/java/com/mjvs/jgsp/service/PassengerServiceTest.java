@@ -70,7 +70,7 @@ public class PassengerServiceTest {
 
         Ticket ticket = null;
         try {
-            ticket = passengerService.buyTicket(false, line.getName(), 12, ticketType);
+            ticket = passengerService.buyTicket(false, line.getName().substring(0,line.getName().length()-1), 12, ticketType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,7 +146,7 @@ public class PassengerServiceTest {
         zone = zoneRepository.save(zone);
         line = zone.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
 
-        passengerService.getLineZone(true, line.getName(), TicketType.DAILY);
+        passengerService.getLineZone(true, line.getName().substring(0,line.getName().length()-1), TicketType.DAILY);
     }
 
     @Transactional
@@ -175,12 +175,12 @@ public class PassengerServiceTest {
     @Test
     public void getLineZoneTestSuccessForLine() throws Exception {
         Zone z = new Zone("sedma_zona", TransportType.BUS);
-        Line l = new Line("777B", z,45);
+        Line l = new Line("777A", z,45);
         z.addLine(l);
         z = zoneRepository.save(z);
         l = z.getLines().get(0); // ovo radimo da bismo u line imali id koji mu je jpa dodelio
 
-        LineZone line =passengerService.getLineZone(false, l.getName(), TicketType.DAILY);
+        LineZone line =passengerService.getLineZone(false, l.getName().substring(0, l.getName().length()-1), TicketType.DAILY);
         assertEquals(l, line);
     }
 

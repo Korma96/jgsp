@@ -22,7 +22,7 @@ public class Line extends LineZone {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Point> points;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER/*fetch = FetchType.LAZY*/, cascade = CascadeType.ALL)
     private List<Stop> stops;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -195,7 +195,7 @@ public class Line extends LineZone {
 
     @Override
     public String getCompleteName() {
-        return name + " (line)";
+        return name.substring(0, name.length()-1) + " (line)";
     }
 
     @Override
@@ -212,7 +212,7 @@ public class Line extends LineZone {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+
         Line line = (Line) o;
         return Objects.equals(name, line.name) &&
                 Objects.equals(zone, line.zone);

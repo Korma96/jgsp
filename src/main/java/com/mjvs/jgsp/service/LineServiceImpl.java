@@ -56,6 +56,11 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
     }
 
     @Override
+    public List<Line> getLines() {
+        return lineRepository.findAll();
+    }
+
+    @Override
     public List<StopDTO> getSortedStopsById(List<Stop> stops)
     {
 

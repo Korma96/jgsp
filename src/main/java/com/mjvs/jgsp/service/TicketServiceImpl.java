@@ -3,10 +3,10 @@ package com.mjvs.jgsp.service;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.mjvs.jgsp.dto.DateTimesAndPriceDTO;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
-import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.TicketRepository;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,7 +40,7 @@ public class TicketServiceImpl implements TicketService {
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
 
     @Override
-    public boolean checkOnetimeTicket(Long ticketId, Long lineId) throws Exception {
+    public DateTimesAndPriceDTO checkOnetimeTicket(Long ticketId) throws Exception {
         Ticket ticket = ticketRepository.findById(ticketId);
         String message;
         if(ticket == null) {
@@ -52,16 +51,27 @@ public class TicketServiceImpl implements TicketService {
 
         if(ticket.getStartDateAndTime() != null) {
             // already activated
-            return false;
+            return null;
         }
 
-        Line line = lineService.findById(lineId).getData();
+        /*Line line = lineService.findById(lineId).getData();
         if(line == null) {
             message = String.format("Line with id (%d) was not found in database.", lineId);
             logger.error(message);
             throw new LineNotFoundException(message);
         }
-        ticket.setLineZone(line);
+        ticket.setLineZone(line);*/
+
+        LineZone lineZone = ticket.getLineZone();
+        Line line;
+        if(lineZone == null) throw new LineNotFoundException();
+
+        if(lineZone instanceof Line) line = (Line) lineZone ;
+        else {
+            message = String.format("No line found, but it is a zone.");
+            logger.error(message);
+            throw new LineNotFoundException(message);
+        }
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(line.getMinutesRequiredForWholeRoute());
@@ -85,7 +95,8 @@ public class TicketServiceImpl implements TicketService {
 
         ticketRepository.save(ticket);
 
-        return true;
+        return new DateTimesAndPriceDTO(ticket.getStartDateAndTimeStr(), ticket.getEndDateAndTimeStr(),
+                ticket.getPrice());
     }
 
     @Override

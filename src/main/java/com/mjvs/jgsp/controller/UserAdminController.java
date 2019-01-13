@@ -1,19 +1,10 @@
 package com.mjvs.jgsp.controller;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.persistence.criteria.CriteriaBuilder.Case;
-import javax.servlet.http.HttpSession;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,22 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mjvs.jgsp.dto.ReportDTO;
+import com.mjvs.jgsp.dto.RequestDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
 import com.mjvs.jgsp.dto.UserDTO;
 import com.mjvs.jgsp.dto.UserFrontendDTO;
-import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.converter.UserConverter;
-import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.TicketType;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.Zone;
+import com.mjvs.jgsp.service.ImageModelService;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.PassengerService;
 import com.mjvs.jgsp.service.TicketService;
@@ -49,6 +37,8 @@ import com.mjvs.jgsp.service.ZoneService;
 @RestController
 @RequestMapping(value = "/userAdmin")
 public class UserAdminController {
+	
+	 private final Logger logger = LogManager.getLogger(this.getClass());
 	
 	@Autowired
 	private UserService userService;
@@ -64,6 +54,9 @@ public class UserAdminController {
 	
 	@Autowired
 	private ZoneService zoneService;
+
+	@Autowired
+	private ImageModelService imageModelService;
 	
 
 	
@@ -73,11 +66,29 @@ public class UserAdminController {
     	List<UserFrontendDTO> userDtos = UserConverter.ConvertUserToUserFrontendDTOs(users);
     	return new ResponseEntity<List<UserFrontendDTO>>(userDtos, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/get-requests", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RequestDTO>> getRequests(){
+    	
+    	List<Passenger> passengers = passengerService.getRequests();
+    	List<RequestDTO> requestDtos = UserConverter.ConvertPassengerToRequestDTOs(passengers);
+    	return new ResponseEntity<List<RequestDTO>>(requestDtos, HttpStatus.OK);
+    }
+
+	@RequestMapping(value = "/get-image/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<byte[]> getImage(@PathVariable("id") Long id){
+		ImageModel imageModel = imageModelService.getImageModel(id);
+
+		if(imageModel != null) return new ResponseEntity<byte[]>(imageModel.getPic(), HttpStatus.OK);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 	
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/add-admin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> add(@RequestBody UserBackendDTO userDTO) {
         try{
         	boolean retValue = userService.save(userDTO.getUsername(), userDTO.getPassword(),UserStatus.ACTIVATED,userDTO.getUserType());
+        	if (retValue) return new ResponseEntity<Boolean>(retValue, HttpStatus.CREATED);
         	return new ResponseEntity<Boolean>(retValue, HttpStatus.OK);
         }
         catch (Exception e) {
@@ -86,7 +97,7 @@ public class UserAdminController {
 
     }    
     
-    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+   @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(@RequestBody UserDTO userDTO) {
         try{
         	User user = userService.getUser(userDTO.getUsername());
@@ -99,7 +110,7 @@ public class UserAdminController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-    
+
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) {
@@ -115,44 +126,22 @@ public class UserAdminController {
     }
 
     
-    
-    @RequestMapping(value = "/accept_request", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity acceptPassengerRequest(@RequestBody String username, String passengerType) {
+    @RequestMapping(value = "/request-review/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> acceptPassengerRequest(@PathVariable("id") Long id, @RequestBody boolean accepted) {
         try{
-        	Passenger passenger = passengerService.getPassenger(username);
-        	User userAdmin = userService.getLoggedUser();
-        	if (passenger!=null && passenger.getUserStatus().equals(UserStatus.PENDING)){
-        		if (passengerType.equals("student"))
-        		{
-        			passenger.setPassengerType(PassengerType.STUDENT);
-        		}
-        		else if (passengerType.equals("pensioner"))
-        		{
-        			passenger.setPassengerType(PassengerType.PENSIONER);
-        		} else {
-					passenger.setPassengerType(PassengerType.OTHER);
-        		}
-
-        		passenger.setUserStatus(UserStatus.ACTIVATED);
-        		passenger.setVerifiedBy(userAdmin);
-        		userService.save(passenger);
+        		boolean success = userService.acceptPassengerRequest(id, accepted);
+        		return new ResponseEntity<Boolean>(success,HttpStatus.OK);
         	}
-        }
         catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        	logger.error(e.getMessage());
+            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity(HttpStatus.OK);
     }
-    
-    @RequestMapping(value = "/decline_request", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    /*
+    @RequestMapping(value = "/decline-request", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity declinePassengerRequest(@RequestBody String username) {
         try{
-        	Passenger passenger = passengerService.getPassenger(username);
-        	if (passenger!=null){
-        		passenger.setIdConfirmation(null);
-        		userService.save(passenger);
-        	}
+        	userService.declinePassengerRequest(username);
         }
         catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -160,16 +149,16 @@ public class UserAdminController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-    
-    @RequestMapping(value = "/general_report", method = RequestMethod.GET)
-    public ResponseEntity generalReport(@RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) {
+    */
+    @RequestMapping(value = "/general-report", method = RequestMethod.GET)
+    public ResponseEntity<ReportDTO> generalReport(@RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) {
     	LocalDate startDate;
 		LocalDate endDate;
 		try {
 			startDate = LocalDate.parse(startDateStr);
 			endDate = LocalDate.parse(endDateStr);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		}
     	
     	int monthly = 0;
@@ -178,7 +167,7 @@ public class UserAdminController {
     	int oneTime = 0;
     	double profit = 0;	    	
     	
-		if (startDate.isAfter(endDate)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		if (startDate.isAfter(endDate)) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
     	
     	List<Ticket> tickets = ticketService.getAll();
     	
@@ -188,16 +177,21 @@ public class UserAdminController {
     		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
     		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
     		{
+    			System.out.println(ticket.getTicketType());
     			switch (ticket.getTicketType())
     			{
     			case DAILY:
     				daily++;
+    				break;
     			case MONTHLY:
     				monthly++;
+    				break;
     			case YEARLY:
     				yearly++;
+    				break;
     			case ONETIME:
     				oneTime++;
+    				break;
     			}
     			profit += ticket.getPrice();
     			
@@ -205,14 +199,14 @@ public class UserAdminController {
     		
     	}
     	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
-        return new ResponseEntity(report, HttpStatus.OK);	    	
+        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
     	
     }
     
     
     
-    @RequestMapping(value = "/line_zone_report", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity lineZoneReport(@RequestParam("line_id") Long id, @RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) throws Exception {
+    @RequestMapping(value = "/line-zone-report", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReportDTO> lineZoneReport(@RequestParam("line_id") Long id, @RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) throws Exception {
     	
     	LocalDate startDate;
 		LocalDate endDate;
@@ -220,7 +214,7 @@ public class UserAdminController {
 			startDate = LocalDate.parse(startDateStr);
 			endDate = LocalDate.parse(endDateStr);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
     	int monthly = 0;
@@ -229,7 +223,7 @@ public class UserAdminController {
     	int oneTime = 0;
     	double profit = 0;
     	
-		if (startDate.isAfter(endDate)) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		if (startDate.isAfter(endDate)) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		    		
     	List<Ticket> tickets = ticketService.getAll();
     	
@@ -259,7 +253,7 @@ public class UserAdminController {
     	}
     	}
     	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
-        return new ResponseEntity(report, HttpStatus.OK);	    	
+        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
     	
     }
     
@@ -280,6 +274,12 @@ public class UserAdminController {
     	int yearly = 0;
     	int oneTime = 0;
     	double profit = 0;
+    	int students = 0;
+    	int pensioners = 0;
+    	int others = 0;
+    	double otherProfit = 0;
+    	double studentProfit = 0;
+    	double pensionerProfit = 0;
     	
 
     	
@@ -300,21 +300,42 @@ public class UserAdminController {
 	    			{
 	    			case DAILY:
 	    				daily++;
+	    				break;
 	    			case MONTHLY:
 	    				monthly++;
+	    				break;
 	    			case YEARLY:
 	    				yearly++;
+	    				break;
 	    			case ONETIME:
 	    				oneTime++;
+	    				break;
 	    			}
 	    			profit += ticket.getPrice();
+	    			
+	    			switch (ticket.getPassengerType())
+	    			{
+	    				case STUDENT:
+	    					students++;
+	    					studentProfit+=ticket.getPrice();
+	    					break;
+	    				case PENSIONER:
+	    					pensioners++;
+	    					pensionerProfit+=ticket.getPrice();
+	    					break;
+	    				case OTHER:
+	    					others++;
+	    					otherProfit+=ticket.getPrice();
+	    					break;
+	    					
+	    			}
 	    			
 	    		}
     		}
     	
     	}
     	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
-        return new ResponseEntity(report, HttpStatus.OK);
+        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);
     	
     }
     
@@ -332,6 +353,12 @@ public class UserAdminController {
 	    	int yearly = 0;
 	    	int oneTime = 0;
 	    	double profit = 0;
+	    	int students = 0;
+	    	int pensioners = 0;
+	    	int others = 0;
+	    	double otherProfit = 0;
+	    	double studentProfit = 0;
+	    	double pensionerProfit = 0;
 	    	
     		if (requestedDate.isAfter(LocalDate.now())) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 	    	
