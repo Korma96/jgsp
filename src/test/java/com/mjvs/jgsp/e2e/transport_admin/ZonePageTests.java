@@ -1,9 +1,6 @@
 package com.mjvs.jgsp.e2e.transport_admin;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -24,6 +21,7 @@ import static org.junit.Assert.*;
 // Tests depend on each other, execute only all tests together
 // and don`t change their execution order !!!
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 public class ZonePageTests
 {
     private final String ZoneHomePage = "http://localhost:4200/transport/zone";
@@ -267,7 +265,7 @@ public class ZonePageTests
     private Wait<WebDriver> GetWaiter()
     {
         return new FluentWait<>(browser)
-                .withTimeout(5, TimeUnit.SECONDS)
+                .withTimeout(10, TimeUnit.SECONDS)
                 .pollingEvery(1, TimeUnit.SECONDS)
                 .ignoring(NoSuchElementException.class);
     }
