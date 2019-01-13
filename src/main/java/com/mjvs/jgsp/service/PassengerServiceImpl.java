@@ -1,6 +1,5 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.dto.PassengerDTO;
 import com.mjvs.jgsp.dto.TicketFrontendDTO;
 import com.mjvs.jgsp.helpers.converter.TicketConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
@@ -9,13 +8,10 @@ import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.helpers.exception.ZoneNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -141,7 +137,7 @@ public class PassengerServiceImpl implements PassengerService {
                 if(hasZoneNotLine) message = "Zone";
                 else message = "Line";
 
-                message += String.format(" with name %d does not exist!", lineZoneName);
+                message += String.format(" with name %s does not exist!", lineZoneName);
                 logger.error(message);
 
                 if(hasZoneNotLine) throw new ZoneNotFoundException(message);

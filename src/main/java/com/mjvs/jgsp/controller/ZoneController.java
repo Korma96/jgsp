@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
             }
             zone.getLines().remove(0);
         }
-
+        zone.setLines(new ArrayList<>());
         Result<Boolean> deleteResult = zoneService.delete(zone);
         if(deleteResult.isFailure()) {
             throw new DatabaseException(deleteResult.getMessage());

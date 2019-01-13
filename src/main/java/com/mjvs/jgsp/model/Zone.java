@@ -35,6 +35,7 @@ public class Zone extends LineZone {
     public Zone()
     {
         this.lines = new ArrayList<>();
+        this.transportType = TransportType.BUS;
     }
 
 
