@@ -1,6 +1,6 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.BaseDTO; 
 import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.dto.TimesDTO;
 import com.mjvs.jgsp.helpers.Messages;
@@ -116,6 +116,28 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 	@Override
 	public Line findByName(String name) {
 		return lineRepository.findByName(name);
+	}
+	
+	public List<String> getLineNames() {
+		List<Line> lines = lineRepository.findAll();
+		List<String> retVal = new ArrayList<String>();
+		String name;
+		String lineNum = "";
+		for (Line line : lines){
+			name = line.getName();
+			for (int i = 0; i < name.length(); i++){
+				try{
+					Integer.parseInt(name.substring(0, i));
+				}
+				catch (Exception e) {
+					lineNum = name.substring(0,i-1);
+				}
+				
+			}
+			retVal.add(lineNum);
+		}
+		
+		return retVal;
 	}
 
 

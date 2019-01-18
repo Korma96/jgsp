@@ -24,4 +24,6 @@ public interface LineService extends ExtendedBaseService<Line>
 	Line findByName(String string);
 
     ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines);
+    
+    List<String> getLineNames();
 }
