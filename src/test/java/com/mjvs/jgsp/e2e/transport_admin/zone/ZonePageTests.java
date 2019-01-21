@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.e2e.transport_admin;
+package com.mjvs.jgsp.e2e.transport_admin.zone;
 
 import org.junit.*;
 import org.junit.runners.MethodSorters;
