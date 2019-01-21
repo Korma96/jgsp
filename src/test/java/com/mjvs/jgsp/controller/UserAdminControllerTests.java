@@ -7,7 +7,9 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,12 +122,15 @@ public class UserAdminControllerTests {
 	    Line line2 = new Line(2L,"1B");
 	    Zone zone = new Zone(3L, "prva");
 	    
+	    LocalDateTime dateTest = LocalDateTime.of(2019, Month.JANUARY, 21, 19, 30, 40);
+
+	    
 		ArrayList<Ticket> tickets = new ArrayList<>();
-		tickets.add(new Ticket(1L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.OTHER ,65, line2));
-		tickets.add(new Ticket(2L, LocalDateTime.now(), LocalDateTime.now(), TicketType.MONTHLY, PassengerType.OTHER ,935, line));
-		tickets.add(new Ticket(3L, LocalDateTime.now(), LocalDateTime.now(), TicketType.YEARLY, PassengerType.OTHER , 1800 , line));
-		tickets.add(new Ticket(4L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.OTHER , 65 , zone));
-		tickets.add(new Ticket(5L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.STUDENT ,135, zone));
+		tickets.add(new Ticket(1L,dateTest , dateTest, TicketType.DAILY, PassengerType.OTHER ,65, line2));
+		tickets.add(new Ticket(2L, dateTest, dateTest, TicketType.MONTHLY, PassengerType.OTHER ,935, line));
+		tickets.add(new Ticket(3L, dateTest, dateTest, TicketType.YEARLY, PassengerType.OTHER , 1800 , line));
+		tickets.add(new Ticket(4L, dateTest, dateTest, TicketType.DAILY, PassengerType.OTHER , 65 , zone));
+		tickets.add(new Ticket(5L, dateTest, dateTest, TicketType.DAILY, PassengerType.STUDENT ,135, zone));
 
 		when(userService.save(userDtoSuccessAccept.getUsername(), userDtoSuccessAccept.getPassword(), UserStatus.ACTIVATED, userDtoSuccessAccept.getUserType())).thenReturn(true);
 		when(userService.save(userDtoFail.getUsername(), userDtoFail.getPassword(), UserStatus.ACTIVATED, userDtoFail.getUserType())).thenReturn(false);
@@ -185,8 +190,8 @@ public class UserAdminControllerTests {
 	@Test
 	public void testGeneralReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,3,1,1,3000);
-		String startDateStr = "2018-08-01";
-		String endDateStr = "2019-12-01";
+		String startDateStr = "2018-8-01";
+		String endDateStr = "2019-12-1";
 		
 		HttpEntity requestEntity = new HttpEntity(headers);
 		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/general-report?startDate="+ startDateStr +
@@ -207,7 +212,7 @@ public class UserAdminControllerTests {
 	@Test
 	public void testDailyGeneralReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,3,1,1,3000);
-		String startDateStr = "2019-01-18";
+		String startDateStr = "2019-01-21";
 		
 		HttpEntity requestEntity = new HttpEntity(headers);
 		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/daily-general-report?startDate="+ startDateStr,
@@ -242,7 +247,7 @@ public class UserAdminControllerTests {
 		assertEquals(r.getOneTime(),retValue.getOneTime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
-		assertEquals(myPi,r.getProfit(),retValue.getProfit());
+		assertEquals(myPi,r.getProfit(), retValue.getProfit());
 		assertEquals(r.getYearly(), retValue.getYearly());
 
 	}
@@ -251,7 +256,7 @@ public class UserAdminControllerTests {
 	@Test
 	public void testDailyLineZoneReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,1,1,1,2800);
-		String reqDateStr = "2019-01-18";
+		String reqDateStr = "2019-01-21";
 		String name = "1";
 		HttpEntity requestEntity = new HttpEntity(headers);
 		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/line_zone_daily_report?line_zone_name="+
