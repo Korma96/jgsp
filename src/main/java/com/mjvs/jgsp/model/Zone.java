@@ -30,6 +30,11 @@ public class Zone extends LineZone {
         this.transportType = transportType;
         this.lines = new ArrayList<>();
     }
+    
+    public Zone(Long id, String name){
+    	this.id = id;
+    	this.name = name;
+    }
 
     public void addLine(Line line) { lines.add(line); }
 

@@ -76,6 +76,13 @@ public class Line extends LineZone {
         this.stops = new ArrayList<>();
         this.schedules = new ArrayList<>();
     }
+	
+	// dodao zbog testa za report
+	public Line(Long id, String name)
+    {
+        this.id = id;
+        this.name = name;
+    }
 
     public String getName() {
         return name;
