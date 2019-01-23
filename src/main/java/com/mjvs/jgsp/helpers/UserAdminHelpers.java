@@ -1,5 +1,7 @@
 package com.mjvs.jgsp.helpers;
 
+import java.time.LocalDate;
+
 import com.mjvs.jgsp.dto.ReportDTO;
 import com.mjvs.jgsp.model.Ticket;
 
@@ -50,6 +52,15 @@ public class UserAdminHelpers {
 		report.setProfit(report.getProfit() + ticket.getPrice());
 		
 		return report;
+	}
+	
+	public static String toValidDateFormat(String dateStr){
+		String[] tokens = dateStr.split("-");
+		if (tokens[1].length() == 1 && tokens[2].length() == 1) return tokens[0] + "-0" + tokens[1] + "-0" + tokens[2];
+		if (tokens[1].length() == 1) return tokens[0] + "-0" + tokens[1] + "-" + tokens[2];
+		if (tokens[2].length() == 1) return tokens[0] + "-" + tokens[1] + "-0" + tokens[2];
+		else return dateStr;
+		
 	}
 	
 

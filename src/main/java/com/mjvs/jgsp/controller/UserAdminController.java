@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.service.ZoneService;
 
 @RestController
+@PreAuthorize("hasAuthority('USER_ADMINISTRATOR')")
 @RequestMapping(value = "/userAdmin")
 public class UserAdminController {
 	
@@ -159,9 +161,10 @@ public class UserAdminController {
 		
 		ReportDTO report = new ReportDTO(0, 0, 0, 0, 0);
 		
+		
 		try {
-			startDate = LocalDate.parse(startDateStr);
-			endDate = LocalDate.parse(endDateStr);
+			startDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(startDateStr));
+			endDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(endDateStr));
 		} catch (Exception e) {
 			return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		}
