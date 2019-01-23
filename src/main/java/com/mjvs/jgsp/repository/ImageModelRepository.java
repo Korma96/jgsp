@@ -10,7 +10,7 @@ public interface ImageModelRepository extends Repository<ImageModel, Long> {
 
     ImageModel findById(Long id);
 
-    ImageModel findByName(String name);
+    ImageModel findByNameAndDeleted(String name, boolean deleted);
 
     void delete(ImageModel imageModel);
 

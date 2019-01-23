@@ -65,19 +65,20 @@ public class ImageModelServiceImpl implements ImageModelService {
             if(image.getBytes().length > 0) {
                 User loggedUser = userService.getLoggedUser();
                 String fileName = loggedUser.getUsername();
-                ImageModel imageModel = imageModelRepository.findByName(fileName);
-                if(imageModel != null) imageModel.setPic(image.getBytes());
-                else imageModel = new ImageModel(fileName, image.getBytes());
+                ImageModel imageModel = imageModelRepository.findByNameAndDeleted(fileName, false);
+                if(imageModel != null) delete(imageModel.getId());
 
-                imageModel = imageModelRepository.save(imageModel);
+                ImageModel newImageModel = new ImageModel(fileName, image.getBytes());
+
+                newImageModel = imageModelRepository.save(newImageModel);
 
                 Passenger loggedPassenger = (Passenger) loggedUser;
-                loggedPassenger.setIdConfirmation(imageModel.getId());
+                loggedPassenger.setIdConfirmation(newImageModel.getId());
                 userService.save(loggedPassenger);
 
                 System.out.println("File successfully uploaded to : " + fileName);
 
-                return imageModel;
+                return newImageModel;
             }
         }
 

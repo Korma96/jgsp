@@ -20,7 +20,8 @@ public class TokenUtils {
 
 	@Value("myXAuthSecret")
 	private String secret;
-	
+
+	//@Value("60")
 	@Value("18000") //in seconds (5 hours)
 	private Long expiration;
 	

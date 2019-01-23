@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,9 @@ import com.mjvs.jgsp.service.TicketService;
 import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.service.ZoneService;
 
+
 @RestController
+@PreAuthorize("hasAuthority('USER_ADMINISTRATOR')")
 @RequestMapping(value = "/userAdmin")
 public class UserAdminController {
 	
@@ -57,9 +60,8 @@ public class UserAdminController {
 
 	@Autowired
 	private ImageModelService imageModelService;
-	
 
-	
+
     @RequestMapping(value = "/get-admins", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserFrontendDTO>> getAdmins(){
     	List<User> users = userService.getAdmins();
@@ -111,7 +113,6 @@ public class UserAdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) {
         try{

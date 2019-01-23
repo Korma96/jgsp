@@ -279,6 +279,7 @@ public class PassengerServiceImpl implements PassengerService {
         Ticket ticket;
         int indexForRemove = -1;
         boolean ticketNotFound = true;
+        LocalDateTime currentDateTime;
 
         for(int i = 0; i < loggedPassenger.getTickets().size(); i++) {
             ticket = loggedPassenger.getTickets().get(i);
@@ -290,7 +291,7 @@ public class PassengerServiceImpl implements PassengerService {
                     indexForRemove = i;
                 }
                 else {
-                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    currentDateTime = LocalDateTime.now();
                     // 10 sec lufta
                     if(ticket.getStartDateAndTime().isAfter(currentDateTime.minusSeconds(10))
                             || currentDateTime.isAfter(ticket.getEndDateAndTime())) {
