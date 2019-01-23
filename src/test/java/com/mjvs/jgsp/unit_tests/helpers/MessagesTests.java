@@ -22,6 +22,19 @@ public class MessagesTests
     }
 
     @Test
+    public void AlreadyContainsTest2()
+    {
+        // Arrange
+        String message = "Line with id 1 already contains Point";
+
+        // Act
+        String result = Messages.AlreadyContains(StringConstants.Line, 1L, StringConstants.Point);
+
+        // Assert
+        assertEquals(message, result);
+    }
+
+    @Test
     public void AlreadyExistsTest()
     {
         // Arrange
@@ -90,10 +103,23 @@ public class MessagesTests
     public void DoesNotContainTest()
     {
         // Arrange
-        String message = "Line with id 1 doesn`t contains Stop with id 2";
+        String message = "Line with id 1 doesn`t contain Stop with id 2";
 
         // Act
         String result = Messages.DoesNotContain(StringConstants.Line, 1L, StringConstants.Stop, 2L);
+
+        // Assert
+        assertEquals(message, result);
+    }
+
+    @Test
+    public void DoesNotContainTest2()
+    {
+        // Arrange
+        String message = "Line with id 1 doesn`t contain Point";
+
+        // Act
+        String result = Messages.DoesNotContain(StringConstants.Line, 1L, StringConstants.Point);
 
         // Assert
         assertEquals(message, result);

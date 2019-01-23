@@ -15,6 +15,8 @@ public interface LineService extends ExtendedBaseService<Line>
 {
     Result<List<BaseDTO>> getActiveLines();
 
+    List<Line> getLines();
+
     List<Schedule> getLatestSchedules(List<Schedule> schedules);
 
     List<StopDTO> getSortedStopsById(List<Stop> stops);
@@ -22,4 +24,6 @@ public interface LineService extends ExtendedBaseService<Line>
 	Line findByName(String string);
 
     ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines);
+    
+    List<String> getLineNames();
 }

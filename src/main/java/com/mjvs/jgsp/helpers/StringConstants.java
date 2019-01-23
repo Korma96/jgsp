@@ -7,4 +7,5 @@ public class StringConstants
     public static final String String = "String";
     public static final String Stop = "Stop";
     public static final String Schedule = "Schedule";
+    public static final String Point = "Point";
 }

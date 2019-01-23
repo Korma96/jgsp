@@ -1,13 +1,13 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.dto.DateTimesAndPriceDTO;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.model.Ticket;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface TicketService {
-    boolean checkOnetimeTicket(Long ticketId, Long lineId) throws Exception;
+    DateTimesAndPriceDTO checkOnetimeTicket(Long ticketId) throws Exception;
     
     Ticket getTicket(Long id);
     

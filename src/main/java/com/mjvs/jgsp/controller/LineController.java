@@ -1,19 +1,21 @@
 package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.*;
-import com.mjvs.jgsp.helpers.converter.StopConverter;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.ScheduleService;
 import com.mjvs.jgsp.helpers.Messages;
 import com.mjvs.jgsp.helpers.ResponseHelpers;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
+import com.mjvs.jgsp.helpers.converter.StopConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.Point;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.model.Stop;
+import com.mjvs.jgsp.repository.PointRepository;
+import com.mjvs.jgsp.service.LineService;
+import com.mjvs.jgsp.service.ScheduleService;
 import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,25 +34,28 @@ public class LineController extends ExtendedBaseController<Line>
     private LineService lineService;
     private StopService stopService;
     private ScheduleService scheduleService;
+    private PointRepository pointRepository;
 
     @Autowired
-    public LineController(LineService lineService, StopService stopService, ScheduleService scheduleService)
+    public LineController(LineService lineService, StopService stopService,
+                          ScheduleService scheduleService, PointRepository pointRepository)
     {
         super(lineService);
         this.lineService = lineService;
         this.stopService = stopService;
         this.scheduleService = scheduleService;
+        this.pointRepository = pointRepository;
     }
 
     @RequestMapping(value = "/stop/add", method = RequestMethod.POST)
-    public ResponseEntity addStopToLine(@RequestBody LineWithStopDTO lineWithStopDTO) throws Exception
+    public ResponseEntity addStopToLine(@RequestBody LineWithStopLiteDTO lineWithStopDTO) throws Exception
     {
         Result<Line> lineResult = lineService.findById(lineWithStopDTO.getLineId());
         if(!lineResult.hasData()) {
             throw new BadRequestException(lineResult.getMessage());
         }
 
-        Result<Stop> stopResult = stopService.findById(lineWithStopDTO.getLineId());
+        Result<Stop> stopResult = stopService.findById(lineWithStopDTO.getStopId());
         if(!stopResult.hasData()) {
             throw new BadRequestException(stopResult.getMessage());
         }
@@ -62,7 +67,15 @@ public class LineController extends ExtendedBaseController<Line>
                     StringConstants.Line, line.getId(), StringConstants.Stop, stop.getId()));
         }
 
-        line.getStops().add(stop);
+        int index = lineWithStopDTO.getPosition();
+        if(index < 1 || index > (line.getStops().size() + 1)){
+            throw new BadRequestException("Position is out of bounds!");
+        }
+
+        List<Stop> lineStops = line.getStops();
+        lineStops.add(index - 1, stop);
+        line.setStops(lineStops);
+
         Result<Boolean> saveResult = lineService.save(line);
         if(saveResult.isFailure()) {
             throw new DatabaseException(saveResult.getMessage());
@@ -71,7 +84,38 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
-    @RequestMapping(value = "schedule/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/stop/remove", method = RequestMethod.POST)
+    public ResponseEntity removeStopFromLine(@RequestBody LineWithStopLiteDTO lineWithStopLiteDTO) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(lineWithStopLiteDTO.getLineId());
+        if(!lineResult.hasData()) {
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Result<Stop> stopResult = stopService.findById(lineWithStopLiteDTO.getStopId());
+        if(!stopResult.hasData()) {
+            throw new BadRequestException(stopResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        Stop stop = stopResult.getData();
+        if(!line.getStops().contains(stop)) {
+            throw new BadRequestException(Messages.DoesNotContain(
+                    StringConstants.Line, line.getId(), StringConstants.Stop, stop.getId()));
+        }
+
+        List<Stop> lineStops = line.getStops();
+        lineStops.remove(stop);
+        line.setStops(lineStops);
+        Result<Boolean> saveResult = lineService.save(line);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult);
+    }
+
+    @RequestMapping(value = "/schedule/add", method = RequestMethod.POST)
     public ResponseEntity addScheduleToLine(LineWithScheduleDTO lineWithScheduleDTO) throws Exception
     {
 
@@ -194,6 +238,66 @@ public class LineController extends ExtendedBaseController<Line>
         PointsAndStopsDTO pointsAndStopsDTO = new PointsAndStopsDTO(points, stopDTOs);
 
         return ResponseHelpers.getResponseData(pointsAndStopsDTO);
+    }
+
+    @RequestMapping(value = "/point/add", method = RequestMethod.POST)
+    public ResponseEntity addPointToLine(@RequestBody LineWithPointDTO lineWithPointDTO) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(lineWithPointDTO.getLineId());
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Point point = pointRepository.findByLatitudeAndLongitude(lineWithPointDTO.getLat(), lineWithPointDTO.getLng());
+        Line line = lineResult.getData();
+        if(line.getPoints().contains(point)) {
+            throw new BadRequestException(Messages.AlreadyContains(
+                    StringConstants.Line, line.getId(), StringConstants.Point));
+        }
+
+        int index = lineWithPointDTO.getPosition();
+        if(index < 1 || index > (line.getPoints().size() + 1)){
+            throw new BadRequestException("Position is out of bounds!");
+        }
+
+        Point newPoint = new Point(lineWithPointDTO.getLat(), lineWithPointDTO.getLng());
+        List<Point> linePoints = line.getPoints();
+        linePoints.add(index - 1, newPoint);
+        line.setPoints(linePoints);
+
+        Result<Boolean> saveResult = lineService.save(line);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult);
+    }
+
+    @RequestMapping(value = "/point/remove", method = RequestMethod.POST)
+    public ResponseEntity removePointFromLine(@RequestBody LineWithPointDTO lineWithPointDTO) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(lineWithPointDTO.getLineId());
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Point point = pointRepository.findByLatitudeAndLongitude(lineWithPointDTO.getLat(), lineWithPointDTO.getLng());
+        Line line = lineResult.getData();
+        if(!line.getPoints().contains(point)) {
+            throw new BadRequestException(Messages.DoesNotContain(
+                    StringConstants.Line, line.getId(), StringConstants.Point));
+        }
+
+        List<Point> linePoints = line.getPoints();
+        linePoints.remove(point);
+        line.setPoints(linePoints);
+
+        Result<Boolean> saveResult = lineService.save(line);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult);
     }
 
     @RequestMapping(value = "/times", method = RequestMethod.GET)

@@ -148,7 +148,7 @@ public class LineControllerTests
 
         // Assert
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(response.getContentAsString(), jsonTester.write(responseData).getJson());
+        assertEquals(jsonTester.write(responseData).getJson(), response.getContentAsString());
     }
 
     @Test
