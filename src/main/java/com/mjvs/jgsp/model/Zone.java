@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 public class Zone extends LineZone {
@@ -29,12 +30,18 @@ public class Zone extends LineZone {
         this.transportType = transportType;
         this.lines = new ArrayList<>();
     }
+    
+    public Zone(Long id, String name){
+    	this.id = id;
+    	this.name = name;
+    }
 
     public void addLine(Line line) { lines.add(line); }
 
     public Zone()
     {
         this.lines = new ArrayList<>();
+        this.transportType = TransportType.BUS;
     }
 
 
@@ -55,7 +62,7 @@ public class Zone extends LineZone {
     }
 
     public List<Line> getLines() {
-        return lines;
+        return lines.stream().filter(s -> !s.isDeleted()).collect(Collectors.toList());
     }
 
     public void setLines(List<Line> lines) {

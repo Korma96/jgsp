@@ -3,6 +3,7 @@ package com.mjvs.jgsp.dto;
 import com.mjvs.jgsp.model.Stop;
 
 public class StopDTO {
+    private Long id;
 
     private String name;
 
@@ -15,7 +16,16 @@ public class StopDTO {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public StopDTO(Stop stop) {
+        this.id = stop.getId();
         this.name = stop.getName();
         this.latitude = stop.getLatitude();
         this.longitude = stop.getLongitude();

@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +23,7 @@ import com.mjvs.jgsp.dto.RequestDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
 import com.mjvs.jgsp.dto.UserDTO;
 import com.mjvs.jgsp.dto.UserFrontendDTO;
+import com.mjvs.jgsp.helpers.UserAdminHelpers;
 import com.mjvs.jgsp.helpers.converter.UserConverter;
 import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
@@ -41,7 +43,7 @@ import com.mjvs.jgsp.service.ZoneService;
 @RequestMapping(value = "/userAdmin")
 public class UserAdminController {
 	
-	 private final Logger logger = LogManager.getLogger(this.getClass());
+	private final Logger logger = LogManager.getLogger(this.getClass());
 	
 	@Autowired
 	private UserService userService;
@@ -155,19 +157,17 @@ public class UserAdminController {
     public ResponseEntity<ReportDTO> generalReport(@RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) {
     	LocalDate startDate;
 		LocalDate endDate;
+		
+		ReportDTO report = new ReportDTO(0, 0, 0, 0, 0);
+		
+		
 		try {
-			startDate = LocalDate.parse(startDateStr);
-			endDate = LocalDate.parse(endDateStr);
+			startDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(startDateStr));
+			endDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(endDateStr));
 		} catch (Exception e) {
 			return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		}
-    	
-    	int monthly = 0;
-    	int daily = 0;
-    	int yearly = 0;
-    	int oneTime = 0;
-    	double profit = 0;	    	
-    	
+  
 		if (startDate.isAfter(endDate)) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
     	
     	List<Ticket> tickets = ticketService.getAll();
@@ -179,35 +179,18 @@ public class UserAdminController {
     		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
     		{
     			System.out.println(ticket.getTicketType());
-    			switch (ticket.getTicketType())
-    			{
-    			case DAILY:
-    				daily++;
-    				break;
-    			case MONTHLY:
-    				monthly++;
-    				break;
-    			case YEARLY:
-    				yearly++;
-    				break;
-    			case ONETIME:
-    				oneTime++;
-    				break;
-    			}
-    			profit += ticket.getPrice();
-    			
+    			report = UserAdminHelpers.calculateReport(report, ticket);
     		}
-    		
     	}
-    	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
+    			
         return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
     	
     }
     
     
     
-    @RequestMapping(value = "/line-zone-report", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReportDTO> lineZoneReport(@RequestParam("line_id") Long id, @RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) throws Exception {
+    @RequestMapping(value = "/line-zone-report", method = RequestMethod.GET)
+    public ResponseEntity<ReportDTO> lineZoneReport(@RequestParam("line_zone_name") String name, @RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) throws Exception {
     	
     	LocalDate startDate;
 		LocalDate endDate;
@@ -218,49 +201,41 @@ public class UserAdminController {
 			return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
-    	int monthly = 0;
-    	int daily = 0;
-    	int yearly = 0;
-    	int oneTime = 0;
-    	double profit = 0;
-    	
 		if (startDate.isAfter(endDate)) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
+		
+		ReportDTO report = new ReportDTO(0, 0, 0, 0, 0);
 		    		
     	List<Ticket> tickets = ticketService.getAll();
     	
+		List<Long> ids = new ArrayList<Long>();
+    	if (zoneService.findByName(name)!=null) ids.add(zoneService.findByName(name).getId());
+    	else { 
+    		ids.add(lineService.findByName(name+"A").getId());
+    		ids.add(lineService.findByName(name+"B").getId());
+
+    	}
     	
     	for (Ticket ticket : tickets)
     	{
-    		
-    		if (ticket.getLineZone().getId().equals(id)){
-	    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-	    		
-	    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
-	    		{
-	    			switch (ticket.getTicketType())
-	    			{
-	    			case DAILY:
-	    				daily++;
-	    			case MONTHLY:
-	    				monthly++;
-	    			case YEARLY:
-	    				yearly++;
-	    			case ONETIME:
-	    				oneTime++;
-	    			}
-	    			profit += ticket.getPrice();
-	    			
+    		for (Long id: ids){
+	    		if (ticket.getLineZone().getId().equals(id)) {
+		    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
+		    		
+		    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
+		    		{
+		    			report = UserAdminHelpers.calculateReport(report, ticket);
+		    		}
 	    		}
     	}
     	}
-    	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
+
         return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
     	
     }
     
     
-    @RequestMapping(value = "/line_zone_daily_report", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReportDTO> lineZoneDailyReport(@RequestParam("line_id") Long id, @RequestParam("requested_date") String requestedDateStr) throws Exception {
+    @RequestMapping(value = "/line_zone_daily_report", method = RequestMethod.GET)
+    public ResponseEntity<ReportDTO> lineZoneDailyReport(@RequestParam("line_zone_name") String name, @RequestParam("requested_date") String requestedDateStr) throws Exception {
     	
     	LocalDate requestedDate;
 		try {
@@ -269,78 +244,34 @@ public class UserAdminController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
     	
-    	
-    	int monthly = 0;
-    	int daily = 0;
-    	int yearly = 0;
-    	int oneTime = 0;
-    	double profit = 0;
-    	int students = 0;
-    	int pensioners = 0;
-    	int others = 0;
-    	double otherProfit = 0;
-    	double studentProfit = 0;
-    	double pensionerProfit = 0;
-    	
-
+		ReportDTO report = new ReportDTO(0, 0, 0, 0, 0); 	
     	
 		if (requestedDate.isAfter(LocalDate.now())) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 	    		
     	List<Ticket> tickets = ticketService.getAll();
     	
+    	List<Long> ids = new ArrayList<Long>();
+    	if (zoneService.findByName(name)!=null) ids.add(zoneService.findByName(name).getId());
+    	else { 
+    		ids.add(lineService.findByName(name+"A").getId());
+    		ids.add(lineService.findByName(name+"B").getId());
+    	}
     	
     	for (Ticket ticket : tickets)
     	{
-    		
-    		if (ticket.getLineZone().getId().equals(id)){
-	    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-	    		
-	    		if (ticketDate.equals(requestedDate))
-	    		{
-	    			switch (ticket.getTicketType())
-	    			{
-	    			case DAILY:
-	    				daily++;
-	    				break;
-	    			case MONTHLY:
-	    				monthly++;
-	    				break;
-	    			case YEARLY:
-	    				yearly++;
-	    				break;
-	    			case ONETIME:
-	    				oneTime++;
-	    				break;
-	    			}
-	    			profit += ticket.getPrice();
-	    			
-	    			switch (ticket.getPassengerType())
-	    			{
-	    				case STUDENT:
-	    					students++;
-	    					studentProfit+=ticket.getPrice();
-	    					break;
-	    				case PENSIONER:
-	    					pensioners++;
-	    					pensionerProfit+=ticket.getPrice();
-	    					break;
-	    				case OTHER:
-	    					others++;
-	    					otherProfit+=ticket.getPrice();
-	    					break;
-	    					
-	    			}
-	    			
+    		for (Long id: ids){
+	    		if (ticket.getLineZone().getId().equals(id)){
+		    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
+		    		if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
 	    		}
     		}
     	
     	}
-    	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
         return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);
     	
     }
     
-    @RequestMapping(value = "/daily_general_report", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/daily-general-report", method = RequestMethod.GET)
     public ResponseEntity<ReportDTO> dailyGeneralReport(@RequestParam("startDate") String requestedDateStr) {
     	
     	LocalDate requestedDate;
@@ -349,17 +280,7 @@ public class UserAdminController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-	    	int monthly = 0;
-	    	int daily = 0;
-	    	int yearly = 0;
-	    	int oneTime = 0;
-	    	double profit = 0;
-	    	int students = 0;
-	    	int pensioners = 0;
-	    	int others = 0;
-	    	double otherProfit = 0;
-	    	double studentProfit = 0;
-	    	double pensionerProfit = 0;
+	    	ReportDTO report = new ReportDTO(0, 0, 0, 0, 0);
 	    	
     		if (requestedDate.isAfter(LocalDate.now())) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 	    	
@@ -371,27 +292,9 @@ public class UserAdminController {
 	    	for (Ticket ticket : tickets)
 	    	{
 	    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-	    		
-	    		if (ticketDate.equals(requestedDate))
-	    		{
-	    			switch (ticket.getTicketType())
-	    			{
-	    			case DAILY:
-	    				daily++;
-	    			case MONTHLY:
-	    				monthly++;
-	    			case YEARLY:
-	    				yearly++;
-	    			case ONETIME:
-	    				oneTime++;
-	    			}
-	    			profit += ticket.getPrice();
-	    			
-	    		}
-	    		
+	    		if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
 	    	}
-	    	ReportDTO report = new ReportDTO(oneTime, daily, monthly, yearly, profit);
-	        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
 	    	
+	        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
 	    }
 }

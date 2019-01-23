@@ -1,11 +1,9 @@
 package com.mjvs.jgsp.repository;
 
+import com.mjvs.jgsp.model.*;
 import org.springframework.data.repository.Repository;
 
-import com.mjvs.jgsp.model.PassengerType;
-import com.mjvs.jgsp.model.PriceTicket;
-import com.mjvs.jgsp.model.TicketType;
-import com.mjvs.jgsp.model.Zone;
+import java.util.List;
 
 public interface PriceTicketRepository extends Repository<PriceTicket, Long> {
 	
@@ -13,4 +11,10 @@ public interface PriceTicketRepository extends Repository<PriceTicket, Long> {
 																			Zone zone);
 	
 	PriceTicket save(PriceTicket priceTicket);
+
+	List<PriceTicket> findAll();
+
+	PriceTicket findById(Long id);
+
+	//PriceTicket findPriceTicketByPassengerTypeAndTicketTypeAndZone(PassengerType passengerType, TicketType ticketType,Zone zone);
 }

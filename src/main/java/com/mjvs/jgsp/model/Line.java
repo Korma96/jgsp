@@ -4,10 +4,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 public class Line extends LineZone {
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = false, nullable = false)
     private String name;
 
     @Column(name = "active", unique = false, nullable = false)
@@ -25,27 +26,17 @@ public class Line extends LineZone {
     @ManyToMany(fetch = FetchType.EAGER/*fetch = FetchType.LAZY*/, cascade = CascadeType.ALL)
     private List<Stop> stops;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Transport> transports;
-
     // orphanRemoval znaci da kad izbrisemo neki Schedule iz ove liste, on ce postati siroce, i bice automatski obrisan
     // i iz tabele schedule
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="line" /*, orphanRemoval = true*/)
     private List<Schedule> schedules;
 
-    /*@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Schedule scheduleWorkDay;
-    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Schedule scheduleSaturday;
-    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Schedule scheduleSunday;
-*/
-
     public Line() {
         super();
+		this.active = false;
+		this.minutesRequiredForWholeRoute = 0;
         this.stops = new ArrayList<>();
         this.points = new ArrayList<>();
-        this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
     }
 
@@ -57,28 +48,22 @@ public class Line extends LineZone {
 
 
 
-    public Line(String name, boolean active, Zone zone, List<Point> points, List<Stop> stops, List<Transport> transports, List<Schedule> schedules
-			/*Schedule scheduleWorkDay, Schedule scheduleSaturday, Schedule scheduleSunday*/) {
-
+    public Line(String name, boolean active, Zone zone, List<Point> points, List<Stop> stops, List<Schedule> schedules)
+    {
 		this.name = name;
 		this.active = active;
 		this.zone = zone;
 		this.points = points;
 		this.stops = stops;
-		this.transports = transports;
 		this.schedules = schedules;
-//		this.scheduleWorkDay = scheduleWorkDay;
-//		this.scheduleSaturday = scheduleSaturday;
-//		this.scheduleSunday = scheduleSunday;
 	}
-    public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Point> points, List<Stop> stops, List<Transport> transports, List<Schedule> schedules) {
+    public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Point> points, List<Stop> stops, List<Schedule> schedules) {
         this.name = name;
         this.minutesRequiredForWholeRoute = minutesRequiredForWholeRoute;
         this.zone = zone;
         this.active = true;
         this.points = points;
         this.stops = stops;
-        this.transports = transports;
         this.schedules = schedules;
     }
 
@@ -89,8 +74,14 @@ public class Line extends LineZone {
         this.active = false;
         this.points = new ArrayList<>();
         this.stops = new ArrayList<>();
-        this.transports = new ArrayList<>();
         this.schedules = new ArrayList<>();
+    }
+	
+	// dodao zbog testa za report
+	public Line(Long id, String name)
+    {
+        this.id = id;
+        this.name = name;
     }
 
     public String getName() {
@@ -118,23 +109,15 @@ public class Line extends LineZone {
     }
 
     public List<Stop> getStops() {
-        return stops;
+        return stops.stream().filter(s -> !s.isDeleted()).collect(Collectors.toList());
     }
 
     public void setStops(List<Stop> stops) {
         this.stops = stops;
     }
 
-    public List<Transport> getTransports() {
-        return transports;
-    }
-
-    public void setTransports(List<Transport> transports) {
-        this.transports = transports;
-    }
-
    public List<Schedule> getSchedules() {
-        return schedules;
+        return schedules.stream().filter(s -> !s.isDeleted()).collect(Collectors.toList());
     }
 
     public void setSchedules(List<Schedule> schedules) {
@@ -142,51 +125,12 @@ public class Line extends LineZone {
     }
 
     public List<Point> getPoints() {
-        return points;
+        return points.stream().filter(s -> !s.isDeleted()).collect(Collectors.toList());
     }
 
     public void setPoints(List<Point> points) {
         this.points = points;
     }
-
-    /*public Schedule getScheduleWorkDay() {
-		return scheduleWorkDay;
-	}
-
-	public void setScheduleWorkDay(Schedule scheduleWorkDay) {
-		this.scheduleWorkDay = scheduleWorkDay;
-	}
-
-	public Schedule getScheduleSaturday() {
-		return scheduleSaturday;
-	}
-
-	public void setScheduleSaturday(Schedule scheduleSaturday) {
-		this.scheduleSaturday = scheduleSaturday;
-	}
-
-	public Schedule getScheduleSunday() {
-		return scheduleSunday;
-	}
-
-	public void setScheduleSunday(Schedule scheduleSunday) {
-		this.scheduleSunday = scheduleSunday;
-	}
-
-
-	public Schedule getSchedule() {
-		int day = LocalDate.now().getDayOfWeek().getValue();
-		return getSchedule(day);
-	}
-
-	public Schedule getSchedule(int day) {
-		if (day<6) return this.scheduleWorkDay;
-		else if (day == 6) return this.scheduleSaturday;
-		else return this.scheduleSunday;
-	}
-	*/
-
-
 
 	@Override
     public Zone getZone() {

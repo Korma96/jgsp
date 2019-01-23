@@ -3,11 +3,10 @@ package com.mjvs.jgsp.service;
 import com.mjvs.jgsp.helpers.exception.*;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.PassengerRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -149,8 +148,8 @@ public class PassengerServiceImpl implements PassengerService {
             if(hasZoneNotLine) message = "Zone";
             else message = "Line";
 
-            message += String.format(" with name %d does not exist!", lineZoneName);
-            logger.error(message);
+                message += String.format(" with name %s does not exist!", lineZoneName);
+                logger.error(message);
 
             if(hasZoneNotLine) throw new ZoneNotFoundException(message);
             else throw new LineNotFoundException(message);
@@ -327,24 +326,24 @@ public class PassengerServiceImpl implements PassengerService {
 	public Passenger save(Passenger p) {
 		return passengerRepository.save(p);
 	}
-	
+
 	@Override
 	public List<Passenger> getAll(){
 		return passengerRepository.findAll();
 	}
-	
+
 	@Override
 	public List<Passenger> getRequests(){
 		List<Passenger> passengers = passengerRepository.findAll();
-		
+
 		List<Passenger> requests = passengers.stream()
 				.filter(p -> p.getNewPassengerType() != null)
 				.collect(Collectors.toList());
-		
+
 		return requests;
 	}
-	 
-	
+
+
 }
 
 

@@ -8,6 +8,8 @@ import com.mjvs.jgsp.model.Ticket;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.security.TokenUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +31,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Autowired
     AuthenticationManager authenticationManager;
@@ -67,12 +71,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('CONTROLLOR')")
-    @RequestMapping(value ="/checkticket/{username}/zoneLine/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username,@PathVariable Long id) {
+    @RequestMapping(value ="/checkticket/{username}/{lineName}", method = RequestMethod.PUT)
+    public ResponseEntity<Boolean> checkPassengerTicket(@PathVariable String username,@PathVariable String lineName) {
         boolean valid;
         try{
-            valid = userService.checkTicket(username,id);
+            valid = userService.checkTicket(username,lineName);
         }catch (Exception e){
+            logger.error(e.getMessage());
             return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
         }
 

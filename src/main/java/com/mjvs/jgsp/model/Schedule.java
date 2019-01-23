@@ -2,8 +2,8 @@ package com.mjvs.jgsp.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Schedule extends EntityForDeleted {
@@ -68,7 +68,7 @@ public class Schedule extends EntityForDeleted {
     }
 
     public List<MyLocalTime> getDepartureList() {
-        return departureList;
+        return departureList.stream().filter(s -> !s.isDeleted()).collect(Collectors.toList());
     }
 
     public void setDepartureList(List<MyLocalTime> departureList) {

@@ -1,8 +1,10 @@
 package com.mjvs.jgsp.service;
 
 
+import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
+import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,15 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Primary // Intellij pronalazi vise implementacija za UserDetailService,
-        // zato koristimo ovu anotaciju, da bi ova implementacija imala prednost u odnosu na druge,
-        // i da bi @Autowired znao koju implementaciju da izabere
+// zato koristimo ovu anotaciju, da bi ova implementacija imala prednost u odnosu na druge,
+// i da bi @Autowired znao koju implementaciju da izabere
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
@@ -38,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(user == null) {
             String message = String.format("No user found with username '%s' in database.", username);
             logger.error(message);
-        	throw new UsernameNotFoundException(message);
+            throw new UsernameNotFoundException(message);
         }
 
         if(user.getUserStatus() != UserStatus.ACTIVATED) {
@@ -47,8 +49,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(message);
         }
 
-        List<GrantedAuthority> garantedAuthorities = AuthorityUtils.createAuthorityList(user.getUserType().toString());
-        
+        List<GrantedAuthority> garantedAuthorities = null;
+        if(user.getUserType() == UserType.PASSENGER) {
+            Passenger passenger = (Passenger) user;
+            garantedAuthorities = AuthorityUtils.createAuthorityList(user.getUserType().toString(),
+                    passenger.getPassengerType().toString());
+        }
+        else {
+            garantedAuthorities = AuthorityUtils.createAuthorityList(user.getUserType().toString());
+        }
+
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), garantedAuthorities);
     }
 

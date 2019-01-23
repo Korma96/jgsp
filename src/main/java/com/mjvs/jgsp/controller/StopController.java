@@ -9,7 +9,6 @@ import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +50,7 @@ public class StopController extends BaseController<Stop>
             throw new DatabaseException(addResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(addResult);
+        return ResponseHelpers.getResponseData(addResult.getMessage());
     }
 
     @RequestMapping(value = "/coordinates", method = RequestMethod.POST)
@@ -65,7 +64,9 @@ public class StopController extends BaseController<Stop>
         Result<Stop> existsResult = stopService.findByLatitudeAndLongitude(
                 stopLiteDTO.getLatitude(), stopLiteDTO.getLongitude());
         if(existsResult.hasData()) {
-            throw new BadRequestException(existsResult.getMessage());
+            if(!existsResult.getData().getId().equals(stopResult.getData().getId())) {
+                throw new BadRequestException(existsResult.getMessage());
+            }
         }
 
         Stop stop = stopResult.getData();
@@ -77,7 +78,7 @@ public class StopController extends BaseController<Stop>
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult);
+        return ResponseHelpers.getResponseData(saveResult.getMessage());
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -91,18 +92,11 @@ public class StopController extends BaseController<Stop>
         return ResponseHelpers.getResponseData(getResult.getData());
     }
 
-    @RequestMapping(value = "/simulation", method = RequestMethod.POST)
-    public ResponseEntity receiveCoordinates(@RequestBody String data)
-    {
-        System.out.println(data);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
     public ResponseEntity rename(@RequestBody BaseDTO baseDTO) throws Exception
     {
         if(StringExtensions.isEmptyOrWhitespace(baseDTO.getName())) {
-            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Line));
+            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Stop));
         }
 
         Result<Stop> stopResult = stopService.findById(baseDTO.getId());
@@ -118,7 +112,7 @@ public class StopController extends BaseController<Stop>
             throw new DatabaseException(saveResult.getMessage());
         }
 
-        return ResponseHelpers.getResponseData(saveResult);
+        return ResponseHelpers.getResponseData(saveResult.getMessage());
     }
 
 }
