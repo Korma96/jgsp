@@ -141,7 +141,7 @@ public class PassengerServiceImpl implements PassengerService {
                 if(hasZoneNotLine) message = "Zone";
                 else message = "Line";
 
-                message += String.format(" with name %d does not exist!", lineZoneName);
+                message += String.format(" with name %s does not exist!", lineZoneName);
                 logger.error(message);
 
                 if(hasZoneNotLine) throw new ZoneNotFoundException(message);

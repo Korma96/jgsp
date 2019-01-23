@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mjvs.jgsp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,13 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.Line;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.User;
-import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.UserType;
-import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.repository.UserRepository;
 
 @Service
@@ -46,46 +40,65 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public boolean checkTicket(String username, Long id) throws Exception {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Override
+    public boolean checkTicket(String username, String lineName) throws Exception {
 
         Passenger passenger = (Passenger) this.getUser(username);
+        if(passenger.getUserStatus() == UserStatus.DEACTIVATED){
+            return false;
+        }
+
 
         LocalDateTime dateAndTime = LocalDateTime.now();
 
         Ticket ticket = null;
         boolean valid = false;
+        boolean condition;
+
         for (int i = 0; i < passenger.getTickets().size(); i++) {
             ticket = passenger.getTickets().get(i);
 
-            if(!ticket.getLineZone().getId().equals(id)){
-                if(ticket.getLineZone() instanceof Zone) {
-                    List<Line> lines = ticket.getLineZone().getZone().getLines();
+            System.out.println(ticket.getId());
+            System.out.println(ticket.getLineZone().getId());
+            System.out.println(ticket.getLineZone().getZone().getId());
 
-                    boolean condition =  lines.stream().filter(line -> line.getId() == id).count() == 0;
 
-                    if(condition){
-                        continue;
-                    }
-                }
-                else {
-                    continue;
-                }
+            System.out.println(ticket.getStartDateAndTime());
+            System.out.println(ticket.getEndDateAndTime());
 
+            LineZone lineZone = ticket.getLineZone();
+
+            if(lineZone instanceof Zone) {
+                List<Line> lines = ticket.getLineZone().getZone().getLines();
+                System.out.println("zona");
+                condition =  lines.stream().filter(line -> line.getName().equals(lineName+"A") || line.getName().equals(lineName+"B"))
+                                .count() == 0;
+            }
+            else {
+                Line line = (Line) lineZone;
+                condition = line.getName() != lineName+"A" && line.getName() != lineName+"B";
+            }
+
+            if(condition){
+                continue;
             }
 
 
             if (ticket.getStartDateAndTime() != null && ticket.getEndDateAndTime() != null) {
 
-                long dif = computeSubtractTwoDateTime(dateAndTime, ticket.getStartDateAndTime());
+                long dif = computeSubtractTwoDateTime(ticket.getStartDateAndTime(), dateAndTime);
 
                 if (dif >= 0) {
-                    dif = computeSubtractTwoDateTime(dateAndTime, ticket.getEndDateAndTime());
+                    dif = computeSubtractTwoDateTime(ticket.getEndDateAndTime(), dateAndTime);
                     if (dif <= 0) {
                         valid = true;
                         break;
                     }
                 }
             }
+
+
         }
 
 

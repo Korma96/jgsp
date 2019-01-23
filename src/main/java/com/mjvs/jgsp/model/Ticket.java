@@ -32,7 +32,7 @@ public class Ticket extends EntityForDeleted {
     //@Column(name = "activated", unique = false, nullable = false)
     //private boolean activated;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     private LineZone lineZone;
 
     @Transient // ovaj atribut se nece naci u bazi zbog ove @Transient anotacije
