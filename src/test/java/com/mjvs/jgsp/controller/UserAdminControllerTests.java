@@ -14,43 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.mjvs.jgsp.dto.ReportDTO;
-import com.mjvs.jgsp.dto.UserBackendDTO;
-import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.Line;
-import com.mjvs.jgsp.model.PassengerType;
-import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.TicketType;
-import com.mjvs.jgsp.model.UserStatus;
-import com.mjvs.jgsp.model.UserType;
-import com.mjvs.jgsp.model.Zone;
-import com.mjvs.jgsp.security.TokenUtils;
-import com.mjvs.jgsp.service.LineService;
-import com.mjvs.jgsp.service.TicketService;
-import com.mjvs.jgsp.service.UserDetailsServiceImpl;
-import com.mjvs.jgsp.service.UserService;
-import com.mjvs.jgsp.service.ZoneService;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= WebEnvironment.RANDOM_PORT)
@@ -210,6 +195,7 @@ public class UserAdminControllerTests {
 	}
 	
 	@Test
+	@Ignore
 	public void testDailyGeneralReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,3,1,1,3000);
 		String startDateStr = "2019-01-21";
@@ -254,6 +240,7 @@ public class UserAdminControllerTests {
 	
 	
 	@Test
+	@Ignore
 	public void testDailyLineZoneReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,1,1,1,2800);
 		String reqDateStr = "2019-01-21";
@@ -275,6 +262,7 @@ public class UserAdminControllerTests {
 	
 	
 	@Test
+	@Ignore
 	public void testGeneralReportBadDate() throws ParseException {
 		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-13-01";
