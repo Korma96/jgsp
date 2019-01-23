@@ -35,7 +35,6 @@ import com.mjvs.jgsp.service.PassengerService;
 import com.mjvs.jgsp.service.TicketService;
 import com.mjvs.jgsp.service.UserService;
 import com.mjvs.jgsp.service.ZoneService;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 @RestController
 @RequestMapping(value = "/userAdmin")

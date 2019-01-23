@@ -1,22 +1,22 @@
 package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.NewZoneDTO;
 import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.dto.ZoneWithLineDTO;
-import com.mjvs.jgsp.helpers.Messages;
-import com.mjvs.jgsp.helpers.ResponseHelpers;
-import com.mjvs.jgsp.helpers.Result;
-import com.mjvs.jgsp.helpers.StringConstants;
+import com.mjvs.jgsp.helpers.*;
 import com.mjvs.jgsp.helpers.converter.LineConverter;
 import com.mjvs.jgsp.helpers.converter.ZoneConverter;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.model.Line;
+import com.mjvs.jgsp.model.TransportType;
 import com.mjvs.jgsp.model.Zone;
 import com.mjvs.jgsp.service.LineService;
 import com.mjvs.jgsp.service.ZoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -39,6 +39,46 @@ public class ZoneController extends ExtendedBaseController<Zone>
         this.zoneService = zoneService;
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
+    @RequestMapping(value = "/addZone", method = RequestMethod.POST)
+    public ResponseEntity add(@RequestBody NewZoneDTO newZoneDTO) throws Exception
+    {
+        int transportType = newZoneDTO.getTransportType();
+        TransportType transportTypeEnum = null;
+        switch (transportType) {
+            case 0:
+                transportTypeEnum = TransportType.BUS;
+                break;
+            case 1:
+                transportTypeEnum = TransportType.TRAM;
+                break;
+            case 2:
+                transportTypeEnum = TransportType.METRO;
+                break;
+        }
+        if (transportTypeEnum == null) {
+            throw new BadRequestException("Transport type must be 0, 1 or 2 !");
+        }
+
+        if(StringExtensions.isEmptyOrWhitespace(newZoneDTO.getName())) {
+            throw new BadRequestException(Messages.CantBeEmptyOrWhitespace(StringConstants.Zone));
+        }
+
+        Result<Boolean> existsResult = zoneService.exists(newZoneDTO.getName());
+        if(existsResult.getData()) {
+            throw new BadRequestException(existsResult.getMessage());
+        }
+
+        Zone newZone = new Zone(newZoneDTO.getName(), transportTypeEnum);
+        Result addResult = zoneService.save(newZone);
+        if(addResult.isFailure()) {
+            throw new DatabaseException(addResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(addResult);
+    }
+
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/line/add", method = RequestMethod.POST)
     public ResponseEntity addLineToZone(@RequestBody ZoneWithLineDTO zoneWithLineDTO) throws Exception
     {
@@ -54,19 +94,21 @@ public class ZoneController extends ExtendedBaseController<Zone>
 
         Zone zone = zoneResult.getData();
         Line line = lineResult.getData();
-        List<Line> zoneLines = zone.getLines().stream()
-                .filter(x -> !x.isDeleted()).collect(Collectors.toList());
+        List<Line> zoneLines = zone.getLines();
         if(zoneLines.stream().anyMatch(x -> x.getId().equals(line.getId()))) {
             throw new BadRequestException(Messages.AlreadyContains(
                     StringConstants.Zone, zone.getId(), StringConstants.Line, line.getId()));
         }
 
-        line.setActive(true);
+        zoneLines.add(line);
+        zone.setLines(zoneLines);
+
+        lineService.checkIfLineCanBeActive(line);
+
         Result<Boolean> saveLineResult = lineService.save(line);
         if(saveLineResult.isFailure()) {
             throw new DatabaseException(saveLineResult.getMessage());
         }
-        zone.getLines().add(line);
 
         Result<Boolean> saveResult = zoneService.save(zone);
         if(saveResult.isFailure()) {
@@ -76,6 +118,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @Override
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
@@ -114,8 +157,42 @@ public class ZoneController extends ExtendedBaseController<Zone>
             throw new DatabaseException(result.getMessage());
         }
 
-        List<BaseDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData().stream()
-                .filter(x -> !x.isDeleted()).collect(Collectors.toList()));
+        List<BaseDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(result.getData());
+        return ResponseHelpers.getResponseData(zoneLiteDTOs);
+    }
+
+    @RequestMapping(value = "/all/{transport_type}", method = RequestMethod.GET)
+    public ResponseEntity getAllByTransportType(@PathVariable("transport_type") int transportType) throws Exception
+    {
+        TransportType transportTypeEnum = null;
+        switch (transportType) {
+            case 0:
+                transportTypeEnum = TransportType.BUS;
+                break;
+            case 1:
+                transportTypeEnum = TransportType.TRAM;
+                break;
+            case 2:
+                transportTypeEnum = TransportType.METRO;
+                break;
+        }
+        if (transportTypeEnum == null) {
+            throw new BadRequestException("Transport type must be 0, 1 or 2 !");
+        }
+
+        Result<List<Zone>> result = zoneService.getAll();
+        if(result.isFailure()) {
+            throw new DatabaseException(result.getMessage());
+        }
+
+        List<Zone> filteredZones = new ArrayList<>();
+        for(Zone zone : result.getData()) {
+            if (zone.getTransportType() == transportTypeEnum) {
+                filteredZones.add(zone);
+            }
+        }
+
+        List<BaseDTO> zoneLiteDTOs = ZoneConverter.ConvertZonesToZoneDTOs(filteredZones);
         return ResponseHelpers.getResponseData(zoneLiteDTOs);
     }
 
@@ -170,12 +247,12 @@ public class ZoneController extends ExtendedBaseController<Zone>
         }
 
         Zone zone = zoneResult.getData();
-        List<BaseDTO> lines = LineConverter.ConvertLinesToBaseDTOs(zone.getLines().stream()
-                .filter(x -> !x.isDeleted()).collect(Collectors.toList()));
+        List<BaseDTO> lines = LineConverter.ConvertLinesToBaseDTOs(zone.getLines());
 
         return ResponseHelpers.getResponseData(lines);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/line/remove", method = RequestMethod.POST)
     public ResponseEntity removeLineFromZone(@RequestBody ZoneWithLineDTO zoneWithLineDTO) throws Exception
     {
@@ -191,8 +268,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
 
         Zone zone = zoneResult.getData();
         Line line = lineResult.getData();
-        List<Line> zoneLines = zone.getLines().stream()
-                .filter(x -> !x.isDeleted()).collect(Collectors.toList());
+        List<Line> zoneLines = zone.getLines();
         if(zoneLines.stream().noneMatch(x -> x.getId().equals(line.getId()))) {
             throw new BadRequestException(Messages.DoesNotContain(
                     StringConstants.Zone, zone.getId(), StringConstants.Line, line.getId()));

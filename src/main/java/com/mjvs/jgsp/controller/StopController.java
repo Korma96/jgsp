@@ -10,6 +10,7 @@ import com.mjvs.jgsp.model.Stop;
 import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,7 @@ public class StopController extends BaseController<Stop>
     }
 
     // Stop name doesn`t need to be unique!
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody StopDTO stopDTO) throws Exception
     {
@@ -53,6 +55,7 @@ public class StopController extends BaseController<Stop>
         return ResponseHelpers.getResponseData(addResult.getMessage());
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/coordinates", method = RequestMethod.POST)
     public ResponseEntity changeCoordinates(@RequestBody StopLiteDTO stopLiteDTO) throws Exception
     {
@@ -92,6 +95,7 @@ public class StopController extends BaseController<Stop>
         return ResponseHelpers.getResponseData(getResult.getData());
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
     public ResponseEntity rename(@RequestBody BaseDTO baseDTO) throws Exception
     {

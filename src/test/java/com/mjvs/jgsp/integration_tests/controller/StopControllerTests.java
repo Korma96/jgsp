@@ -22,6 +22,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -54,6 +55,7 @@ public class StopControllerTests
     @Autowired
     private StopController stopController;
 
+
     @Before
     public void init()
     {
@@ -71,6 +73,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Add_StopNameIsEmptyOrWhiteSpace_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -89,7 +92,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(new ErrorDTO(
                 Messages.CantBeEmptyOrWhitespace(StringConstants.Stop))), response.getContentAsString());
     }
@@ -97,6 +99,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Add_StopExists_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -117,7 +120,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(
                 new ErrorDTO(String.format("%s with lat %f and lng %f already exist!", StringConstants.Stop, lat, lng))),
                 response.getContentAsString());
@@ -126,6 +128,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Add_StopDoesNotExist_StopSaved() throws Exception
     {
         // Arrange
@@ -146,7 +149,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
         assertNotNull(stopRepository.findByLatitudeAndLongitude(lat, lng));
     }
@@ -154,6 +156,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void ChangeCoordinates_StopDoesNotExist_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -171,7 +174,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(
                 new ErrorDTO(Messages.DoesNotExist(StringConstants.Stop, stopLiteDTO.getId()))),
                 response.getContentAsString());
@@ -180,6 +182,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void ChangeCoordinates_StopWithSameLatAndLngAlreadyExists_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -205,7 +208,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(
                 new ErrorDTO(String.format("%s with lat %f and lng %f already exist!",
                         StringConstants.Stop, lat, lng))),
@@ -215,6 +217,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void ChangeCoordinates_UpdatingUnchangedCoordinates_StopUpdated() throws Exception
     {
         // Arrange
@@ -238,13 +241,13 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
     }
 
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void ChangeCoordinates_UpdatingChangedCoordinates_StopUpdated() throws Exception
     {
         // Arrange
@@ -270,7 +273,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
         Stop dbStop = stopRepository.findById(id).get();
         assertEquals(newLat, dbStop.getLatitude(), 0);
@@ -310,6 +312,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Rename_NameIsEmptyOrWhitespace_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -326,7 +329,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(new ErrorDTO(
                 Messages.CantBeEmptyOrWhitespace(StringConstants.Stop))), response.getContentAsString());
     }
@@ -334,6 +336,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Rename_StopDoesNotExist_ThrowsBadRequestException() throws Exception
     {
         // Arrange
@@ -350,7 +353,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(
                 new ErrorDTO(Messages.DoesNotExist(StringConstants.Stop, baseDTO.getId()))),
                 response.getContentAsString());
@@ -359,6 +361,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Rename_StopWithSameNameDoesNotExist_StopRenamed() throws Exception
     {
         // Arrange
@@ -380,7 +383,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
         assertEquals(newName, stopRepository.findById(id).get().getName());
     }
@@ -388,6 +390,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Rename_StopWithSameNameExists_StopRenamed() throws Exception
     {
         // Arrange
@@ -409,7 +412,6 @@ public class StopControllerTests
                 .andReturn().getResponse();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
         assertEquals(newName, stopRepository.findById(id).get().getName());
     }
@@ -417,6 +419,7 @@ public class StopControllerTests
     @Transactional
     @Rollback(true)
     @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
     public void Rename_StopNameIsUnchanged_StopRenamed() throws Exception
     {
         // Arrange
