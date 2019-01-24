@@ -221,6 +221,47 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(latestSchedules);
     }
 
+    @RequestMapping(value = "/{id}/minutes", method = RequestMethod.GET)
+    public ResponseEntity<MinutesRequiredForWholeRouteDTO> getLineMinutesRequiredForWholeRoute(@PathVariable("id") Long id) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(id);
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        MinutesRequiredForWholeRouteDTO minutesDTO = new MinutesRequiredForWholeRouteDTO(
+                line.getMinutesRequiredForWholeRoute());
+        return ResponseHelpers.getResponseData(minutesDTO);
+    }
+
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
+    @RequestMapping(value = "/{id}/minutes", method = RequestMethod.POST)
+    public ResponseEntity updateLineMinutesRequiredForWholeRoute(
+            @PathVariable("id") Long id, @RequestBody MinutesRequiredForWholeRouteDTO minutesDTO) throws Exception
+    {
+        int minutes = minutesDTO.getMinutes();
+        if(minutes <= 0){
+            throw new BadRequestException("Minutes required for whole route must be positive number!");
+        }
+
+        Result<Line> lineResult = lineService.findById(id);
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        line.setMinutesRequiredForWholeRoute(minutes);
+        lineService.checkIfLineCanBeActive(line);
+
+        Result<Boolean> saveResult = lineService.save(line);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult);
+    }
+
     @RequestMapping(value = "/{id}/stop", method = RequestMethod.GET)
     public ResponseEntity<List<StopDTO>> getLineStops(@PathVariable("id") Long id) throws Exception
     {

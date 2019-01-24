@@ -198,18 +198,21 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         if(line.getZone() == null){
             if(line.isActive()){
                 line.setActive(false);
+                return;
             }
         }
         // must have at least two stops
         if(line.getStops().size() < 2){
             if(line.isActive()){
                 line.setActive(false);
+                return;
             }
         }
         // must have at least one schedule
         if(line.getSchedules().size() == 0){
             if(line.isActive()){
                 line.setActive(false);
+                return;
             }
         }
         // must have at least one departure time
@@ -217,8 +220,16 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
             if(s.getDepartureList().size() == 0){
                 if(line.isActive()){
                     line.setActive(false);
-                    break;
+                    return;
                 }
+            }
+        }
+
+        // minutes required for whole route must not be 0
+        if(line.getMinutesRequiredForWholeRoute() == 0){
+            if(line.isActive()){
+                line.setActive(false);
+                return;
             }
         }
 

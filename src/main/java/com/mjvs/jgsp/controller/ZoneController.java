@@ -102,6 +102,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
 
         zoneLines.add(line);
         zone.setLines(zoneLines);
+        line.setZone(zone);
 
         lineService.checkIfLineCanBeActive(line);
 
@@ -274,6 +275,15 @@ public class ZoneController extends ExtendedBaseController<Zone>
                     StringConstants.Zone, zone.getId(), StringConstants.Line, line.getId()));
         }
 
+        // update line
+        line.setZone(null);
+        lineService.checkIfLineCanBeActive(line);
+
+        Result<Boolean> saveLineResult = lineService.save(line);
+        if(saveLineResult.isFailure()) {
+            throw new DatabaseException(saveLineResult.getMessage());
+        }
+
         // zoneLines.remove(line) not working -> throws StackOverflowException :/
         int index = -1;
         for(int i=0; i<zoneLines.size(); i++){
@@ -282,11 +292,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
                 break;
             }
         }
-        line.setActive(false);
-        Result<Boolean> saveLineResult = lineService.save(line);
-        if(saveLineResult.isFailure()) {
-            throw new DatabaseException(saveLineResult.getMessage());
-        }
+        // update zone
         zoneLines.remove(index);
         zone.setLines(zoneLines);
 
