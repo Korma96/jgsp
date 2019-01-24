@@ -325,24 +325,35 @@ public class PassengerServiceImpl implements PassengerService {
 	public Passenger save(Passenger p) {
 		return passengerRepository.save(p);
 	}
-
+	
 	@Override
 	public List<Passenger> getAll(){
 		return passengerRepository.findAll();
 	}
-
+	
 	@Override
 	public List<Passenger> getRequests(){
 		List<Passenger> passengers = passengerRepository.findAll();
-
+		
 		List<Passenger> requests = passengers.stream()
 				.filter(p -> p.getNewPassengerType() != null)
 				.collect(Collectors.toList());
-
+		
 		return requests;
 	}
 
-
+	@Override
+	public List<Passenger> getDeactivatedPassengers() {
+		List<Passenger> passengers = passengerRepository.findAll();
+		
+		List<Passenger> deactivatedPassengers = passengers.stream()
+				.filter(p -> p.getUserStatus() != UserStatus.ACTIVATED)
+				.collect(Collectors.toList());
+		
+		return deactivatedPassengers;
+	}
+	 
+	
 }
 
 

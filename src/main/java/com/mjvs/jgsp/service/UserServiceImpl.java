@@ -193,9 +193,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteUser(Long id) throws UserNotFoundException {
 		User user = userRepository.findByIdAndDeleted(id, false);
-		if (user == null)
-			throw new UserNotFoundException();
-
+		if (user == null) throw new UserNotFoundException();
 		user.setDeleted(true);
 		userRepository.save(user);
 		return true;
@@ -223,5 +221,44 @@ public class UserServiceImpl implements UserService {
 
 		return false;
 	}
+
+	@Override
+	public boolean adminActivation(Long id, boolean activate) throws UserNotFoundException {
+		User user = userRepository.findByIdAndDeleted(id, false);
+		if (user != null) {
+			if (user.getUserStatus().equals(UserStatus.ACTIVATED)){
+				user.setUserStatus(UserStatus.DEACTIVATED);
+			}
+			else{
+				user.setUserStatus(UserStatus.ACTIVATED);
+			}
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean activatePassenger(Long id, boolean activate) throws UserNotFoundException {
+		Passenger passenger = passengerRepository.findById(id);
+
+		if (passenger != null) {
+			if (passenger.getUserStatus().equals(UserStatus.DEACTIVATED)){
+				passenger.setUserStatus(UserStatus.ACTIVATED);
+				passenger.setNumOfDelicts(0);
+			}
+			else if (passenger.getUserStatus().equals(UserStatus.PENDING)) {
+				passenger.setUserStatus(UserStatus.ACTIVATED);
+			}
+			else{
+				return false;
+			}
+			userRepository.save(passenger);
+			return true;
+		}
+
+		return false;
+	}
+	
 
 }
