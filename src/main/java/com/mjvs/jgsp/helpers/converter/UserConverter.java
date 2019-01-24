@@ -3,6 +3,7 @@ package com.mjvs.jgsp.helpers.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mjvs.jgsp.dto.DeactivatedPassengerDTO;
 import com.mjvs.jgsp.dto.RequestDTO;
 import com.mjvs.jgsp.dto.UserFrontendDTO;
 import com.mjvs.jgsp.model.Passenger;
@@ -18,4 +19,7 @@ public class UserConverter {
 		return passengers.stream().map(passenger -> new RequestDTO(passenger)).collect(Collectors.toList());
 	}
 
+	public static List<DeactivatedPassengerDTO> ConvertPassengerToDeactivatedPassengerDTO(List<Passenger> passengers) {
+		return passengers.stream().map(passenger -> new DeactivatedPassengerDTO(passenger)).collect(Collectors.toList());
+	}
 }

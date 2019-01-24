@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mjvs.jgsp.dto.DeactivatedPassengerDTO;
 import com.mjvs.jgsp.dto.ReportDTO;
 import com.mjvs.jgsp.dto.RequestDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
@@ -100,7 +101,7 @@ public class UserAdminController {
         }
 
     }    
-    
+    /*
    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(@RequestBody UserDTO userDTO) {
         try{
@@ -114,7 +115,7 @@ public class UserAdminController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-
+*/
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) {
@@ -133,8 +134,40 @@ public class UserAdminController {
     @RequestMapping(value = "/request-review/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> acceptPassengerRequest(@PathVariable("id") Long id, @RequestBody boolean accepted) {
         try{
-        		boolean success = userService.acceptPassengerRequest(id, accepted);
-        		return new ResponseEntity<Boolean>(success,HttpStatus.OK);
+    		boolean success = userService.acceptPassengerRequest(id, accepted);
+    		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+        	}
+        catch (Exception e) {
+        	logger.error(e.getMessage());
+            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value = "/get-deactivated-passengers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<DeactivatedPassengerDTO>> getDeactivatedPassengers(){
+    	
+    	List<Passenger> passengers = passengerService.getDeactivatedPassengers();
+    	List<DeactivatedPassengerDTO> deactivatedPassengerDtos = UserConverter.ConvertPassengerToDeactivatedPassengerDTO(passengers);
+    	return new ResponseEntity<List<DeactivatedPassengerDTO>>(deactivatedPassengerDtos, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/activate-passenger/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> activatePassenger(@PathVariable("id") Long id, @RequestBody boolean accepted) {
+        try{
+    		boolean success = userService.activatePassenger(id, accepted);
+    		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+        	}
+        catch (Exception e) {
+        	logger.error(e.getMessage());
+            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value = "/activation/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> adminActivation(@PathVariable("id") Long id, @RequestBody boolean activate) {
+        try{
+        	boolean success = userService.adminActivation(id, activate);
+        	return new ResponseEntity<Boolean>(success, HttpStatus.OK);
         	}
         catch (Exception e) {
         	logger.error(e.getMessage());
@@ -177,7 +210,7 @@ public class UserAdminController {
     	for (Ticket ticket : tickets)
     	{
     		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
+    		if ((ticketDate.equals(startDate) || ticketDate.isAfter(startDate)) && (ticketDate.equals(endDate) || ticketDate.isBefore(endDate)) )
     		{
     			System.out.println(ticket.getTicketType());
     			report = UserAdminHelpers.calculateReport(report, ticket);
@@ -222,7 +255,7 @@ public class UserAdminController {
 	    		if (ticket.getLineZone().getId().equals(id)) {
 		    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
 		    		
-		    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
+		    		if ((ticketDate.equals(startDate) || ticketDate.isAfter(startDate)) && (ticketDate.equals(endDate) || ticketDate.isBefore(endDate)) )
 		    		{
 		    			report = UserAdminHelpers.calculateReport(report, ticket);
 		    		}
@@ -240,7 +273,7 @@ public class UserAdminController {
     	
     	LocalDate requestedDate;
 		try {
-			requestedDate = LocalDate.parse(requestedDateStr);
+			requestedDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(requestedDateStr));
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -273,11 +306,11 @@ public class UserAdminController {
     }
     
     @RequestMapping(value = "/daily-general-report", method = RequestMethod.GET)
-    public ResponseEntity<ReportDTO> dailyGeneralReport(@RequestParam("startDate") String requestedDateStr) {
+    public ResponseEntity<ReportDTO> dailyGeneralReport(@RequestParam("requestedDate") String requestedDateStr) {
     	
     	LocalDate requestedDate;
 		try {
-			requestedDate = LocalDate.parse(requestedDateStr);
+			requestedDate = LocalDate.parse(UserAdminHelpers.toValidDateFormat(requestedDateStr));
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

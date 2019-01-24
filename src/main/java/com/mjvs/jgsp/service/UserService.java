@@ -31,4 +31,8 @@ public interface UserService {
 	
 	boolean acceptPassengerRequest(Long id, boolean accepted) throws UserNotFoundException;
 	
+	boolean adminActivation(Long id, boolean activate) throws UserNotFoundException;
+	
+	boolean activatePassenger(Long id, boolean accepted) throws UserNotFoundException;
+	
 }

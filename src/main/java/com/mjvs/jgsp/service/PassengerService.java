@@ -35,5 +35,7 @@ public interface PassengerService {
     List <Passenger> getAll();
 
 	List<Passenger> getRequests();
+	
+	List<Passenger> getDeactivatedPassengers();
 
 }

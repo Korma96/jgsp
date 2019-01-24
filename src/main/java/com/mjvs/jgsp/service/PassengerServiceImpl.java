@@ -341,6 +341,17 @@ public class PassengerServiceImpl implements PassengerService {
 		
 		return requests;
 	}
+
+	@Override
+	public List<Passenger> getDeactivatedPassengers() {
+		List<Passenger> passengers = passengerRepository.findAll();
+		
+		List<Passenger> deactivatedPassengers = passengers.stream()
+				.filter(p -> p.getUserStatus() != UserStatus.ACTIVATED)
+				.collect(Collectors.toList());
+		
+		return deactivatedPassengers;
+	}
 	 
 	
 }
