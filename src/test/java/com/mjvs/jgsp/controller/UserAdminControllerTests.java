@@ -3,11 +3,9 @@ package com.mjvs.jgsp.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -16,9 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,7 +33,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mjvs.jgsp.dto.ReportDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
 import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
@@ -212,10 +207,10 @@ public class UserAdminControllerTests {
 	@Test
 	public void testDailyGeneralReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,3,1,1,3000);
-		String startDateStr = "2019-01-21";
+		String requestedDate = "2019-01-21";
 		
 		HttpEntity requestEntity = new HttpEntity(headers);
-		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/daily-general-report?startDate="+ startDateStr,
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/daily-general-report?requestedDate="+ requestedDate,
 										HttpMethod.GET, requestEntity, ReportDTO.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
