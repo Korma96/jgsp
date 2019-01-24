@@ -18,7 +18,7 @@ public interface PriceTicketService {
 
 	void save(PriceTicket priceTicket);
 
-	boolean addTicket(PriceTicketDTO priceTicketDTO);
+	Map addTicket(PriceTicketDTO priceTicketDTO);
 
 	List<PriceTicketFrontendDTO> getAllPriceTickets();
 

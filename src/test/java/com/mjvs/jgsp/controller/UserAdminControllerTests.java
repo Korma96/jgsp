@@ -13,6 +13,12 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mjvs.jgsp.dto.ReportDTO;
+import com.mjvs.jgsp.dto.UserBackendDTO;
+import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.security.TokenUtils;
+import com.mjvs.jgsp.service.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,7 +58,7 @@ public class UserAdminControllerTests {
 	private UserService userService;
 	
 	@MockBean
-    UserDetailsServiceImpl userDetailsService;
+	UserDetailsServiceImpl userDetailsService;
 	
 	@MockBean
 	ZoneService zoneService;
@@ -64,7 +70,7 @@ public class UserAdminControllerTests {
     AuthenticationManager authenticationManager;
 
     @MockBean
-    TokenUtils tokenUtils;
+	TokenUtils tokenUtils;
 	
 	private HttpHeaders headers;
 	
