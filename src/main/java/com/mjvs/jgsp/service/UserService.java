@@ -19,7 +19,7 @@ public interface UserService {
     
     User getUser(String username, String password);
 
-    boolean checkTicket(String username, Long id) throws Exception;
+    boolean checkTicket(String username, String lineName) throws Exception;
 
     boolean exists(String username);
 

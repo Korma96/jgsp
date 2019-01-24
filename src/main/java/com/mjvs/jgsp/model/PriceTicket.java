@@ -113,4 +113,18 @@ public class PriceTicket extends EntityForDeleted {
     public int hashCode() {
         return Objects.hash(id, dateFrom, passengerType, ticketType, priceLine, priceZone, zone);
     }
+
+    @Override
+    public String toString() {
+        return "PriceTicket{" +
+                "id=" + id +
+                ", dateFrom=" + dateFrom +
+                ", passengerType=" + passengerType +
+                ", ticketType=" + ticketType +
+                ", priceLine=" + priceLine +
+                ", priceZone=" + priceZone +
+                ", zone=" + zone +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

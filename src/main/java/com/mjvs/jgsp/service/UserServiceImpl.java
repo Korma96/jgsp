@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.mjvs.jgsp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,45 +54,66 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public boolean checkTicket(String username, Long id) throws Exception {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Override
+    public boolean checkTicket(String username, String lineName) throws Exception {
 
-		Passenger passenger = (Passenger) this.getUser(username);
+        Passenger passenger = (Passenger) this.getUser(username);
+        if(passenger.getUserStatus() == UserStatus.DEACTIVATED){
+            return false;
+        }
 
-		LocalDateTime dateAndTime = LocalDateTime.now();
 
-		Ticket ticket = null;
-		boolean valid = false;
-		for (int i = 0; i < passenger.getTickets().size(); i++) {
-			ticket = passenger.getTickets().get(i);
+        LocalDateTime dateAndTime = LocalDateTime.now();
 
-			if (!ticket.getLineZone().getId().equals(id)) {
-				if (ticket.getLineZone() instanceof Zone) {
-					List<Line> lines = ticket.getLineZone().getZone().getLines();
+        Ticket ticket = null;
+        boolean valid = false;
+        boolean condition;
 
-					boolean condition = lines.stream().filter(line -> line.getId() == id).count() == 0;
+        for (int i = 0; i < passenger.getTickets().size(); i++) {
+            ticket = passenger.getTickets().get(i);
 
-					if (condition) {
-						continue;
-					}
-				} else {
-					continue;
-				}
+            System.out.println(ticket.getId());
+            System.out.println(ticket.getLineZone().getId());
+            System.out.println(ticket.getLineZone().getZone().getId());
 
-			}
 
-			if (ticket.getStartDateAndTime() != null && ticket.getEndDateAndTime() != null) {
+            System.out.println(ticket.getStartDateAndTime());
+            System.out.println(ticket.getEndDateAndTime());
 
-				long dif = computeSubtractTwoDateTime(dateAndTime, ticket.getStartDateAndTime());
+            LineZone lineZone = ticket.getLineZone();
 
-				if (dif >= 0) {
-					dif = computeSubtractTwoDateTime(dateAndTime, ticket.getEndDateAndTime());
-					if (dif <= 0) {
-						valid = true;
-						break;
-					}
-				}
-			}
-		}
+            if(lineZone instanceof Zone) {
+                List<Line> lines = ticket.getLineZone().getZone().getLines();
+                System.out.println("zona");
+                condition =  lines.stream().filter(line -> line.getName().equals(lineName+"A") || line.getName().equals(lineName+"B"))
+                                .count() == 0;
+            }
+            else {
+                Line line = (Line) lineZone;
+                condition = !line.getName().equals(lineName+"A") && !line.getName().equals(lineName+"B");
+            }
+
+            if(condition){
+                continue;
+            }
+
+
+            if (ticket.getStartDateAndTime() != null && ticket.getEndDateAndTime() != null) {
+
+                long dif = computeSubtractTwoDateTime(ticket.getStartDateAndTime(), dateAndTime);
+
+                if (dif >= 0) {
+                    dif = computeSubtractTwoDateTime(ticket.getEndDateAndTime(), dateAndTime);
+                    if (dif <= 0) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+
+
+        }
 
 		if (!valid) {
 			int num_d = passenger.getNumOfDelicts();
@@ -192,7 +214,7 @@ public class UserServiceImpl implements UserService {
 			else {
 				passenger.setNewPassengerType(null);
 				userRepository.save(passenger);
-				
+
 			}
 			return true;
 		}
