@@ -44,6 +44,8 @@ public class Line extends LineZone {
     {
         this();
         this.name = name;
+        this.active = false;
+        this.minutesRequiredForWholeRoute = 0;
     }
 
 
@@ -56,6 +58,7 @@ public class Line extends LineZone {
 		this.points = points;
 		this.stops = stops;
 		this.schedules = schedules;
+        this.minutesRequiredForWholeRoute = 0;
 	}
     public Line(String name, int minutesRequiredForWholeRoute, Zone zone, List<Point> points, List<Stop> stops, List<Schedule> schedules) {
         this.name = name;
@@ -149,7 +152,10 @@ public class Line extends LineZone {
 
     @Override
     public String toString() {
-        return name + " ("+ zone.getName() + ")";
+        if(zone != null){
+            return name + " ("+ zone.getName() + ")";
+        }
+        return name;
     }
 
     @Override

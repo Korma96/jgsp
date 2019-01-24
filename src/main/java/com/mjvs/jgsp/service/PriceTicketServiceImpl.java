@@ -56,9 +56,10 @@ public class PriceTicketServiceImpl implements PriceTicketService {
 	}
 
 	@Override
-	public boolean addTicket(PriceTicketDTO priceTicketDTO) {
+	public Map addTicket(PriceTicketDTO priceTicketDTO) {
+        System.out.println("Servis");
 		PriceTicket priceTicket;
-		System.out.println("hej");
+		Map<String,String> retVal = new HashMap<String,String>();
 
 		List<PriceTicket> priceTicketList = this.priceTicketRepository.findAll();
 
@@ -78,8 +79,9 @@ public class PriceTicketServiceImpl implements PriceTicketService {
 			if (priceTicketDTO.getPassengerType().equals(priceTicketList.get(i).getPassengerType()) &&
 					priceTicketDTO.getTicketType().equals(priceTicketList.get(i).getTicketType()) &&
 					priceTicketDTO.getZone().equalsIgnoreCase(priceTicketList.get(i).getZone().getName())) {
-				System.out.println("ovde");
-				return false;
+				retVal.put("message","This combination of passenger type, ticket type and zone already exist in base!");
+				retVal.put("added","false");
+				return retVal;
 			}
 
 		}
@@ -87,20 +89,24 @@ public class PriceTicketServiceImpl implements PriceTicketService {
 
 		Zone zone = this.zoneRepository.findByName(priceTicketDTO.getZone());
 		if (zone == null) {
-			return false;
+            retVal.put("message","The zone does not exist in base!");
+            retVal.put("added","false");
+			return retVal;
 		}
 
-		System.out.println("Asfasfasf");
 
 
 		try {
 			priceTicket = new PriceTicket(priceTicketDTO.getDateFrom(), priceTicketDTO.getPassengerType(), priceTicketDTO.getTicketType(),
 					priceTicketDTO.getPriceLine(), priceTicketDTO.getPriceZone(), zone);
 			this.priceTicketRepository.save(priceTicket);
+			System.out.println("asfasfasf");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			return true;
+        retVal.put("message","Priceticket successfully added :)");
+        retVal.put("added","true");
+        return retVal;
 		}
 
 		@Override

@@ -53,7 +53,7 @@ public class ZonePageTests
         // wait for page to load
         WaitUntilZonePageIsShown();
 
-        assertEquals("We have 3 zones in e2e.sql file",3, GetNumberOfZones());
+        assertEquals("We have 3 zones in db",3, GetNumberOfZones());
     }
 
     @Test
@@ -93,11 +93,13 @@ public class ZonePageTests
 
         // remove line from zone
         WaitUntilZoneLinesAppear();
+        Thread.sleep(3000);
         assertNull(GetAddLineButtonByName(LineName));
         WebElement removeLineButton = GetRemoveLineButtonByName(LineName);
         assertNotNull(removeLineButton);
         removeLineButton.click();
         WaitUntilRemainingLinesAppear();
+        Thread.sleep(3000);
         assertNotNull(GetAddLineButtonByName(LineName));
 
         // add line to newly created zone
@@ -141,6 +143,8 @@ public class ZonePageTests
         // remove newly created zone, so its line(s) will be released
         browser.navigate().to(ZoneHomePage);
         WaitUntilZonesAppear();
+        WaitUntilZonePageIsShown();
+        Thread.sleep(3000);
         WebElement removeZoneButton = GetRemoveZoneButtonByName(RenamedNewZoneName);
         assertNotNull(removeZoneButton);
         removeZoneButton.click();

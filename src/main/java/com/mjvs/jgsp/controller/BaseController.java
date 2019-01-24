@@ -1,11 +1,12 @@
 package com.mjvs.jgsp.controller;
 
-import com.mjvs.jgsp.service.BaseService;
 import com.mjvs.jgsp.helpers.ResponseHelpers;
 import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.DatabaseException;
+import com.mjvs.jgsp.service.BaseService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ public class BaseController<T>
         this.baseService = baseService;
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
     {
