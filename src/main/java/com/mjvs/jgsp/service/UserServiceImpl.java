@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import com.mjvs.jgsp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
@@ -193,9 +190,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteUser(Long id) throws UserNotFoundException {
 		User user = userRepository.findByIdAndDeleted(id, false);
-		if (user == null)
-			throw new UserNotFoundException();
-
+		if (user == null) throw new UserNotFoundException();
 		user.setDeleted(true);
 		userRepository.save(user);
 		return true;
@@ -223,5 +218,44 @@ public class UserServiceImpl implements UserService {
 
 		return false;
 	}
+
+	@Override
+	public boolean adminActivation(Long id, boolean activate) throws UserNotFoundException {
+		User user = userRepository.findByIdAndDeleted(id, false);
+		if (user != null) {
+			if (user.getUserStatus().equals(UserStatus.ACTIVATED)){
+				user.setUserStatus(UserStatus.DEACTIVATED);
+			}
+			else{
+				user.setUserStatus(UserStatus.ACTIVATED);
+			}
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean activatePassenger(Long id, boolean activate) throws UserNotFoundException {
+		Passenger passenger = passengerRepository.findById(id);
+
+		if (passenger != null) {
+			if (passenger.getUserStatus().equals(UserStatus.DEACTIVATED)){
+				passenger.setUserStatus(UserStatus.ACTIVATED);
+				passenger.setNumOfDelicts(0);
+			}
+			else if (passenger.getUserStatus().equals(UserStatus.PENDING)) {
+				passenger.setUserStatus(UserStatus.ACTIVATED);
+			}
+			else{
+				return false;
+			}
+			userRepository.save(passenger);
+			return true;
+		}
+
+		return false;
+	}
+	
 
 }

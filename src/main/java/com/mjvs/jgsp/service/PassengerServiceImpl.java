@@ -280,10 +280,12 @@ public class PassengerServiceImpl implements PassengerService {
         boolean ticketNotFound = true;
         LocalDateTime currentDateTime;
 
-        for(int i = 0; i < loggedPassenger.getTickets().size(); i++) {
-            ticket = loggedPassenger.getTickets().get(i);
+        List<Ticket> tickets = loggedPassenger.getTickets();
 
-            if(ticket.getId() == id) {
+        for(int i = 0; i < tickets.size(); i++) {
+            ticket = tickets.get(i);
+
+            if(ticket.getId().longValue() == id.longValue()) {
                 ticketNotFound = false;
 
                 if(ticket.getStartDateAndTime() == null || ticket.getEndDateAndTime() == null) {
@@ -326,24 +328,35 @@ public class PassengerServiceImpl implements PassengerService {
 	public Passenger save(Passenger p) {
 		return passengerRepository.save(p);
 	}
-
+	
 	@Override
 	public List<Passenger> getAll(){
 		return passengerRepository.findAll();
 	}
-
+	
 	@Override
 	public List<Passenger> getRequests(){
 		List<Passenger> passengers = passengerRepository.findAll();
-
+		
 		List<Passenger> requests = passengers.stream()
 				.filter(p -> p.getNewPassengerType() != null)
 				.collect(Collectors.toList());
-
+		
 		return requests;
 	}
 
-
+	@Override
+	public List<Passenger> getDeactivatedPassengers() {
+		List<Passenger> passengers = passengerRepository.findAll();
+		
+		List<Passenger> deactivatedPassengers = passengers.stream()
+				.filter(p -> p.getUserStatus() != UserStatus.ACTIVATED)
+				.collect(Collectors.toList());
+		
+		return deactivatedPassengers;
+	}
+	 
+	
 }
 
 

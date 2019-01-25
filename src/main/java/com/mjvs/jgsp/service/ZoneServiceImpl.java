@@ -1,7 +1,6 @@
 package com.mjvs.jgsp.service;
 
 import com.mjvs.jgsp.model.Zone;
-import com.mjvs.jgsp.repository.LineRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

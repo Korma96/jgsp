@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;
@@ -30,5 +29,9 @@ public interface UserService {
 	boolean deleteUser(Long id) throws UserNotFoundException;
 	
 	boolean acceptPassengerRequest(Long id, boolean accepted) throws UserNotFoundException;
+	
+	boolean adminActivation(Long id, boolean activate) throws UserNotFoundException;
+	
+	boolean activatePassenger(Long id, boolean accepted) throws UserNotFoundException;
 	
 }
