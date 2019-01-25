@@ -6,26 +6,20 @@ import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.security.TokenUtils;
 import com.mjvs.jgsp.service.UserDetailsServiceImpl;
 import com.mjvs.jgsp.service.UserService;
-import org.hibernate.mapping.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,15 +59,15 @@ public class UserControllerTest {
     private UserDTO userDTO2;
     private UserDTO userDTO3;
 
-    private long idSuccess;
-    private long idUnsuccess;
-    private long idBadRequest;
+    private String lineNameSuccess;
+    private String lineNameUnsuccess;
+    private String lineNameBadRequest;
 
     @Before
     public void setUp() throws Exception {
-        idSuccess = 1;
-        idUnsuccess = 2;
-        idBadRequest = 3;
+        lineNameSuccess = "1";
+        lineNameUnsuccess = "2";
+        lineNameBadRequest = "3";
 
         userDTO1 = new UserDTO("user1","111");
         userDTO2 = new UserDTO("user2","222");
@@ -106,9 +100,9 @@ public class UserControllerTest {
         when(tokenUtils.validateToken(accessToken3, userDetails3)).thenReturn(true);
 
 
-        /*when(userService.checkTicket(userDTO1.getUsername(), idSuccess)).thenReturn(true);
-        when(userService.checkTicket(userDTO2.getUsername(), idUnsuccess)).thenReturn(false);
-        when(userService.checkTicket(userDTO3.getUsername(), idBadRequest)).thenThrow(Exception.class);*/
+        when(userService.checkTicket(userDTO1.getUsername(), lineNameSuccess)).thenReturn(true);
+        when(userService.checkTicket(userDTO2.getUsername(), lineNameUnsuccess)).thenReturn(false);
+        when(userService.checkTicket(userDTO3.getUsername(), lineNameBadRequest)).thenThrow(Exception.class);
     }
 
 
@@ -136,7 +130,7 @@ public class UserControllerTest {
         headers.add("X-Auth-Token",accessToken1);
         HttpEntity httpEntity = new HttpEntity(headers);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO1.getUsername()+"/zoneLine/"+idSuccess,
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO1.getUsername()+"/"+lineNameSuccess,
                 HttpMethod.PUT,httpEntity, Boolean.class);
 
         boolean valid = responseEntity.getBody();
@@ -152,7 +146,7 @@ public class UserControllerTest {
         h.add("X-Auth-Token",accessToken2);
         HttpEntity httpEntity = new HttpEntity(h);
         int id = 5;
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO2.getUsername()+"/zoneLine/"+idUnsuccess,
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO2.getUsername()+"/"+lineNameUnsuccess,
                 HttpMethod.PUT,httpEntity, Boolean.class);
 
         boolean valid = responseEntity.getBody();
@@ -167,7 +161,7 @@ public class UserControllerTest {
         headers.add("X-Auth-Token",accessToken3);
         HttpEntity httpEntity = new HttpEntity(headers);
 
-        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO3.getUsername()+"/zoneLine/"+idBadRequest,
+        ResponseEntity<Boolean> responseEntity = testRestTemplate.exchange("/users/checkticket/"+userDTO3.getUsername()+"/"+lineNameBadRequest,
                 HttpMethod.PUT,httpEntity, Boolean.class);
 
         Boolean valid = responseEntity.getBody();

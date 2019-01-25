@@ -8,6 +8,7 @@ import com.mjvs.jgsp.helpers.exception.DatabaseException;
 import com.mjvs.jgsp.service.ExtendedBaseService;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ public class ExtendedBaseController<T> extends BaseController<T>
                 .resolveTypeArgument(getClass(), ExtendedBaseController.class).getSimpleName();
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity add(@RequestBody BaseLiteDTO baseLiteDTO) throws Exception
     {
@@ -51,6 +53,7 @@ public class ExtendedBaseController<T> extends BaseController<T>
         return ResponseHelpers.getResponseData(addResult);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
     public ResponseEntity rename(@RequestBody BaseDTO baseDTO) throws Exception
     {

@@ -20,6 +20,7 @@ import com.mjvs.jgsp.service.StopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class LineController extends ExtendedBaseController<Line>
         this.pointRepository = pointRepository;
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/stop/add", method = RequestMethod.POST)
     public ResponseEntity addStopToLine(@RequestBody LineWithStopLiteDTO lineWithStopDTO) throws Exception
     {
@@ -76,6 +78,8 @@ public class LineController extends ExtendedBaseController<Line>
         lineStops.add(index - 1, stop);
         line.setStops(lineStops);
 
+        lineService.checkIfLineCanBeActive(line);
+
         Result<Boolean> saveResult = lineService.save(line);
         if(saveResult.isFailure()) {
             throw new DatabaseException(saveResult.getMessage());
@@ -84,6 +88,7 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/stop/remove", method = RequestMethod.POST)
     public ResponseEntity removeStopFromLine(@RequestBody LineWithStopLiteDTO lineWithStopLiteDTO) throws Exception
     {
@@ -107,6 +112,9 @@ public class LineController extends ExtendedBaseController<Line>
         List<Stop> lineStops = line.getStops();
         lineStops.remove(stop);
         line.setStops(lineStops);
+
+        lineService.checkIfLineCanBeActive(line);
+
         Result<Boolean> saveResult = lineService.save(line);
         if(saveResult.isFailure()) {
             throw new DatabaseException(saveResult.getMessage());
@@ -115,6 +123,7 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/schedule/add", method = RequestMethod.POST)
     public ResponseEntity addScheduleToLine(LineWithScheduleDTO lineWithScheduleDTO) throws Exception
     {
@@ -136,7 +145,12 @@ public class LineController extends ExtendedBaseController<Line>
                     StringConstants.Line, line.getId(), StringConstants.Schedule, schedule.getId()));
         }
 
-        line.getSchedules().add(schedule);
+        List<Schedule> lineSchedules = line.getSchedules();
+        lineSchedules.add(schedule);
+        line.setSchedules(lineSchedules);
+
+        lineService.checkIfLineCanBeActive(line);
+
         Result<Boolean> saveResult = lineService.save(line);
         if(saveResult.isFailure()) {
             throw new DatabaseException(saveResult.getMessage());
@@ -207,6 +221,47 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(latestSchedules);
     }
 
+    @RequestMapping(value = "/{id}/minutes", method = RequestMethod.GET)
+    public ResponseEntity<MinutesRequiredForWholeRouteDTO> getLineMinutesRequiredForWholeRoute(@PathVariable("id") Long id) throws Exception
+    {
+        Result<Line> lineResult = lineService.findById(id);
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        MinutesRequiredForWholeRouteDTO minutesDTO = new MinutesRequiredForWholeRouteDTO(
+                line.getMinutesRequiredForWholeRoute());
+        return ResponseHelpers.getResponseData(minutesDTO);
+    }
+
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
+    @RequestMapping(value = "/{id}/minutes", method = RequestMethod.POST)
+    public ResponseEntity updateLineMinutesRequiredForWholeRoute(
+            @PathVariable("id") Long id, @RequestBody MinutesRequiredForWholeRouteDTO minutesDTO) throws Exception
+    {
+        int minutes = minutesDTO.getMinutes();
+        if(minutes <= 0){
+            throw new BadRequestException("Minutes required for whole route must be positive number!");
+        }
+
+        Result<Line> lineResult = lineService.findById(id);
+        if(!lineResult.hasData()){
+            throw new BadRequestException(lineResult.getMessage());
+        }
+
+        Line line = lineResult.getData();
+        line.setMinutesRequiredForWholeRoute(minutes);
+        lineService.checkIfLineCanBeActive(line);
+
+        Result<Boolean> saveResult = lineService.save(line);
+        if(saveResult.isFailure()) {
+            throw new DatabaseException(saveResult.getMessage());
+        }
+
+        return ResponseHelpers.getResponseData(saveResult);
+    }
+
     @RequestMapping(value = "/{id}/stop", method = RequestMethod.GET)
     public ResponseEntity<List<StopDTO>> getLineStops(@PathVariable("id") Long id) throws Exception
     {
@@ -240,6 +295,7 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(pointsAndStopsDTO);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/point/add", method = RequestMethod.POST)
     public ResponseEntity addPointToLine(@RequestBody LineWithPointDTO lineWithPointDTO) throws Exception
     {
@@ -273,6 +329,7 @@ public class LineController extends ExtendedBaseController<Line>
         return ResponseHelpers.getResponseData(saveResult);
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/point/remove", method = RequestMethod.POST)
     public ResponseEntity removePointFromLine(@RequestBody LineWithPointDTO lineWithPointDTO) throws Exception
     {
@@ -317,5 +374,6 @@ public class LineController extends ExtendedBaseController<Line>
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
 
 }

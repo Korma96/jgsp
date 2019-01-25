@@ -24,14 +24,18 @@ public class PriceTicketController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> addPriceTicket(@RequestBody PriceTicketDTO priceTicketDTO){
+    public ResponseEntity addPriceTicket(@RequestBody PriceTicketDTO priceTicketDTO){
         System.out.println("kontroler");
-        boolean added = this.priceTicketService.addTicket(priceTicketDTO);
+        //boolean added = this.priceTicketService.addTicket(priceTicketDTO);
+        Map<String, String> added;
 
-        if(added){
-            return new ResponseEntity<Boolean>(HttpStatus.CREATED);
+        try {
+            added = this.priceTicketService.addTicket(priceTicketDTO);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<Map>(added, HttpStatus.OK);
     }
 
 
@@ -50,20 +54,17 @@ public class PriceTicketController {
     @RequestMapping(value = "/{id}/update", method = RequestMethod.PUT)
     public ResponseEntity update(@RequestBody PriceTicketDTO priceTicketDTO, @PathVariable Long id) {
 
-        System.out.println("kontroler");
-        Pair<String,Boolean> changed = this.priceTicketService.update(priceTicketDTO,id);
-
-//        System.out.println(changed.getValue());
-       // System.out.println(changed.getKey());
-
         Map<String,String> response = new HashMap<>();
+        Pair<String,Boolean> changed;
+
+        try {
+            changed = this.priceTicketService.update(priceTicketDTO,id);
+        } catch (Exception e){
+            return new ResponseEntity(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         response.put("message",changed.getKey());
         response.put("changed",changed.getValue().toString());
-
-        if(changed.getValue()){
-            return new ResponseEntity(response,HttpStatus.OK);
-        }
 
         return new ResponseEntity(response,HttpStatus.OK);
     }
@@ -74,14 +75,16 @@ public class PriceTicketController {
     {
 
         System.out.println("kontrolor");
-        Map<String,String> deleted = this.priceTicketService.delete(id);
+        Map<String,String> deleted;
 
-
-        if(deleted.get("deleted").equalsIgnoreCase("true")){
-            return new ResponseEntity(deleted, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(deleted,HttpStatus.BAD_REQUEST);
+        try {
+            deleted = this.priceTicketService.delete(id);
+        } catch (Exception e){
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return new ResponseEntity(deleted, HttpStatus.OK);
+
 
     }
 

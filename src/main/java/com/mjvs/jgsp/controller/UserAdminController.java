@@ -272,7 +272,7 @@ public class UserAdminController {
     }
     
     @RequestMapping(value = "/daily-general-report", method = RequestMethod.GET)
-    public ResponseEntity<ReportDTO> dailyGeneralReport(@RequestParam("startDate") String requestedDateStr) {
+    public ResponseEntity<ReportDTO> dailyGeneralReport(@RequestParam("requestedDate") String requestedDateStr) {
     	
     	LocalDate requestedDate;
 		try {

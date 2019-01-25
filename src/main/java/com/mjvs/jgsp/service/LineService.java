@@ -26,4 +26,6 @@ public interface LineService extends ExtendedBaseService<Line>
     ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines);
     
     List<String> getLineNames();
+
+    void checkIfLineCanBeActive(Line line);
 }
