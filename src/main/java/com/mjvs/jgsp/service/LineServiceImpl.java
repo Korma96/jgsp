@@ -143,22 +143,22 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 
 	@Override
     public ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines) {
-        try {
-            LocalDate date = LocalDate.parse(dateStr, dateFormatter);
-            DayType day = DayType.valueOf(dayStr.toUpperCase());
+        LocalDate date = LocalDate.parse(dateStr, dateFormatter);
+        DayType day = DayType.valueOf(dayStr.toUpperCase());
 
-            ArrayList<TimesDTO> timesDTOs = new ArrayList<TimesDTO>();
+        ArrayList<TimesDTO> timesDTOs = new ArrayList<TimesDTO>();
 
-            Line lineA, lineB;
-            TimesDTO timesDTO;
-            String[] sufixes = {"A", "B"};
-            List<String> timesA, timesB;
+        Line lineA, lineB;
+        TimesDTO timesDTO = null;
+        String[] sufixes = {"A", "B"};
+        List<String> timesA, timesB;
 
-            for (String lineStr : lines) {
+        for (String lineStr : lines) {
+            try {
                 timesDTO = new TimesDTO();
                 lineA = lineRepository.findByNameAndDeleted(lineStr+sufixes[0], false);
                 lineB = lineRepository.findByNameAndDeleted(lineStr+sufixes[1], false);
-                if(lineA == null && lineB == null) return null;
+                //if(lineA == null && lineB == null) return null;
 
                 if(lineA == null) timesDTO.setTimesA(new ArrayList<>());
                 else {
@@ -181,15 +181,17 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
                             .collect(Collectors.toList());
                     timesDTO.setTimesB(timesB);
                 }
+            } catch (Exception e) {
+                if(timesDTO == null) timesDTO = new TimesDTO();
 
-                timesDTOs.add(timesDTO);
+                timesDTO.setTimesA(new ArrayList<>());
+                timesDTO.setTimesB(new ArrayList<>());
             }
 
-            return timesDTOs;
-        } catch (Exception e) {
-            return null;
+            timesDTOs.add(timesDTO);
         }
 
+        return timesDTOs;
     }
 
     public void checkIfLineCanBeActive(Line line)
