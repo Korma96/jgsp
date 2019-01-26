@@ -1,11 +1,16 @@
 package com.mjvs.jgsp.service;
 
+import com.mjvs.jgsp.model.DayType;
+import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Schedule;
 import com.mjvs.jgsp.repository.ScheduleRepository;
+import edu.emory.mathcs.backport.java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,20 @@ public class ScheduleServiceImpl extends BaseServiceImpl<Schedule> implements Sc
     }
 
     @Override
+    public List<String> getLineDatesFrom(Line line)
+    {
+        List<LocalDate> datesFrom = line.getSchedules().stream().map(Schedule::getDateFrom)
+                .sorted(new Comparator<LocalDate>(){
+                    @Override
+                    public int compare(LocalDate o1, LocalDate o2) {
+                        return o1.compareTo(o2);
+                    }
+                }).collect(Collectors.toList());
+
+        return datesFrom.stream().map(LocalDate::toString).distinct().collect(Collectors.toList());
+    }
+
+    @Override
     public List<String> getAllDatesFrom() {
         List<Schedule> schedules = scheduleRepository.findAll();
 
@@ -31,5 +50,29 @@ public class ScheduleServiceImpl extends BaseServiceImpl<Schedule> implements Sc
                                 .collect(Collectors.toList());
 
         return dates;
+    }
+
+    @Override
+    public Schedule getScheduleByLineAndDateFromAndDayType(Line line, LocalDate dateFromLocalDate, DayType dayTypeEnum)
+    {
+        /*
+        List<Schedule> lineSchedules = line.getSchedules().stream()
+                .filter(x -> x.getDateFrom().equals(dateFromLocalDate)).collect(Collectors.toList());
+
+        for(Schedule s : lineSchedules) {
+            if(s.getDayType().equals(dayTypeEnum)){
+                return s;
+            }
+        }
+        */
+        return scheduleRepository.findTopByDateFromAndLineAndDayType(dateFromLocalDate, line, dayTypeEnum);
+    }
+
+    @Override
+    public List<String> getSortedStringTimes(Schedule schedule) {
+        List<String> times = schedule.getDepartureList().stream()
+                                .map(x -> x.getTime().toString()).collect(Collectors.toList());
+        Collections.sort(times);
+        return times;
     }
 }

@@ -198,30 +198,44 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         if(line.getZone() == null){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
         // must have at least two stops
         if(line.getStops().size() < 2){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
         // must have at least one schedule
         if(line.getSchedules().size() == 0){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
-        // must have at least one departure time
-        for(Schedule s : line.getSchedules()){
+
+        // must have latest schedules for all DayTypes
+
+        List<Schedule> latestSchedules = getLatestSchedules(line.getSchedules());
+        /*
+        if(latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.WORKDAY) ||
+           latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SATURDAY) ||
+           latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SUNDAY)){
+            if(line.isActive()){
+                line.setActive(false);
+            }
+            return;
+        }
+        */
+        // must have at least one departure time in latest schedules
+        for(Schedule s : latestSchedules){
             if(s.getDepartureList().size() == 0){
                 if(line.isActive()){
                     line.setActive(false);
-                    return;
                 }
+                return;
             }
         }
 
@@ -229,8 +243,8 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         if(line.getMinutesRequiredForWholeRoute() == 0){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
 
         if(!line.isActive()){

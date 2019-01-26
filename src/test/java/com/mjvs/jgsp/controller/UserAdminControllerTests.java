@@ -1,18 +1,11 @@
 package com.mjvs.jgsp.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
-
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.mjvs.jgsp.dto.ReportDTO;
+import com.mjvs.jgsp.dto.UserBackendDTO;
+import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.security.TokenUtils;
+import com.mjvs.jgsp.service.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +46,7 @@ public class UserAdminControllerTests {
 	private UserService userService;
 	
 	@MockBean
-    UserDetailsServiceImpl userDetailsService;
+	UserDetailsServiceImpl userDetailsService;
 	
 	@MockBean
 	ZoneService zoneService;
@@ -64,7 +58,7 @@ public class UserAdminControllerTests {
     AuthenticationManager authenticationManager;
 
     @MockBean
-    TokenUtils tokenUtils;
+	TokenUtils tokenUtils;
 	
 	private HttpHeaders headers;
 	
@@ -240,7 +234,6 @@ public class UserAdminControllerTests {
 	
 	
 	@Test
-	@Ignore
 	public void testDailyLineZoneReport() throws ParseException {
 		ReportDTO r = new ReportDTO(0,1,1,1,2800);
 		String reqDateStr = "2019-01-21";
@@ -262,7 +255,6 @@ public class UserAdminControllerTests {
 	
 	
 	@Test
-	@Ignore
 	public void testGeneralReportBadDate() throws ParseException {
 		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-13-01";
