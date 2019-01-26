@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;

@@ -1,10 +1,10 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.integration_tests.service;
 
 import com.mjvs.jgsp.helpers.exception.PriceTicketNotFoundException;
 import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.service.*;
 import com.mjvs.jgsp.repository.PriceTicketRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

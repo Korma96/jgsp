@@ -2,11 +2,8 @@ package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.*;
 import com.mjvs.jgsp.helpers.converter.TicketConverter;
-import com.mjvs.jgsp.helpers.exception.CanNotBeDeletedException;
 import com.mjvs.jgsp.model.*;
-import com.mjvs.jgsp.service.ImageModelService;
 import com.mjvs.jgsp.service.PassengerService;
-import com.mjvs.jgsp.service.PriceTicketService;
 import com.mjvs.jgsp.service.TicketService;
 import com.mjvs.jgsp.helpers.exception.TicketNotFoundException;
 import com.mjvs.jgsp.helpers.exception.LineNotFoundException;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -37,6 +33,8 @@ public class PassengerController {
 
     @Autowired
     private TicketService ticketService;
+
+    private final long MAXIMUM_ALLOWED_FILE_SIZE = 1024 * 1024; // bytes   (1Mb)
 
 
     @RequestMapping(value ="/registrate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -56,7 +54,12 @@ public class PassengerController {
     @RequestMapping(value = "/change-account-type/{passengerType}", method = RequestMethod.POST/*, consumes = MediaType.APPLICATION_JSON_VALUE*/)
     public ResponseEntity uploadConfirmation(@PathVariable("passengerType") PassengerType passengerType, @RequestParam("image") MultipartFile image) {
         try {
-            //PassengerType newPassengerType = PassengerType.valueOf(newPassengerTypeStr);
+            long imageSize = image.getSize();
+            System.out.println("Image size: " + imageSize + " bytes");
+            if(imageSize > MAXIMUM_ALLOWED_FILE_SIZE) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
             passengerService.changeAccountType(passengerType,image);
 
         } catch (Exception e) {

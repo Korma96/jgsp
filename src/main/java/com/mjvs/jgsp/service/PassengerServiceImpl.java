@@ -278,18 +278,21 @@ public class PassengerServiceImpl implements PassengerService {
         Ticket ticket;
         int indexForRemove = -1;
         boolean ticketNotFound = true;
+        LocalDateTime currentDateTime;
 
-        for(int i = 0; i < loggedPassenger.getTickets().size(); i++) {
-            ticket = loggedPassenger.getTickets().get(i);
+        List<Ticket> tickets = loggedPassenger.getTickets();
 
-            if(ticket.getId() == id) {
+        for(int i = 0; i < tickets.size(); i++) {
+            ticket = tickets.get(i);
+
+            if(ticket.getId().longValue() == id.longValue()) {
                 ticketNotFound = false;
 
                 if(ticket.getStartDateAndTime() == null || ticket.getEndDateAndTime() == null) {
                     indexForRemove = i;
                 }
                 else {
-                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    currentDateTime = LocalDateTime.now();
                     // 10 sec lufta
                     if(ticket.getStartDateAndTime().isAfter(currentDateTime.minusSeconds(10))
                             || currentDateTime.isAfter(ticket.getEndDateAndTime())) {

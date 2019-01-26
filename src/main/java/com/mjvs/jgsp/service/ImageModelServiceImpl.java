@@ -1,6 +1,6 @@
 package com.mjvs.jgsp.service;
 
-import com.mjvs.jgsp.helpers.exception.ImageModelAlreadyDeleted;
+import com.mjvs.jgsp.helpers.exception.ImageModelAlreadyDeletedException;
 import com.mjvs.jgsp.helpers.exception.ImageModelNotFoundException;
 import com.mjvs.jgsp.model.ImageModel;
 import com.mjvs.jgsp.model.Passenger;
@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Service
@@ -35,7 +37,7 @@ public class ImageModelServiceImpl implements ImageModelService {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     @Override
-    public void delete(Long id) throws ImageModelNotFoundException, ImageModelAlreadyDeleted {
+    public void delete(Long id) throws ImageModelNotFoundException, ImageModelAlreadyDeletedException {
         //ImageModel imageModel = imageModelRepository.findById(id);
         //imageModelRepository.delete(imageModel);
         ImageModel imageModel = imageModelRepository.findById(id);
@@ -47,10 +49,18 @@ public class ImageModelServiceImpl implements ImageModelService {
             throw new ImageModelNotFoundException(message);
         }
 
+       delete(imageModel);
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Override
+    public void delete(ImageModel imageModel) throws ImageModelAlreadyDeletedException {
+        String message;
+
         if(imageModel.isDeleted()) {
-            message = String.format("ImageModel, with id (%d), is already deleted.", id);
+            message = String.format("ImageModel, with id (%d), is already deleted.", imageModel.getId());
             logger.error(message);
-            throw new ImageModelAlreadyDeleted(message);
+            throw new ImageModelAlreadyDeletedException(message);
         }
 
         imageModel.setDeleted(true);
@@ -65,19 +75,29 @@ public class ImageModelServiceImpl implements ImageModelService {
             if(image.getBytes().length > 0) {
                 User loggedUser = userService.getLoggedUser();
                 String fileName = loggedUser.getUsername();
-                ImageModel imageModel = imageModelRepository.findByName(fileName);
-                if(imageModel != null) imageModel.setPic(image.getBytes());
-                else imageModel = new ImageModel(fileName, image.getBytes());
+                List<ImageModel> imageModels = imageModelRepository.findByNameAndDeleted(fileName, false);
+                if(imageModels != null) {
+                    if(!imageModels.isEmpty())
+                        imageModels.stream().forEach(imageModel -> {
+                            try {
+                                delete(imageModel);
+                            } catch (ImageModelAlreadyDeletedException imageModelAlreadyDeleted) {
+                                imageModelAlreadyDeleted.printStackTrace();
+                            }
+                        });
+                }
 
-                imageModel = imageModelRepository.save(imageModel);
+                ImageModel newImageModel = new ImageModel(fileName, image.getBytes());
+
+                newImageModel = imageModelRepository.save(newImageModel);
 
                 Passenger loggedPassenger = (Passenger) loggedUser;
-                loggedPassenger.setIdConfirmation(imageModel.getId());
+                loggedPassenger.setIdConfirmation(newImageModel.getId());
                 userService.save(loggedPassenger);
 
                 System.out.println("File successfully uploaded to : " + fileName);
 
-                return imageModel;
+                return newImageModel;
             }
         }
 

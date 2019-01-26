@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.controller;
+package com.mjvs.jgsp.unit_tests.controller;
 
 
 import com.mjvs.jgsp.dto.UserDTO;

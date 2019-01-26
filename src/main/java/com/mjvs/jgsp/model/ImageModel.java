@@ -10,11 +10,11 @@ import javax.persistence.Lob;
 @Entity
 public class ImageModel extends EntityForDeleted {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique=true, nullable=false)
     private Long id;
 
-    @Column(name = "name", unique=true, nullable=false)
+    @Column(name = "name", unique=false, nullable=false)
     private String name;
 
     @Column(name = "type", unique=false, nullable=false)
@@ -25,6 +25,14 @@ public class ImageModel extends EntityForDeleted {
     private byte[] pic;
 
     public ImageModel(){}
+
+    public ImageModel(Long id, String name, byte[] pic){
+        super();
+        this.id = id;
+        this.name = name;
+        this.type = "png";
+        this.pic = pic;
+    }
 
     public ImageModel(String name, byte[] pic){
         super();

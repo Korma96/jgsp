@@ -367,7 +367,7 @@ public class LineController extends ExtendedBaseController<Line>
             }
 
             ArrayList<TimesDTO> timesDTOs = lineService.getDepartureLists(date, day, lines);
-            if(timesDTOs == null) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            //if(timesDTOs == null) return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
             return new ResponseEntity<ArrayList<TimesDTO>>(timesDTOs, HttpStatus.OK);
         } catch (Exception e) {

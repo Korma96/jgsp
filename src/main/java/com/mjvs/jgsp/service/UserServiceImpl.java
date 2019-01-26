@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import com.mjvs.jgsp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;

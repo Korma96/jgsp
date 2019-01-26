@@ -1,8 +1,9 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.integration_tests.service;
 
 import com.mjvs.jgsp.helpers.exception.BadRequestException;
 import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
 import com.mjvs.jgsp.model.*;
+import com.mjvs.jgsp.service.*;
 import com.mjvs.jgsp.repository.PriceTicketRepository;
 import com.mjvs.jgsp.repository.ZoneRepository;
 import org.assertj.core.api.Assertions;
@@ -14,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;

@@ -1,9 +1,10 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.integration_tests.service;
 
-import com.mjvs.jgsp.helpers.exception.ImageModelAlreadyDeleted;
+import com.mjvs.jgsp.helpers.exception.ImageModelAlreadyDeletedException;
 import com.mjvs.jgsp.helpers.exception.ImageModelNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.ImageModelRepository;
+import com.mjvs.jgsp.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,15 +49,15 @@ public class ImageModelServiceTest {
     @Transactional
     @Rollback(true)
     @Test(expected = ImageModelNotFoundException.class)
-    public void deleteTestThrowsImageModelNotFoundException() throws ImageModelNotFoundException, ImageModelAlreadyDeleted {
+    public void deleteTestThrowsImageModelNotFoundException() throws ImageModelNotFoundException, ImageModelAlreadyDeletedException {
         final long wrongId = 123;
         imageModelService.delete(wrongId);
     }
 
     @Transactional
     @Rollback(true)
-    @Test(expected = ImageModelAlreadyDeleted.class)
-    public void deleteTestThrowsImageModelAlreadyDeleted() throws ImageModelNotFoundException, ImageModelAlreadyDeleted {
+    @Test(expected = ImageModelAlreadyDeletedException.class)
+    public void deleteTestThrowsImageModelAlreadyDeleted() throws ImageModelNotFoundException, ImageModelAlreadyDeletedException {
         testImageModel.setDeleted(true);
         testImageModel = imageModelRepository.save(testImageModel);
 
@@ -67,14 +67,14 @@ public class ImageModelServiceTest {
     @Transactional
     @Rollback(true)
     @Test()
-    public void deleteTestSuccess() throws ImageModelNotFoundException, ImageModelAlreadyDeleted {
+    public void deleteTestSuccess() throws ImageModelNotFoundException, ImageModelAlreadyDeletedException {
         testImageModel.setDeleted(false);
-        imageModelRepository.save(testImageModel);
+        ImageModel imageModel1 = imageModelRepository.save(testImageModel);
 
-        imageModelService.delete(testImageModel.getId());
+        imageModelService.delete(imageModel1.getId());
 
-        ImageModel imageModel = imageModelRepository.findById(testImageModel.getId());
-        assertTrue(imageModel.isDeleted());
+        ImageModel imageModel2 = imageModelRepository.findById(imageModel1.getId());
+        assertTrue(imageModel2.isDeleted());
     }
 
     @Transactional
