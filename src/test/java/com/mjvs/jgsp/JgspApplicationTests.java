@@ -2,6 +2,7 @@ package com.mjvs.jgsp;
 
 import com.mjvs.jgsp.model.Passenger;
 import com.mjvs.jgsp.model.PassengerType;
+import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.service.UserService;
@@ -33,6 +34,21 @@ public class JgspApplicationTests {
 		}
 
 		UsernamePasswordAuthenticationToken userInfo = new UsernamePasswordAuthenticationToken(passenger.getUsername(), password);
+		Authentication authentication = authenticationManager.authenticate(userInfo);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+	
+	
+	public static void prepareLoggedAdmin(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+		final String password = "admin";
+		User user = new User("admin",  passwordEncoder.encode(password) , UserType.USER_ADMINISTRATOR, UserStatus.ACTIVATED);
+		try {
+			userService.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		UsernamePasswordAuthenticationToken userInfo = new UsernamePasswordAuthenticationToken(user.getUsername(), password);
 		Authentication authentication = authenticationManager.authenticate(userInfo);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}

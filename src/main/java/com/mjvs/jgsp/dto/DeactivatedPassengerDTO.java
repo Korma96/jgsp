@@ -16,7 +16,7 @@ public class DeactivatedPassengerDTO {
     public DeactivatedPassengerDTO(Passenger passenger) {
 
 		this.id = passenger.getId();
-		this.username = passenger.getEmail();
+		this.username = passenger.getUsername();
 		this.userStatus = passenger.getUserStatus();
 		this.email = passenger.getEmail();
 		this.firstName = passenger.getFirstName();

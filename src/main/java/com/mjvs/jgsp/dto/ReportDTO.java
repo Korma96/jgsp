@@ -2,7 +2,7 @@ package com.mjvs.jgsp.dto;
 
 public class ReportDTO {
 	
-	private int oneTime;
+	private int onetime;
 	private int daily;
 	private int monthly;
 	private int yearly;
@@ -14,9 +14,9 @@ public class ReportDTO {
 	}
 
 
-	public ReportDTO(int oneTime, int daily, int monthly, int yearly, double profit) {
+	public ReportDTO(int onetime, int daily, int monthly, int yearly, double profit) {
 		super();
-		this.oneTime = oneTime;
+		this.onetime = onetime;
 		this.daily = daily;
 		this.monthly = monthly;
 		this.yearly = yearly;
@@ -25,12 +25,12 @@ public class ReportDTO {
 
 
 	public int getOneTime() {
-		return oneTime;
+		return onetime;
 	}
 
 
 	public void setOneTime(int oneTime) {
-		this.oneTime = oneTime;
+		this.onetime = oneTime;
 	}
 
 
@@ -80,7 +80,7 @@ public class ReportDTO {
 		int result = 1;
 		result = prime * result + daily;
 		result = prime * result + monthly;
-		result = prime * result + oneTime;
+		result = prime * result + onetime;
 		long temp;
 		temp = Double.doubleToLongBits(profit);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -102,7 +102,7 @@ public class ReportDTO {
 			return false;
 		if (monthly != other.monthly)
 			return false;
-		if (oneTime != other.oneTime)
+		if (onetime != other.onetime)
 			return false;
 		if (Double.doubleToLongBits(profit) != Double.doubleToLongBits(other.profit))
 			return false;

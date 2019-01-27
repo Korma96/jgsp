@@ -33,6 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mjvs.jgsp.dto.ReportDTO;
 import com.mjvs.jgsp.dto.UserBackendDTO;
 import com.mjvs.jgsp.dto.UserDTO;
+import com.mjvs.jgsp.dto.UserFrontendDTO;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.PassengerType;
 import com.mjvs.jgsp.model.Ticket;
@@ -83,6 +84,8 @@ public class UserAdminControllerTests {
 	private UserBackendDTO userDtoSuccessDecline;
 	private UserBackendDTO userDtoUnsuccessDecline;
 	private UserBackendDTO userDtoFail;
+	private UserFrontendDTO userDTOAdminForActivation;
+
 	
 	private String accessToken;
 	private UserDetails adminDetails;
@@ -90,13 +93,16 @@ public class UserAdminControllerTests {
 	
 	@Before
 	public void setUp() throws Exception {
+		
 		adminDTO = new UserDTO("user1","111");
-
+		
 		userDtoSuccessAccept = new UserBackendDTO(1L,"1", "1", UserType.TRANSPORT_ADMINISTRATOR);
 		userDtoUnsuccessAccept = new UserBackendDTO(2L,"2", "2", UserType.TRANSPORT_ADMINISTRATOR);
 		userDtoSuccessDecline = new UserBackendDTO(3L,"3", "3", UserType.TRANSPORT_ADMINISTRATOR);
 		userDtoUnsuccessDecline = new UserBackendDTO(4L,"4", "4", UserType.TRANSPORT_ADMINISTRATOR);
 		userDtoFail = new UserBackendDTO(5L,"5", "5", UserType.TRANSPORT_ADMINISTRATOR);
+		userDTOAdminForActivation = new UserFrontendDTO(6L,"5", UserType.TRANSPORT_ADMINISTRATOR, UserStatus.DEACTIVATED);
+
 		
 		List<GrantedAuthority> garantedAuthorities = AuthorityUtils.createAuthorityList(UserType.USER_ADMINISTRATOR.toString());
 
@@ -134,6 +140,7 @@ public class UserAdminControllerTests {
 		when(userService.acceptPassengerRequest(userDtoUnsuccessAccept.getId(), true)).thenReturn(false);
 		when(userService.acceptPassengerRequest(userDtoSuccessDecline.getId(), false)).thenReturn(true);
 		when(userService.acceptPassengerRequest(userDtoUnsuccessDecline.getId(), false)).thenReturn(false);
+		when(userService.adminActivation(userDTOAdminForActivation.getId(), true)).thenReturn(true);
 		
 		when(zoneService.findByName("prva")).thenReturn(zone);
 		when(lineService.findByName("1A")).thenReturn(line);
@@ -181,6 +188,16 @@ public class UserAdminControllerTests {
 	public void testAcceptPassengerRequest() {
 
 	}
+	
+	@Test
+	public void testAdminActivation() {
+		HttpEntity<Boolean> requestEntity = new HttpEntity<Boolean>(true, headers);
+	    ResponseEntity<Boolean> response = testRestTemplate.exchange("/userAdmin/activation/"+userDTOAdminForActivation.getId(), HttpMethod.PUT, requestEntity, Boolean.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody());
+
+	}
+	
 	
 	@Test
 	public void testGeneralReport() throws ParseException {
