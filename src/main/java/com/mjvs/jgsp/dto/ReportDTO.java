@@ -24,12 +24,12 @@ public class ReportDTO {
 	}
 
 
-	public int getOneTime() {
+	public int getOnetime() {
 		return onetime;
 	}
 
 
-	public void setOneTime(int oneTime) {
+	public void setOnetime(int oneTime) {
 		this.onetime = oneTime;
 	}
 

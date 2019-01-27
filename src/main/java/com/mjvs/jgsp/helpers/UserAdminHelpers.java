@@ -28,7 +28,7 @@ public class UserAdminHelpers {
 			report.setYearly(report.getYearly()+1);
 			break;
 		case ONETIME:
-			report.setOneTime(report.getOneTime()+1);
+			report.setOnetime(report.getOnetime()+1);
 			break;
 		}
 		

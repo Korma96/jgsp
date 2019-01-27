@@ -211,9 +211,9 @@ public class UserAdminControllerTests {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOneTime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
+		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
-		assertEquals(r.getOneTime(),retValue.getOneTime());
+		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(),retValue.getProfit());
@@ -232,9 +232,9 @@ public class UserAdminControllerTests {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOneTime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
+		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
-		assertEquals(r.getOneTime(),retValue.getOneTime());
+		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(),retValue.getProfit());
@@ -254,9 +254,9 @@ public class UserAdminControllerTests {
 														name+"&startDate="+startDateStr+"&endDate="+endDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOneTime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
+		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
-		assertEquals(r.getOneTime(),retValue.getOneTime());
+		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(), retValue.getProfit());
@@ -275,9 +275,9 @@ public class UserAdminControllerTests {
 														name+"&requested_date="+reqDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOneTime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
+		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
-		assertEquals(r.getOneTime(),retValue.getOneTime());
+		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
 		double myPi = 22.0d / 7.0d;
 		assertEquals(myPi,r.getProfit(),retValue.getProfit());

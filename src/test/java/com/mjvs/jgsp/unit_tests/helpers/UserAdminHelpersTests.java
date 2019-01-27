@@ -56,7 +56,7 @@ public class UserAdminHelpersTests {
 		double myPi = 22.0d / 7.0d;
 		assertEquals(65, reportTest.getProfit(), myPi);
 		assertEquals(0, reportTest.getMonthly());
-		assertEquals(0, reportTest.getOneTime());
+		assertEquals(0, reportTest.getOnetime());
 		assertEquals(0, reportTest.getYearly());
 	}
 	
