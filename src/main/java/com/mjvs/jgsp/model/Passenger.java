@@ -60,7 +60,8 @@ public class Passenger extends User {
         this.verifiedBy = verifiedBy;
         this.numOfDelicts = 0;
     }
-
+    
+    
 
     public Passenger(String username, String password, UserType userType, UserStatus userStatus, String firstName, String lastName, String email, String address, PassengerType passengerType) {
         super(username, password, userType, userStatus);
@@ -72,8 +73,22 @@ public class Passenger extends User {
         this.numOfDelicts = 0;
         this.tickets = new ArrayList<Ticket>();
     }
+    
+    
 
-    public String getFirstName() {
+    public Passenger(String username, String password, UserType userType, UserStatus userStatus,String firstName, String lastName, String email, String address,
+			PassengerType passengerType, PassengerType newPassengerType) {
+    	super(username, password, userType, userStatus);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.address = address;
+		this.numOfDelicts = 0;
+		this.passengerType = passengerType;
+		this.newPassengerType = newPassengerType;
+	}
+
+	public String getFirstName() {
         return firstName;
     }
 

@@ -220,13 +220,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean adminActivation(Long id, boolean activate) throws UserNotFoundException {
+	public boolean adminActivation(Long id, boolean activate) {
 		User user = userRepository.findByIdAndDeleted(id, false);
 		if (user != null) {
 			if (user.getUserStatus().equals(UserStatus.ACTIVATED)){
 				user.setUserStatus(UserStatus.DEACTIVATED);
 			}
-			else{
+			else {
 				user.setUserStatus(UserStatus.ACTIVATED);
 			}
 			userRepository.save(user);
@@ -236,7 +236,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public boolean activatePassenger(Long id, boolean activate) throws UserNotFoundException {
+	public boolean activatePassenger(Long id, boolean activate) {
 		Passenger passenger = passengerRepository.findById(id);
 
 		if (passenger != null) {
@@ -247,7 +247,7 @@ public class UserServiceImpl implements UserService {
 			else if (passenger.getUserStatus().equals(UserStatus.PENDING)) {
 				passenger.setUserStatus(UserStatus.ACTIVATED);
 			}
-			else{
+			else {
 				return false;
 			}
 			userRepository.save(passenger);

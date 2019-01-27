@@ -27,7 +27,6 @@ public class UserBackendDTO {
 		this.userType = userType;
 	
 	}
-	
 
 	public Long getId() {
 		return id;
