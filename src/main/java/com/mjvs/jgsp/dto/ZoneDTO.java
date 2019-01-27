@@ -7,13 +7,13 @@ import java.util.List;
 public class ZoneDTO {
     private String name;
     private String transport;
-    private List<BaseDTO> lines;
+    private List<LineDTO> lines;
 
     public ZoneDTO() {
 
     }
 
-    public ZoneDTO(String name, List<BaseDTO> lines, TransportType transport) {
+    public ZoneDTO(String name, List<LineDTO> lines, TransportType transport) {
         this.name = name;
         this.transport = transport.name().toLowerCase();
         this.lines = lines;
@@ -35,11 +35,11 @@ public class ZoneDTO {
         this.transport = transport;
     }
 
-    public List<BaseDTO> getLines() {
+    public List<LineDTO> getLines() {
         return lines;
     }
 
-    public void setLines(List<BaseDTO> lines) {
+    public void setLines(List<LineDTO> lines) {
         this.lines = lines;
     }
 }

@@ -143,22 +143,22 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
 
 	@Override
     public ArrayList<TimesDTO> getDepartureLists(String dateStr, String dayStr, String[] lines) {
-        try {
-            LocalDate date = LocalDate.parse(dateStr, dateFormatter);
-            DayType day = DayType.valueOf(dayStr.toUpperCase());
+        LocalDate date = LocalDate.parse(dateStr, dateFormatter);
+        DayType day = DayType.valueOf(dayStr.toUpperCase());
 
-            ArrayList<TimesDTO> timesDTOs = new ArrayList<TimesDTO>();
+        ArrayList<TimesDTO> timesDTOs = new ArrayList<TimesDTO>();
 
-            Line lineA, lineB;
-            TimesDTO timesDTO;
-            String[] sufixes = {"A", "B"};
-            List<String> timesA, timesB;
+        Line lineA, lineB;
+        TimesDTO timesDTO = null;
+        String[] sufixes = {"A", "B"};
+        List<String> timesA, timesB;
 
-            for (String lineStr : lines) {
+        for (String lineStr : lines) {
+            try {
                 timesDTO = new TimesDTO();
                 lineA = lineRepository.findByNameAndDeleted(lineStr+sufixes[0], false);
                 lineB = lineRepository.findByNameAndDeleted(lineStr+sufixes[1], false);
-                if(lineA == null && lineB == null) return null;
+                //if(lineA == null && lineB == null) return null;
 
                 if(lineA == null) timesDTO.setTimesA(new ArrayList<>());
                 else {
@@ -181,15 +181,17 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
                             .collect(Collectors.toList());
                     timesDTO.setTimesB(timesB);
                 }
+            } catch (Exception e) {
+                if(timesDTO == null) timesDTO = new TimesDTO();
 
-                timesDTOs.add(timesDTO);
+                timesDTO.setTimesA(new ArrayList<>());
+                timesDTO.setTimesB(new ArrayList<>());
             }
 
-            return timesDTOs;
-        } catch (Exception e) {
-            return null;
+            timesDTOs.add(timesDTO);
         }
 
+        return timesDTOs;
     }
 
     public void checkIfLineCanBeActive(Line line)
@@ -198,30 +200,44 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         if(line.getZone() == null){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
         // must have at least two stops
         if(line.getStops().size() < 2){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
         // must have at least one schedule
         if(line.getSchedules().size() == 0){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
-        // must have at least one departure time
-        for(Schedule s : line.getSchedules()){
+
+        // must have latest schedules for all DayTypes
+
+        List<Schedule> latestSchedules = getLatestSchedules(line.getSchedules());
+        /*
+        if(latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.WORKDAY) ||
+           latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SATURDAY) ||
+           latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SUNDAY)){
+            if(line.isActive()){
+                line.setActive(false);
+            }
+            return;
+        }
+        */
+        // must have at least one departure time in latest schedules
+        for(Schedule s : latestSchedules){
             if(s.getDepartureList().size() == 0){
                 if(line.isActive()){
                     line.setActive(false);
-                    return;
                 }
+                return;
             }
         }
 
@@ -229,8 +245,8 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
         if(line.getMinutesRequiredForWholeRoute() == 0){
             if(line.isActive()){
                 line.setActive(false);
-                return;
             }
+            return;
         }
 
         if(!line.isActive()){

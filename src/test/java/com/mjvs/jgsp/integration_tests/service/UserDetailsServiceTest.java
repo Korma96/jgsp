@@ -1,10 +1,9 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.integration_tests.service;
 
 import com.mjvs.jgsp.model.User;
 import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.repository.UserRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 

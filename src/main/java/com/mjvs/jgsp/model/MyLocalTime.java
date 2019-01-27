@@ -10,7 +10,7 @@ public class MyLocalTime extends EntityForDeleted {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "time", unique = true, nullable = false)
+    @Column(name = "time", unique = false, nullable = false)
     private LocalTime time;
 
     public MyLocalTime() {

@@ -2,11 +2,6 @@ package com.mjvs.jgsp.controller;
 
 import com.mjvs.jgsp.dto.UserDTO;
 import com.mjvs.jgsp.service.UserService;
-import com.mjvs.jgsp.helpers.exception.UserNotFoundException;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.Ticket;
-import com.mjvs.jgsp.model.User;
-import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.security.TokenUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

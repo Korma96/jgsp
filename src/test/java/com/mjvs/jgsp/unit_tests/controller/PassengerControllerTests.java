@@ -1,28 +1,15 @@
-package com.mjvs.jgsp.controller;
+package com.mjvs.jgsp.unit_tests.controller;
 
 
-import com.mjvs.jgsp.TestLog4j2Appender;
 import com.mjvs.jgsp.dto.PassengerDTO;
-import com.mjvs.jgsp.dto.UserDTO;
-import com.mjvs.jgsp.model.Passenger;
-import com.mjvs.jgsp.model.PassengerType;
-import com.mjvs.jgsp.service.LineServiceImpl;
 import com.mjvs.jgsp.service.PassengerService;
-import com.mjvs.jgsp.service.PassengerServiceImpl;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.when;
 
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static org.junit.Assert.assertEquals;
 
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)

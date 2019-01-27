@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.helpers.converter;
 
 import com.mjvs.jgsp.dto.BaseDTO;
+import com.mjvs.jgsp.dto.LineDTO;
 import com.mjvs.jgsp.dto.ZoneDTO;
 import com.mjvs.jgsp.model.Line;
 import com.mjvs.jgsp.model.Zone;
@@ -20,13 +21,13 @@ public class ZoneConverter
     public static List<ZoneDTO> ConvertZonesToZoneDTOsWithLine(List<Zone> zones)
     {
         List<ZoneDTO> zoneDTOS = new ArrayList<ZoneDTO>();
-        List<BaseDTO> lines;
+        List<LineDTO> lines;
 
         for (Zone zone : zones) {
-            lines = new ArrayList<BaseDTO>();
+            lines = new ArrayList<LineDTO>();
 
             for (Line line: zone.getLines()) {
-                lines.add(new BaseDTO(line.getId(), line.getName()));
+                lines.add(new LineDTO(line.getId(), line.getName(), line.isActive()));
             }
             zoneDTOS.add(new ZoneDTO(zone.getName(), lines, zone.getTransportType()));
         }
