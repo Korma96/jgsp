@@ -4,7 +4,9 @@ import com.mjvs.jgsp.helpers.exception.ImageModelAlreadyDeletedException;
 import com.mjvs.jgsp.helpers.exception.ImageModelNotFoundException;
 import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.ImageModelRepository;
-import com.mjvs.jgsp.service.*;
+import com.mjvs.jgsp.service.ImageModelService;
+import com.mjvs.jgsp.service.UserService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import  static com.mjvs.jgsp.JgspApplicationTests.prepareLoggedUser;
-
+import static com.mjvs.jgsp.JgspApplicationTests.prepareLoggedUser;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Ignore
 public class ImageModelServiceTest {
 
     @Autowired

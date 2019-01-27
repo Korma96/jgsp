@@ -41,7 +41,7 @@ public class ZoneController extends ExtendedBaseController<Zone>
 
     @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/addZone", method = RequestMethod.POST)
-    public ResponseEntity add(@RequestBody NewZoneDTO newZoneDTO) throws Exception
+    public ResponseEntity addZone(@RequestBody NewZoneDTO newZoneDTO) throws Exception
     {
         int transportType = newZoneDTO.getTransportType();
         TransportType transportTypeEnum = null;

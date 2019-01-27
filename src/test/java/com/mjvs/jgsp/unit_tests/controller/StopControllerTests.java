@@ -23,6 +23,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.doReturn;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -145,6 +147,30 @@ public class StopControllerTests
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
         assertEquals(objectMapper.writeValueAsString(
                 new ErrorDTO(Messages.DatabaseError())),
+                response.getContentAsString());
+    }
+
+    @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
+    public void Delete_DeleteFails_ThrowsDatabaseException() throws Exception
+    {
+        // Arrange
+        long id = 1L;
+        Stop stop = new Stop();
+        doReturn(new Result<>(stop)).when(stopService).findById(any());
+        doReturn(new Result<Stop>(null, false,
+                Messages.ErrorDeleting(StringConstants.Stop, id, Messages.DatabaseError())))
+                .when(stopService).delete(any());
+
+        // Act
+        MockHttpServletResponse response = mockMvc.perform(delete("/stop/" + id + "/delete")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(objectMapper.writeValueAsString(
+                new ErrorDTO(Messages.ErrorDeleting(StringConstants.Stop, id, Messages.DatabaseError()))),
                 response.getContentAsString());
     }
 }

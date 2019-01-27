@@ -3,10 +3,7 @@ package com.mjvs.jgsp.unit_tests.service;
 import com.mjvs.jgsp.dto.BaseDTO;
 import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.helpers.Result;
-import com.mjvs.jgsp.model.DayType;
-import com.mjvs.jgsp.model.Line;
-import com.mjvs.jgsp.model.Schedule;
-import com.mjvs.jgsp.model.Stop;
+import com.mjvs.jgsp.model.*;
 import com.mjvs.jgsp.repository.LineRepository;
 import com.mjvs.jgsp.service.LineService;
 import org.junit.Test;
@@ -34,27 +31,8 @@ public class LineServiceTests
 
     @MockBean
     private LineRepository lineRepository;
-/*
-    private TestLog4j2Appender appender;
 
-    // logger`s appender initialization
-    public void setupLogger()
-    {
-        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        final Configuration config = ctx.getConfiguration();
-        appender = TestLog4j2Appender.createAppender("TestAppender", null, null, null);
-        appender.start();
-        config.addAppender(appender);
-        Logger logger = LogManager.getLogger(LineServiceImpl.class);
-        ((org.apache.logging.log4j.core.Logger) logger).addAppender(appender);
-        ctx.updateLoggers();
-    }
 
-    public void removeMessagesFromLogger()
-    {
-        appender.clearMessages();
-    }
-*/
     @Test(expected = Exception.class)
     public void GetActiveLines_FindByActiveThrowsException_ExceptionThrown()
     {
@@ -198,4 +176,194 @@ public class LineServiceTests
         assertEquals(latestDate, latestSchedules.get(2).getDateFrom());
     }
 
+    @Test
+    public void CheckIfLineCanBeActive_ZoneIsNull_LineIsNotActive()
+    {
+        // Arrange
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(null);
+        line2.setZone(null);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertFalse(line1.isActive());
+        assertFalse(line2.isActive());
+    }
+
+    @Test
+    public void CheckIfLineCanBeActive_MinutesRequiredForWholeRouteIsZero_LineIsNotActive()
+    {
+        // Arrange
+        Zone zone = new Zone();
+        int minutes = 0;
+
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(zone);
+        line2.setZone(zone);
+        line1.setMinutesRequiredForWholeRoute(minutes);
+        line2.setMinutesRequiredForWholeRoute(minutes);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertFalse(line1.isActive());
+        assertFalse(line2.isActive());
+    }
+
+    @Test
+    public void CheckIfLineCanBeActive_LineDoesNotHaveEnoughStops_LineIsNotActive()
+    {
+        // Arrange
+        Zone zone = new Zone();
+        int minutes = 25;
+        List<Stop> stops = new ArrayList<>();
+        stops.add(new Stop());
+
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(zone);
+        line2.setZone(zone);
+        line1.setMinutesRequiredForWholeRoute(minutes);
+        line2.setMinutesRequiredForWholeRoute(minutes);
+        line1.setStops(stops);
+        line2.setStops(stops);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertFalse(line1.isActive());
+        assertFalse(line2.isActive());
+    }
+
+    @Test
+    public void CheckIfLineCanBeActive_LineDoesNotHaveAnySchedule_LineIsNotActive()
+    {
+        // Arrange
+        Zone zone = new Zone();
+        int minutes = 25;
+        List<Stop> stops = new ArrayList<>();
+        stops.add(new Stop());
+        stops.add(new Stop());
+        List<Schedule> schedules = new ArrayList<>();
+
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(zone);
+        line2.setZone(zone);
+        line1.setMinutesRequiredForWholeRoute(minutes);
+        line2.setMinutesRequiredForWholeRoute(minutes);
+        line1.setStops(stops);
+        line2.setStops(stops);
+        line1.setSchedules(schedules);
+        line2.setSchedules(schedules);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertFalse(line1.isActive());
+        assertFalse(line2.isActive());
+    }
+
+    @Test
+    public void CheckIfLineCanBeActive_OneOfLineSchedulesDoesNotContainAnyDepartureTime_LineIsNotActive()
+    {
+        // Arrange
+        Zone zone = new Zone();
+        int minutes = 25;
+        List<Stop> stops = new ArrayList<>();
+        stops.add(new Stop());
+        stops.add(new Stop());
+        List<Schedule> schedules = new ArrayList<>();
+        LocalDate localDate = LocalDate.of(2019, 2, 5);
+        List<MyLocalTime> departureTimes = new ArrayList<>();
+        departureTimes.add(new MyLocalTime());
+        Schedule schedule1 = new Schedule(DayType.WORKDAY, localDate, departureTimes);
+        Schedule schedule2 = new Schedule(DayType.SATURDAY, localDate, departureTimes);
+        Schedule schedule3 = new Schedule(DayType.SUNDAY, localDate, new ArrayList<>());
+        schedules.add(schedule1);
+        schedules.add(schedule2);
+        schedules.add(schedule3);
+
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(zone);
+        line2.setZone(zone);
+        line1.setMinutesRequiredForWholeRoute(minutes);
+        line2.setMinutesRequiredForWholeRoute(minutes);
+        line1.setStops(stops);
+        line2.setStops(stops);
+        line1.setSchedules(schedules);
+        line2.setSchedules(schedules);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertFalse(line1.isActive());
+        assertFalse(line2.isActive());
+    }
+
+    @Test
+    public void CheckIfLineCanBeActive_LineCanBeActive_LineIsActive()
+    {
+        // Arrange
+        Zone zone = new Zone();
+        int minutes = 25;
+        List<Stop> stops = new ArrayList<>();
+        stops.add(new Stop());
+        stops.add(new Stop());
+        List<Schedule> schedules = new ArrayList<>();
+        LocalDate localDate = LocalDate.of(2019, 2, 5);
+        List<MyLocalTime> departureTimes = new ArrayList<>();
+        departureTimes.add(new MyLocalTime());
+        Schedule schedule1 = new Schedule(DayType.WORKDAY, localDate, departureTimes);
+        Schedule schedule2 = new Schedule(DayType.SATURDAY, localDate, departureTimes);
+        Schedule schedule3 = new Schedule(DayType.SUNDAY, localDate, departureTimes);
+        schedules.add(schedule1);
+        schedules.add(schedule2);
+        schedules.add(schedule3);
+
+        Line line1 = new Line("line1");
+        Line line2 = new Line("line2");
+        line1.setZone(zone);
+        line2.setZone(zone);
+        line1.setMinutesRequiredForWholeRoute(minutes);
+        line2.setMinutesRequiredForWholeRoute(minutes);
+        line1.setStops(stops);
+        line2.setStops(stops);
+        line1.setSchedules(schedules);
+        line2.setSchedules(schedules);
+        line1.setActive(true);
+        line2.setActive(false);
+
+        // Act
+        lineService.checkIfLineCanBeActive(line1);
+        lineService.checkIfLineCanBeActive(line2);
+
+        // Assert
+        assertTrue(line1.isActive());
+        assertTrue(line2.isActive());
+    }
 }

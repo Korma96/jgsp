@@ -7,6 +7,7 @@ import com.mjvs.jgsp.dto.ErrorDTO;
 import com.mjvs.jgsp.dto.StopDTO;
 import com.mjvs.jgsp.dto.StopLiteDTO;
 import com.mjvs.jgsp.helpers.Messages;
+import com.mjvs.jgsp.helpers.Result;
 import com.mjvs.jgsp.helpers.StringConstants;
 import com.mjvs.jgsp.helpers.exception.ExceptionResolver;
 import com.mjvs.jgsp.model.Stop;
@@ -34,8 +35,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -444,5 +444,46 @@ public class StopControllerTests
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(Messages.SuccessfullySaved(StringConstants.Stop), response.getContentAsString());
         assertEquals(newName, stopRepository.findById(id).get().getName());
+    }
+
+    @Transactional
+    @Rollback(true)
+    @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
+    public void Delete_IdDoesNotExist_ThrowsBadRequestException() throws Exception
+    {
+        // Arrange
+        long id = 444L;
+
+        // Act
+        MockHttpServletResponse response = mockMvc.perform(delete("/stop/" + id + "/delete")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(objectMapper.writeValueAsString(
+                new ErrorDTO(Messages.DoesNotExist(StringConstants.Stop, id))),
+                response.getContentAsString());
+    }
+
+    @Transactional
+    @Rollback(true)
+    @Test
+    @WithMockUser(username = "nenad", authorities = { "TRANSPORT_ADMINISTRATOR" })
+    public void Delete_Success_ReturnsTrue() throws Exception
+    {
+        // Arrange
+        stopRepository.save(new Stop(1, 1, "stop55"));
+        Stop stop = stopRepository.findByLatitudeAndLongitude(1, 1);
+        long id = stop.getId();
+
+        // Act
+        MockHttpServletResponse response = mockMvc.perform(delete("/stop/" + id + "/delete")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Assert
+        Result<Boolean> result = new Result<>(true, Messages.SuccessfullyDeleted(StringConstants.Stop, id));
+        assertEquals(objectMapper.writeValueAsString(result), response.getContentAsString());
     }
 }

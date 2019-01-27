@@ -55,16 +55,6 @@ public class ScheduleServiceImpl extends BaseServiceImpl<Schedule> implements Sc
     @Override
     public Schedule getScheduleByLineAndDateFromAndDayType(Line line, LocalDate dateFromLocalDate, DayType dayTypeEnum)
     {
-        /*
-        List<Schedule> lineSchedules = line.getSchedules().stream()
-                .filter(x -> x.getDateFrom().equals(dateFromLocalDate)).collect(Collectors.toList());
-
-        for(Schedule s : lineSchedules) {
-            if(s.getDayType().equals(dayTypeEnum)){
-                return s;
-            }
-        }
-        */
         return scheduleRepository.findTopByDateFromAndLineAndDayType(dateFromLocalDate, line, dayTypeEnum);
     }
 

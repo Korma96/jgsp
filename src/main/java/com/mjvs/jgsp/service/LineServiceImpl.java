@@ -203,6 +203,15 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
             }
             return;
         }
+
+        // minutes required for whole route must be greater than 0
+        if(line.getMinutesRequiredForWholeRoute() <= 0){
+            if(line.isActive()){
+                line.setActive(false);
+            }
+            return;
+        }
+
         // must have at least two stops
         if(line.getStops().size() < 2){
             if(line.isActive()){
@@ -218,10 +227,9 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
             return;
         }
 
-        // must have latest schedules for all DayTypes
-
         List<Schedule> latestSchedules = getLatestSchedules(line.getSchedules());
         /*
+        // must have latest schedules for all DayTypes
         if(latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.WORKDAY) ||
            latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SATURDAY) ||
            latestSchedules.stream().noneMatch(x -> x.getDayType() == DayType.SUNDAY)){
@@ -239,14 +247,6 @@ public class LineServiceImpl extends ExtendedBaseServiceImpl<Line> implements Li
                 }
                 return;
             }
-        }
-
-        // minutes required for whole route must not be 0
-        if(line.getMinutesRequiredForWholeRoute() == 0){
-            if(line.isActive()){
-                line.setActive(false);
-            }
-            return;
         }
 
         if(!line.isActive()){
