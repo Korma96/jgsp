@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.controller;
+package com.mjvs.jgsp.unit_tests.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -132,6 +132,7 @@ public class UserAdminControllerTests {
 		tickets.add(new Ticket(3L, dateTest, dateTest, TicketType.YEARLY, PassengerType.OTHER , 1800 , line));
 		tickets.add(new Ticket(4L, dateTest, dateTest, TicketType.DAILY, PassengerType.OTHER , 65 , zone));
 		tickets.add(new Ticket(5L, dateTest, dateTest, TicketType.DAILY, PassengerType.STUDENT ,135, zone));
+		tickets.add(new Ticket(6L, null, null, TicketType.ONETIME, PassengerType.STUDENT ,100 , zone));
 
 		when(userService.save(userDtoSuccessAccept.getUsername(), userDtoSuccessAccept.getPassword(), UserStatus.ACTIVATED, userDtoSuccessAccept.getUserType())).thenReturn(true);
 		when(userService.save(userDtoFail.getUsername(), userDtoFail.getPassword(), UserStatus.ACTIVATED, userDtoFail.getUserType())).thenReturn(false);

@@ -1,6 +1,7 @@
 package com.mjvs.jgsp.controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,15 +194,16 @@ public class UserAdminController {
 		if (startDate.isAfter(endDate)) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
     	
     	List<Ticket> tickets = ticketService.getAll();
-    	
+    	LocalDate ticketDate = LocalDate.now();
     	
     	for (Ticket ticket : tickets)
     	{
-    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
-    		{
-    			System.out.println(ticket.getTicketType());
-    			report = UserAdminHelpers.calculateReport(report, ticket);
+    		if (ticket.getStartDateAndTime() == null ) continue; 
+	    	else { 
+	    		ticketDate = ticket.getStartDateAndTime().toLocalDate();
+    			if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate)) {
+    				report = UserAdminHelpers.calculateReport(report, ticket);
+    			}
     		}
     	}
     			
@@ -236,19 +238,20 @@ public class UserAdminController {
     		ids.add(lineService.findByName(name+"B").getId());
 
     	}
-    	
+    	LocalDate ticketDate = LocalDate.now();
     	for (Ticket ticket : tickets)
     	{
     		for (Long id: ids){
 	    		if (ticket.getLineZone().getId().equals(id)) {
-		    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-		    		
-		    		if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate))
-		    		{
-		    			report = UserAdminHelpers.calculateReport(report, ticket);
-		    		}
+	    			if (ticket.getStartDateAndTime() == null ) continue; 
+		    		else { 
+		    			ticketDate = ticket.getStartDateAndTime().toLocalDate();
+		    			if (ticketDate.isAfter(startDate) && ticketDate.isBefore(endDate)) {
+		    				report = UserAdminHelpers.calculateReport(report, ticket);
+		    			}
 	    		}
-    	}
+	    		}
+    		}
     	}
 
         return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	
@@ -278,14 +281,17 @@ public class UserAdminController {
     		ids.add(lineService.findByName(name+"A").getId());
     		ids.add(lineService.findByName(name+"B").getId());
     	}
-    	
+    	LocalDate ticketDate = LocalDate.now();
     	for (Ticket ticket : tickets)
     	{
     		for (Long id: ids){
 	    		if (ticket.getLineZone().getId().equals(id)){
-		    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-		    		if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
-	    		}
+		    		if (ticket.getStartDateAndTime() == null ) continue; 
+		    		else { 
+		    			ticketDate = ticket.getStartDateAndTime().toLocalDate();
+		    			if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
+		    		}
+		    		}
     		}
     	
     	}
@@ -310,11 +316,14 @@ public class UserAdminController {
 	    	
 	    	if (tickets==null) return new ResponseEntity<ReportDTO>(HttpStatus.BAD_REQUEST);
 	    	
-	    	
+	    	LocalDate ticketDate = LocalDate.now();
 	    	for (Ticket ticket : tickets)
 	    	{
-	    		LocalDate ticketDate = ticket.getStartDateAndTime().toLocalDate();
-	    		if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
+	    		if (ticket.getStartDateAndTime() == null ) continue; 
+	    		else { 
+	    			ticketDate = ticket.getStartDateAndTime().toLocalDate();
+	    			if (ticketDate.equals(requestedDate)) report = UserAdminHelpers.calculateReport(report, ticket);
+	    		}
 	    	}
 	    	
 	        return new ResponseEntity<ReportDTO>(report, HttpStatus.OK);	    	

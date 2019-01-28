@@ -1,4 +1,4 @@
-package com.mjvs.jgsp.service;
+package com.mjvs.jgsp.integration_tests.service;
 
 import static com.mjvs.jgsp.JgspApplicationTests.prepareLoggedAdmin;
 import static org.junit.Assert.assertEquals;
@@ -26,6 +26,7 @@ import com.mjvs.jgsp.model.UserStatus;
 import com.mjvs.jgsp.model.UserType;
 import com.mjvs.jgsp.repository.PassengerRepository;
 import com.mjvs.jgsp.repository.UserRepository;
+import com.mjvs.jgsp.service.UserService;
 
 
 
