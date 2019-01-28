@@ -228,7 +228,7 @@ public class PassengerServiceImpl implements PassengerService {
         User loggedUser = userService.getLoggedUser();
         Passenger loggedPassenger = (Passenger) loggedUser;
 
-        loggedPassenger.getTickets().sort(new Comparator<Ticket>() {
+        /*loggedPassenger.getTickets().sort(new Comparator<Ticket>() {
             @Override
             public int compare(Ticket o1, Ticket o2) {
                 if(o1.getStartDateAndTime() == null && o2.getStartDateAndTime() != null) return -1;
@@ -237,7 +237,7 @@ public class PassengerServiceImpl implements PassengerService {
 
                 return o1.getStartDateAndTime().compareTo(o2.getStartDateAndTime());
             }
-        });
+        });*/
 
        return loggedPassenger.getTickets();
     }

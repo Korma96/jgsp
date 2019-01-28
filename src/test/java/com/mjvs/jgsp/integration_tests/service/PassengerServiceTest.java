@@ -33,7 +33,7 @@ import  static com.mjvs.jgsp.JgspApplicationTests.prepareLoggedUser;
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 //port je definisan u test/resources/application.properties
-@Ignore
+//@Ignore
 public class PassengerServiceTest {
 
     @Autowired

@@ -8,6 +8,7 @@ import com.mjvs.jgsp.model.TicketType;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class TicketFrontendDTO {
     private Long id;
@@ -97,5 +98,24 @@ public class TicketFrontendDTO {
 
     public void setLineZone(String lineZone) {
         this.lineZone = lineZone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketFrontendDTO that = (TicketFrontendDTO) o;
+        return Double.compare(that.price, price) == 0 &&
+                id.equals(that.id) &&
+                startDateAndTime.equals(that.startDateAndTime) &&
+                endDateAndTime.equals(that.endDateAndTime) &&
+                ticketType.equals(that.ticketType) &&
+                passengerType.equals(that.passengerType) &&
+                lineZone.equals(that.lineZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startDateAndTime, endDateAndTime, ticketType, price, passengerType, lineZone);
     }
 }

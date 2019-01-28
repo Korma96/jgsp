@@ -1,10 +1,13 @@
 package com.mjvs.jgsp.security;
 
 import com.mjvs.jgsp.service.UserDetailsServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
+
+	private final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -30,13 +35,22 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		String username = tokenUtils.getUsernameFromToken(authToken);
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-			if (tokenUtils.validateToken(authToken, userDetails)) {
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, 
-																					null, userDetails.getAuthorities());
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+			UserDetails userDetails = null;
+			try {
+				userDetails = this.userDetailsService.loadUserByUsername(username);
+			} catch (UsernameNotFoundException e) {
+				logger.error(e.getMessage());
 			}
+
+			if(userDetails != null) {
+				if (tokenUtils.validateToken(authToken, userDetails)) {
+					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+							null, userDetails.getAuthorities());
+					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
+			}
+
 		}
 
 		chain.doFilter(request, response);

@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Ignore
+//@Ignore
 public class ImageModelServiceTest {
 
     @Autowired

@@ -2,6 +2,8 @@ package com.mjvs.jgsp.dto;
 
 import com.mjvs.jgsp.model.TicketType;
 
+import java.util.Objects;
+
 public class TicketDTO {
     private boolean hasZoneNotLine;
     private String name;
@@ -12,7 +14,7 @@ public class TicketDTO {
 
     }
 
-    public TicketDTO(boolean hasZoneNotLine, String id, int dayInMonthOrMonthInYear, TicketType ticketType) {
+    public TicketDTO(boolean hasZoneNotLine, String name, int dayInMonthOrMonthInYear, TicketType ticketType) {
         this.hasZoneNotLine = hasZoneNotLine;
         this.name = name;
         this.dayInMonthOrMonthInYear = dayInMonthOrMonthInYear;
@@ -49,5 +51,21 @@ public class TicketDTO {
 
     public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketDTO ticketDTO = (TicketDTO) o;
+        return hasZoneNotLine == ticketDTO.hasZoneNotLine &&
+                dayInMonthOrMonthInYear == ticketDTO.dayInMonthOrMonthInYear &&
+                name.equals(ticketDTO.name) &&
+                ticketType == ticketDTO.ticketType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hasZoneNotLine, name, dayInMonthOrMonthInYear, ticketType);
     }
 }
