@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class PriceTicketController {
     private PriceTicketService priceTicketService;
 
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addPriceTicket(@RequestBody PriceTicketDTO priceTicketDTO){
         System.out.println("kontroler");
@@ -40,6 +42,7 @@ public class PriceTicketController {
 
 
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/pricetickets", method = RequestMethod.GET)
     public ResponseEntity<List<PriceTicketFrontendDTO>> getPriceTickets() {
         try {
@@ -51,6 +54,7 @@ public class PriceTicketController {
         }
     }
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/{id}/update", method = RequestMethod.PUT)
     public ResponseEntity update(@RequestBody PriceTicketDTO priceTicketDTO, @PathVariable Long id) {
 
@@ -70,6 +74,7 @@ public class PriceTicketController {
     }
 
 
+    @PreAuthorize("hasAuthority('TRANSPORT_ADMINISTRATOR')")
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable("id") Long id) throws Exception
     {
