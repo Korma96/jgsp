@@ -7,6 +7,10 @@ public class ReportDTO {
 	private int monthly;
 	private int yearly;
 	private double profit;
+	private double dailyProfit = 0;
+	private double monthlyProfit = 0;
+	private double yearlyProfit = 0;
+	private double onetimeProfit = 0;
 	
 	
 	public ReportDTO() 
@@ -14,14 +18,21 @@ public class ReportDTO {
 	}
 
 
-	public ReportDTO(int onetime, int daily, int monthly, int yearly, double profit) {
+	public ReportDTO(int onetime, int daily, int monthly, int yearly, double profit, double onetimeProfit, double dailyProfit,
+			double monthlyProfit, double yearlyProfit) {
 		super();
 		this.onetime = onetime;
 		this.daily = daily;
 		this.monthly = monthly;
 		this.yearly = yearly;
 		this.profit = profit;
+		this.dailyProfit = dailyProfit;
+		this.monthlyProfit = monthlyProfit;
+		this.yearlyProfit = yearlyProfit;
+		this.onetimeProfit = onetimeProfit;
 	}
+
+
 
 
 	public int getOnetime() {
@@ -71,6 +82,45 @@ public class ReportDTO {
 
 	public void setProfit(double profit) {
 		this.profit = profit;
+	}
+
+	public double getDailyProfit() {
+		return dailyProfit;
+	}
+
+
+	public void setDailyProfit(double dailyProfit) {
+		this.dailyProfit = dailyProfit;
+	}
+
+
+	public double getMonthlyProfit() {
+		return monthlyProfit;
+	}
+
+
+	public void setMonthlyProfit(double monthlyProfit) {
+		this.monthlyProfit = monthlyProfit;
+	}
+
+
+	public double getYearlyProfit() {
+		return yearlyProfit;
+	}
+
+
+	public void setYearlyProfit(double yearlyProfit) {
+		this.yearlyProfit = yearlyProfit;
+	}
+
+
+	public double getOnetimeProfit() {
+		return onetimeProfit;
+	}
+
+
+	public void setOnetimeProfit(double onetimeProfit) {
+		this.onetimeProfit = onetimeProfit;
 	}
 
 

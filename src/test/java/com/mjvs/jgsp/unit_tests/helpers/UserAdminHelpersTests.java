@@ -32,7 +32,7 @@ public class UserAdminHelpersTests {
 	@Before
 	public void setUp() throws Exception {
 		ticket = new Ticket(1L, LocalDateTime.now(), LocalDateTime.now(), TicketType.DAILY, PassengerType.OTHER ,65, new Zone("1", null));
-		report = new ReportDTO(0,0,0,0,0);
+		report = new ReportDTO(0,0,0,0,0,0,0,0,0);
 		testDate1 = "2019-1-1";
 		testDate2 = "2019-11-1";
 		testDate3 = "2019-1-11";
@@ -58,6 +58,10 @@ public class UserAdminHelpersTests {
 		assertEquals(0, reportTest.getMonthly());
 		assertEquals(0, reportTest.getOnetime());
 		assertEquals(0, reportTest.getYearly());
+		assertEquals(0, reportTest.getOnetimeProfit(),myPi);
+		assertEquals(65, reportTest.getDailyProfit(),myPi);
+
+
 	}
 	
 	@Test

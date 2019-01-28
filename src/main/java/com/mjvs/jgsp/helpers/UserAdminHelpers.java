@@ -9,44 +9,24 @@ public class UserAdminHelpers {
 	
 	public static ReportDTO calculateReport(ReportDTO report, Ticket ticket){
 		
-		int students = 0;
-    	int pensioners = 0;
-    	int others = 0;
-    	double otherProfit = 0;
-    	double studentProfit = 0;
-    	double pensionerProfit = 0;
-		
 		switch (ticket.getTicketType())
 		{
 		case DAILY:
 			report.setDaily(report.getDaily()+1);
+			report.setDailyProfit(report.getDailyProfit() + ticket.getPrice());
 			break;
 		case MONTHLY:
 			report.setMonthly(report.getMonthly()+1);
+			report.setMonthlyProfit(report.getMonthlyProfit() + ticket.getPrice());
 			break;
 		case YEARLY:
 			report.setYearly(report.getYearly()+1);
+			report.setYearlyProfit(report.getYearlyProfit() + ticket.getPrice());
 			break;
 		case ONETIME:
 			report.setOnetime(report.getOnetime()+1);
+			report.setOnetimeProfit(report.getOnetimeProfit() + ticket.getPrice());
 			break;
-		}
-		
-		switch (ticket.getPassengerType())
-		{
-			case STUDENT:
-				students++;
-				studentProfit+=ticket.getPrice();
-				break;
-			case PENSIONER:
-				pensioners++;
-				pensionerProfit+=ticket.getPrice();
-				break;
-			case OTHER:
-				others++;
-				otherProfit+=ticket.getPrice();
-				break;
-				
 		}
 		
 		report.setProfit(report.getProfit() + ticket.getPrice());

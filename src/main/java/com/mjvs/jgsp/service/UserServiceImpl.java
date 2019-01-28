@@ -160,8 +160,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getAdmins() {
-		return userRepository.findByDeleted(false).stream().filter(user -> user.getUserType() != UserType.PASSENGER)
+	public List<User> getAdmins() throws UserNotFoundException {
+		User logged = getLoggedUser();
+		if (logged == null) throw new UserNotFoundException();
+		return userRepository.findByDeleted(false).stream().filter(user -> user.getUserType() != UserType.PASSENGER).filter(user -> user.getUsername() != logged.getUsername())
 				.collect(Collectors.toList());
 	}
 

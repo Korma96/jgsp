@@ -21,7 +21,7 @@ public interface UserService {
 
     boolean exists(String username);
 
-	List<User> getAdmins();
+	List<User> getAdmins() throws UserNotFoundException;;
 
 	boolean save(String username, String password, UserStatus userStatus, UserType userType);
 

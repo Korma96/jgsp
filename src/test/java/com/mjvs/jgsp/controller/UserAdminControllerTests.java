@@ -201,7 +201,7 @@ public class UserAdminControllerTests {
 	
 	@Test
 	public void testGeneralReport() throws ParseException {
-		ReportDTO r = new ReportDTO(0,3,1,1,3000);
+		ReportDTO r = new ReportDTO(0,3,1,1,3000,0,265,935,1800);
 		String startDateStr = "2018-8-01";
 		String endDateStr = "2019-12-1";
 		
@@ -211,19 +211,21 @@ public class UserAdminControllerTests {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
 		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
-		double myPi = 22.0d / 7.0d;
-		assertEquals(myPi,r.getProfit(),retValue.getProfit());
+		assertEquals(r.getProfit(),retValue.getProfit(), 0.01);
 		assertEquals(r.getYearly(), retValue.getYearly());
+		assertEquals(r.getYearlyProfit(), retValue.getYearlyProfit(), 0.01);
+		assertEquals(r.getMonthlyProfit(), retValue.getMonthlyProfit(), 0.01);
+		assertEquals(r.getProfit(), retValue.getYearlyProfit() + retValue.getDailyProfit() + retValue.getOnetimeProfit() + retValue.getMonthlyProfit(), 0.01);
+
 
 	}
 	
 	@Test
 	public void testDailyGeneralReport() throws ParseException {
-		ReportDTO r = new ReportDTO(0,3,1,1,3000);
+		ReportDTO r = new ReportDTO(0,3,1,1,3000,0,265,935,1800);
 		String requestedDate = "2019-01-21";
 		
 		HttpEntity requestEntity = new HttpEntity(headers);
@@ -232,56 +234,63 @@ public class UserAdminControllerTests {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
 		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
-		double myPi = 22.0d / 7.0d;
-		assertEquals(myPi,r.getProfit(),retValue.getProfit());
+		assertEquals(r.getProfit(),retValue.getProfit(), 0.01);
 		assertEquals(r.getYearly(), retValue.getYearly());
+		assertEquals(r.getYearlyProfit(), retValue.getYearlyProfit(), 0.01);
+		assertEquals(r.getMonthlyProfit(), retValue.getMonthlyProfit(), 0.01);
+		assertEquals(r.getProfit(), retValue.getYearlyProfit() + retValue.getDailyProfit() + retValue.getOnetimeProfit() + retValue.getMonthlyProfit(), 0.01);
+
 
 	}
 	
 	
 	@Test
 	public void testLineZoneGeneralReport() throws ParseException {
-		ReportDTO r = new ReportDTO(0,2,0,0,180);
+		ReportDTO r = new ReportDTO(0,2,0,0,200,0,200,0,0);
 		String startDateStr = "2018-08-01";
 		String endDateStr = "2019-12-01";
 		String name = "prva";
 		HttpEntity requestEntity = new HttpEntity(headers);
-		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/line-zone-report?line_zone_name="+
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/line-zone-report?lineZoneName="+
 														name+"&startDate="+startDateStr+"&endDate="+endDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
-		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
 		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
-		double myPi = 22.0d / 7.0d;
-		assertEquals(myPi,r.getProfit(), retValue.getProfit());
+		assertEquals(r.getProfit(), retValue.getProfit(), 0.01);
 		assertEquals(r.getYearly(), retValue.getYearly());
+		assertEquals(r.getDailyProfit(), retValue.getDailyProfit(), 0.01);
+		assertEquals(r.getMonthlyProfit(), retValue.getMonthlyProfit(), 0.01);
+		assertEquals(r.getProfit(), retValue.getYearlyProfit() + retValue.getDailyProfit() + retValue.getOnetimeProfit() + retValue.getMonthlyProfit(), 0.01);
+
 
 	}
 	
 	
 	@Test
 	public void testDailyLineZoneReport() throws ParseException {
-		ReportDTO r = new ReportDTO(0,1,1,1,2800);
+		ReportDTO r = new ReportDTO(0,1,1,1,2800,0,65,935,1800);
 		String reqDateStr = "2019-01-21";
 		String name = "1";
 		HttpEntity requestEntity = new HttpEntity(headers);
-		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/line_zone_daily_report?line_zone_name="+
-														name+"&requested_date="+reqDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
+		ResponseEntity<ReportDTO> response = testRestTemplate.exchange("/userAdmin/line-zone-daily-report?lineZoneName="+
+														name+"&requestedDate="+reqDateStr, HttpMethod.GET, requestEntity, ReportDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		ReportDTO retValue = response.getBody();
 		System.out.println(retValue.getDaily() + " mesec " + retValue.getMonthly() + " jedna " +retValue.getOnetime() + " prof " +retValue.getProfit() + " godina: " + retValue.getYearly());
 		assertEquals(r.getDaily(),retValue.getDaily());
 		assertEquals(r.getOnetime(),retValue.getOnetime());
 		assertEquals(r.getMonthly(),retValue.getMonthly());
-		double myPi = 22.0d / 7.0d;
-		assertEquals(myPi,r.getProfit(),retValue.getProfit());
+		assertEquals(r.getProfit(),retValue.getProfit(), 0.01);
 		assertEquals(r.getYearly(), retValue.getYearly());
+		assertEquals(r.getYearlyProfit(), retValue.getYearlyProfit(), 0.01);
+		assertEquals(r.getMonthlyProfit(), retValue.getMonthlyProfit(), 0.01);
+		assertEquals(r.getProfit(), retValue.getYearlyProfit() + retValue.getDailyProfit() + retValue.getOnetimeProfit() + retValue.getMonthlyProfit(), 0.01);
+
 
 	}
 	
