@@ -1,5 +1,6 @@
 package com.mjvs.jgsp.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -208,6 +209,22 @@ public class UserServiceImpl implements UserService {
 				passenger.setPassengerType(passenger.getNewPassengerType());
 				passenger.setNewPassengerType(null);
 				passenger.setVerifiedBy(userAdmin);
+
+				int month;
+				if(passenger.getPassengerType() == PassengerType.STUDENT) month = 10;
+				else month = 12;
+
+				LocalDate currentDate = LocalDate.now();
+				int year = currentDate.getYear();
+				if(passenger.getExpirationDate() != null) {
+					if(currentDate.plusMonths(2).isAfter(passenger.getExpirationDate())) {
+						// dva meseca pre isteka studentskog ili penzionerskog naloga
+						// moguce je produziti nalog
+						year++;
+					}
+				}
+
+				passenger.setExpirationDate(LocalDate.of(year, month, 31));
 				userRepository.save(passenger);
 			}
 			else {

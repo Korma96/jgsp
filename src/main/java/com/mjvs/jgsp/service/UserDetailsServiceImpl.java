@@ -53,15 +53,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> garantedAuthorities = null;
         if(user.getUserType() == UserType.PASSENGER) {
             Passenger passenger = (Passenger) user;
-            if(passenger.getPassengerType() != PassengerType.OTHER &&
-                    LocalDate.now().isAfter(passenger.getExpirationDate())) {
-                // isteklo vazenje potvrde o specifinosti korisnika,
-                // dok ne dostavi novu, setujemo da bude obican passenger
-                passenger.setPassengerType(PassengerType.OTHER);
-                passenger.setVerifiedBy(null);
-                passengerService.save(passenger);
-
+            if(passenger.getPassengerType() != PassengerType.OTHER) {
+                if (passenger.getExpirationDate() == null) {
+                    resetPassengerType(passenger, false);
+                }
+                else if(LocalDate.now().isAfter(passenger.getExpirationDate())) {
+                    resetPassengerType(passenger, true);
+                }
             }
+
             garantedAuthorities = AuthorityUtils.createAuthorityList(user.getUserType().toString(),
                     passenger.getPassengerType().toString());
         }
@@ -70,6 +70,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), garantedAuthorities);
+    }
+
+    private void resetPassengerType(Passenger passenger, boolean cancelExpirationDate) {
+        // isteklo vazenje potvrde o specifinosti korisnika,
+        // dok ne dostavi novu, setujemo da bude obican passenger
+        passenger.setPassengerType(PassengerType.OTHER);
+        passenger.setExpirationDate(null);
+        if(cancelExpirationDate) passenger.setVerifiedBy(null);
+
+        passengerService.save(passenger);
     }
 
 }
